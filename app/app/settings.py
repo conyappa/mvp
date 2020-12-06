@@ -33,7 +33,8 @@ ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(" ")
 
 # Constants.
 TICKET_COST = 2500
-PICK_RANGE = range(1, 20)
+TICKET_PICK_RANGE = range(1, 20)
+TICKET_LENGTH = 7
 
 
 # Application definition.
