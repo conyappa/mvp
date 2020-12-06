@@ -32,6 +32,7 @@ ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(" ")
 
 
 # Constants.
+MAX_TICKETS = 4
 TICKET_COST = 2500
 TICKET_PICK_RANGE = range(1, 20)
 TICKET_LENGTH = 7

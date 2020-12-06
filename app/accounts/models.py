@@ -16,7 +16,7 @@ class User(BaseModel, AbstractUser):
 
     @property
     def number_of_tickets(self):
-        return self.balance // settings.TICKET_COST
+        return min(settings.MAX_TICKETS, self.balance // settings.TICKET_COST)
 
     def delete(self, *args, **kwargs):
         self.is_active = False
