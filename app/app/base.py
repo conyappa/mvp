@@ -4,7 +4,7 @@ from django.utils import timezone
 
 
 class BaseManagerMixin:
-    def get_queryset(self):
+    def all_active(self):
         return super().get_queryset().filter(is_active=True)
 
 

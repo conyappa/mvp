@@ -2,6 +2,7 @@
 *
 
 # Include application files.
+!app/accounts
 !app/app
 !app/manage.py
 !app/run.sh

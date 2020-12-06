@@ -112,16 +112,16 @@ if "DATABASE_URL" in os.environ:
 
 
 # Django REST framework.
-REST_FRAMEWORK = {
-    "TEST_REQUEST_DEFAULT_FORMAT": "json",
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 100,
-}
+REST_FRAMEWORK = {}
+
+
+# Authentication.
+AUTH_USER_MODEL = "accounts.User"
 
 
 # Internationalization: https://docs.djangoproject.com/en/2.2/topics/i18n/.
-LANGUAGE_CODE = "en"
-TIME_ZONE = "UTC"
+LANGUAGE_CODE = "es"
+TIME_ZONE = "America/Santiago"
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True

@@ -5,7 +5,10 @@ from .managers import UserManager
 from app.base import BaseModelMixin
 
 
-class CustomUser(BaseModelMixin, AbstractUser):
+class User(BaseModelMixin, AbstractUser):
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ["username", "email", "password"]
+
     groups = None
     user_permissions = None
 
