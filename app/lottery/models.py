@@ -1,15 +1,14 @@
 import random as rd
 from django.db import models
+from django.conf import settings
 from app.base import BaseModel
 
 
-MAX_PICK_NUMBER = 20
+def generate_random_picks():
+    return rd.sample(settings.PICK_RANGE, 7)
 
 
 class Ticket(BaseModel):
     week = models.DateField(auto_now=False, auto_now_add=False, verbose_name="week")
-    picks = models.JSONField(default=Ticket.generate_random_picks)
-
-    @staticmethod
-    def generate_random_picks():
-        return rd.sample(range(1, MAX_PICK_NUMBER), 7)
+    picks = models.JSONField(default=generate_random_picks)
+    user = models.ForeignKey("accounts.User", verbose_name="user", related_name= "tickets", on_delete=models.CASCADE)

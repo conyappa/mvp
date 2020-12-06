@@ -1,7 +1,9 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.conf import settings
 from .managers import UserManager
 from app.base import BaseModel
+
 
 
 class User(BaseModel, AbstractUser):
@@ -14,7 +16,7 @@ class User(BaseModel, AbstractUser):
 
     @property
     def number_of_tickets(self):
-        return self.balance // 2500
+        return self.balance // settings.TICKET_COST
 
     def delete(self, *args, **kwargs):
         self.is_active = False

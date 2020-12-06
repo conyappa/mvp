@@ -31,6 +31,11 @@ DEBUG = os.getenv("DJANGO_ENV") == "development"
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(" ")
 
 
+# Constants.
+TICKET_COST = 2500
+PICK_RANGE = range(1, 20)
+
+
 # Application definition.
 INSTALLED_APPS = [
     # Third party.
@@ -39,6 +44,7 @@ INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
     # First party.
     "accounts.apps.AccountsConfig",
+    "lottery.apps.LotteryConfig",
     # Built-in.
     "django.contrib.admin",
     "django.contrib.auth",
