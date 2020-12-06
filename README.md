@@ -9,7 +9,7 @@
 
 ## Install for local development
 
-Create your local settings at each submodule (_i.e._, environment variables)
+Create your local settings (_i.e._, environment variables)
 
 ```bash
 make setlocalenv
