@@ -33,7 +33,9 @@ class BaseModelMixin:
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="created at")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="last updated at")
-    deleted_at = models.DateTimeField(null=True, blank=True, verbose_name="last deleted at")
+    deleted_at = models.DateTimeField(
+        null=True, blank=True, verbose_name="last deleted at"
+    )
 
     objects = managers.BaseModelManager()
 
