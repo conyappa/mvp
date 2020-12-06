@@ -1,0 +1,12 @@
+# Python.
+__pycache__
+
+# macOS.
+.DS_Store
+
+# Virtual environment.
+.venv
+app.egg-info
+
+# Local environment and secrets.
+local_settings.py

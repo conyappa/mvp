@@ -1,0 +1,15 @@
+{
+  "python.formatting.provider": "black",
+  "python.linting.flake8Enabled": true,
+  "python.linting.mypyEnabled": false,
+  "python.linting.pycodestyleEnabled": false,
+  "python.pythonPath": ".venv/bin/python",
+  "python.linting.pylintEnabled": false,
+  "[python]": {
+    "editor.tabSize": 4,
+    "editor.rulers": [120],
+  },
+  "[markdown]": {
+    "files.trimTrailingWhitespace": false
+  },
+}

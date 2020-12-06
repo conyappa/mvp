@@ -1,0 +1,31 @@
+version: '3.7'
+services:
+  db:
+    image: postgres:12.3
+    volumes:
+      - data:/var/lib/postgresql/data
+    expose:
+      - "5432"
+    networks:
+      - backend
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        DJANGO_ENV: development
+    init: true
+    volumes:
+      - .:/app
+      - ./app/static:/app/app/static
+    environment:
+      PORT: 8000
+      DJANGO_ENV: development
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+volumes:
+  data:
+    driver: local
