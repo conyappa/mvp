@@ -3,5 +3,5 @@ from . import views
 
 
 urlpatterns = [
-    path("sentry-debug/", views.trigger_error),
+    path("exception/", views.trigger_exception),
 ]

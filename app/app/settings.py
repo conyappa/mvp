@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "whitenoise.runserver_nostatic",
+    # First party.
+    "accounts.apps.AccountsConfig",
     # Built-in.
     "django.contrib.admin",
     "django.contrib.auth",
