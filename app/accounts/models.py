@@ -8,7 +8,7 @@ class User(BaseModel, AbstractUser):
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["email", "password"]
 
-    balance = models.PositiveIntegerField(default=0)
+    balance = models.PositiveIntegerField(default=0, verbose_name="account balance")
 
     objects = UserManager()
 
