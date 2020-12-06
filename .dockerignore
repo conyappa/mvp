@@ -3,8 +3,8 @@
 
 # Include application files.
 !app/app
-!glik/manage.py
-!glik/run.sh
+!app/manage.py
+!app/run.sh
 
 # Include build files.
 !pyproject.toml

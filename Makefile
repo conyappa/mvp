@@ -21,4 +21,4 @@ shell:
 	$(DOCKER-COMPOSE) run web python manage.py shell
 
 black:
-	$(POETRY) run black glik
+	$(POETRY) run black app
