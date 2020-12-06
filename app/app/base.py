@@ -3,11 +3,6 @@ from django.db import models
 from django.utils import timezone
 
 
-class BaseManager(models.Manager):
-    def all_active(self):
-        return super().get_queryset().filter(is_active=True)
-
-
 class BaseModel(models.Model):
     class Meta:
         abstract = True
@@ -23,8 +18,6 @@ class BaseModel(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="created at")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="last updated at")
-
-    objects = BaseManager()
 
     def save(self, *args, **kwargs):
         self.clean_fields()
