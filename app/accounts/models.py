@@ -1,15 +1,17 @@
-import uuid
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from .managers import UserManager
-from app.base import BaseModelMixin
+from app.base import BaseModel
 
 
-class User(BaseModelMixin, AbstractUser):
+class User(BaseModel, AbstractUser):
     USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ["username", "email", "password"]
+    REQUIRED_FIELDS = ["email", "password"]
 
-    groups = None
-    user_permissions = None
+    balance = models.PositiveIntegerField(default=0)
 
     objects = UserManager()
+
+    @property
+    def number_of_tickets(self):
+        return self.balance // 2500

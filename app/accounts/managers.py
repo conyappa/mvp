@@ -1,8 +1,8 @@
 from django.contrib.auth.base_user import BaseUserManager
-from app.base import BaseManagerMixin
+from app.base import BaseManager
 
 
-class UserManager(BaseManagerMixin, BaseUserManager):
+class UserManager(BaseManager, BaseUserManager):
     def create_user(self, username, email, password, **extra_fields):
         user = self.model(username=username, **extra_fields)
         user.set_password(password)

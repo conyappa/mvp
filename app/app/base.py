@@ -3,16 +3,15 @@ from django.db import models
 from django.utils import timezone
 
 
-class BaseManagerMixin:
+class BaseManager(models.Manager):
     def all_active(self):
         return super().get_queryset().filter(is_active=True)
 
 
-class BaseModelManager(BaseManagerMixin, models.Manager):
-    pass
+class BaseModel(models.Model):
+    class Meta:
+        abstract = True
 
-
-class BaseModelMixin:
     id = models.UUIDField(
         default=uuid.uuid4,
         editable=False,
@@ -22,22 +21,13 @@ class BaseModelMixin:
         verbose_name="identifier",
     )
 
-    is_active = models.BooleanField(
-        default=True,
-        help_text=(
-            "Designates whether this object should be treated as active. "
-            "Unselect this instead of deleting it."
-        ),
-        verbose_name="active status",
-    )
-
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="created at")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="last updated at")
     deleted_at = models.DateTimeField(
         null=True, blank=True, verbose_name="last deleted at"
     )
 
-    objects = managers.BaseModelManager()
+    objects = BaseManager()
 
     def save(self, *args, **kwargs):
         self.clean_fields()
