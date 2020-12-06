@@ -1,6 +1,4 @@
-# Glik's backend composer
-
-> The backend composer application of Glik.
+# MVP Cuenta de Ahorro
 
 ## Requirements
 
