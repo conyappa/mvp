@@ -11,4 +11,4 @@ def generate_random_picks():
 class Ticket(BaseModel):
     week = models.DateField(auto_now=False, auto_now_add=False, verbose_name="week")
     picks = models.JSONField(default=generate_random_picks)
-    user = models.ForeignKey("accounts.User", verbose_name="user", related_name= "tickets", on_delete=models.CASCADE)
+    user = models.ForeignKey("accounts.User", verbose_name="user", related_name="tickets", on_delete=models.CASCADE)
