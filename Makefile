@@ -12,7 +12,7 @@ createvenv:
 	$(POETRY) run poetry install
 
 makemigrations:
-	$(DOCKER-COMPOSE) run web python manage.py migrate
+	$(DOCKER-COMPOSE) run web python manage.py makemigrations
 
 migrate:
 	$(DOCKER-COMPOSE) run web python manage.py migrate
