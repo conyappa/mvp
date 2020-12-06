@@ -15,3 +15,14 @@ class User(BaseModel, AbstractUser):
     @property
     def number_of_tickets(self):
         return self.balance // 2500
+
+    def delete(self, *args, **kwargs):
+        self.is_active = False
+        self.save(*args, **kwargs)
+
+    def restore(self, *args, **kwargs):
+        self.is_active = True
+        self.save(*args, **kwargs)
+
+    def hard_delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)

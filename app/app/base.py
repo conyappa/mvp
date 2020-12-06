@@ -23,20 +23,9 @@ class BaseModel(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="created at")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="last updated at")
-    deleted_at = models.DateTimeField(
-        null=True, blank=True, verbose_name="last deleted at"
-    )
 
     objects = BaseManager()
 
     def save(self, *args, **kwargs):
         self.clean_fields()
         return super().save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        self.is_active = False
-        self.deleted_at = timezone.now()
-        self.save(*args, **kwargs)
-
-    def hard_delete(self, *args, **kwargs):
-        super().delete(*args, **kwargs)
