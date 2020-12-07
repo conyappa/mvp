@@ -20,8 +20,8 @@ def generate_result_pool():
 
 class Draw(BaseModel):
     date = models.DateField(verbose_name="creation date")
-    pool = models.JSONField(default=generate_result_pool)
-    results = models.JSONField(blank=True, default=list)
+    pool = models.JSONField(default=generate_result_pool, verbose_name="result pool")
+    results = models.JSONField(blank=True, default=list, verbose_name="results")
 
     def choose_results(self, k):
         results = rd.sample(population=self.pool, k=k)
@@ -57,13 +57,13 @@ class Draw(BaseModel):
 class Ticket(BaseModel):
     picks = models.JSONField(default=generate_random_picks)
     draw = models.ForeignKey(
-        "lottery.Draw",
+        to="lottery.Draw",
         verbose_name="draw",
         related_name="tickets",
         on_delete=models.CASCADE,
     )
     user = models.ForeignKey(
-        "accounts.User",
+        to="accounts.User",
         verbose_name="user",
         related_name="tickets",
         on_delete=models.CASCADE,
