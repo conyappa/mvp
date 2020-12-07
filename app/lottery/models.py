@@ -29,7 +29,7 @@ class Draw(BaseModel):
         self.results += results
         self.save()
 
-    def attach_results_scheduler(self, scheduler):
+    def attach_results_schedule(self, scheduler):
         for days_delta in range(1, 8):
             run_date = self.week + dt.timedelta(days=days_delta, hours=settings.DRAW_RESULTS_HOUR)
             scheduler.add_job(self.choose_results, "date", run_date=run_date, kwargs={"k": 1})
@@ -38,7 +38,7 @@ class Draw(BaseModel):
     def create(cls, scheduler):
         draw = cls.objects.create(week=timezone.now())
         logger.error(draw)
-        draw.attach_results_scheduler(scheduler)
+        draw.attach_results_schedule(scheduler)
 
     @classmethod
     def attach_creation_schedule(cls, scheduler):
