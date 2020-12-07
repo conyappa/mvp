@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     # First party.
     "accounts.apps.AccountsConfig",
     "lottery.apps.LotteryConfig",
+    "scheduler.apps.SchedulerConfig",
     # Built-in.
     "django.contrib.admin",
     "django.contrib.auth",
