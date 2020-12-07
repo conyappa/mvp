@@ -23,6 +23,13 @@ requests = "^2.25.0"
 black = "^20.8b1"
 flake8 = "^3.8.4"
 
+[tool.black]
+line-length = 120
+target-version = ["py36", "py37", "py38"]
+exclude = '/(\.venv)/'
+
 [build-system]
 requires = ["poetry>=1.0.3"]
 build-backend = "poetry.masonry.api"
+
+
