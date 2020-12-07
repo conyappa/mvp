@@ -9,22 +9,37 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Draw',
+            name="Draw",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True, verbose_name='identifier')),
-                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created at')),
-                ('updated_at', models.DateTimeField(auto_now=True, verbose_name='last updated at')),
-                ('week', models.DateField(verbose_name='week')),
-                ('pool', models.JSONField(default=lottery.models.generate_result_pool)),
-                ('results', models.JSONField(default=list)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                        unique=True,
+                        verbose_name="identifier",
+                    ),
+                ),
+                (
+                    "created_at",
+                    models.DateTimeField(auto_now_add=True, verbose_name="created at"),
+                ),
+                (
+                    "updated_at",
+                    models.DateTimeField(auto_now=True, verbose_name="last updated at"),
+                ),
+                ("week", models.DateField(verbose_name="week")),
+                ("pool", models.JSONField(default=lottery.models.generate_result_pool)),
+                ("results", models.JSONField(default=list)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

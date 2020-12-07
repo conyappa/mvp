@@ -26,5 +26,15 @@ class Draw(BaseModel):
 
 class Ticket(BaseModel):
     picks = models.JSONField(default=generate_random_picks)
-    draw = models.ForeignKey("lottery.Draw", verbose_name="draw", related_name="tickets", on_delete=models.CASCADE)
-    user = models.ForeignKey("accounts.User", verbose_name="user", related_name="tickets", on_delete=models.CASCADE)
+    draw = models.ForeignKey(
+        "lottery.Draw",
+        verbose_name="draw",
+        related_name="tickets",
+        on_delete=models.CASCADE,
+    )
+    user = models.ForeignKey(
+        "accounts.User",
+        verbose_name="user",
+        related_name="tickets",
+        on_delete=models.CASCADE,
+    )

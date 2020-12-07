@@ -5,7 +5,6 @@ from .managers import UserManager
 from app.base import BaseModel
 
 
-
 class User(BaseModel, AbstractUser):
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["email", "password"]
