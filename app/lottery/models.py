@@ -19,7 +19,7 @@ def generate_result_pool():
 
 
 class Draw(BaseModel):
-    week = models.DateField(verbose_name="week")
+    date = models.DateField(verbose_name="creation date")
     pool = models.JSONField(default=generate_result_pool)
     results = models.JSONField(blank=True, default=list)
 
@@ -31,12 +31,12 @@ class Draw(BaseModel):
 
     def attach_results_schedule(self, scheduler):
         for days_delta in range(1, 8):
-            run_date = self.week + dt.timedelta(days=days_delta, hours=settings.DRAW_RESULTS_HOUR)
+            run_date = self.date + dt.timedelta(days=days_delta, hours=settings.DRAW_RESULTS_HOUR)
             scheduler.add_job(self.choose_results, "date", run_date=run_date, kwargs={"k": 1})
 
     @classmethod
     def create(cls, scheduler):
-        draw = cls.objects.create(week=timezone.now())
+        draw = cls.objects.create(date=timezone.now())
         logger.error(draw)
         draw.attach_results_schedule(scheduler)
 
@@ -51,7 +51,7 @@ class Draw(BaseModel):
         )
 
     def __str__(self):
-        return f"{self.week}\n{self.pool}\n{self.results}"
+        return f"{self.date}\n{self.pool}\n{self.results}"
 
 
 class Ticket(BaseModel):
