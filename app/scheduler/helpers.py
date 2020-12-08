@@ -11,5 +11,5 @@ def boot_scheduler():
     _scheduler.value = scheduler
 
 
-def get_scheduler():
-    return _scheduler.value
+def use_scheduler(task):
+    return lambda *args, **kwargs: task(*args, **kwargs, scheduler=_scheduler.value)

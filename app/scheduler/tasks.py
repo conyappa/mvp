@@ -1,13 +1,5 @@
 from django.conf import settings
-from .main import get_scheduler
-
-
-def use_scheduler(task):
-    def wrapper(*args, **kwargs):
-        scheduler = get_scheduler()
-        task(*args, **kwargs, scheduler=scheduler)
-
-    return wrapper
+from .helpers import use_scheduler
 
 
 @use_scheduler
