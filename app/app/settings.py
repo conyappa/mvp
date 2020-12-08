@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "whitenoise.runserver_nostatic",
+    "phonenumber_field",
     # First party.
     "accounts.apps.AccountsConfig",
     "lottery.apps.LotteryConfig",

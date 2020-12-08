@@ -128,6 +128,21 @@ Django = ">=2.2"
 
 [[package]]
 category = "main"
+description = "An international phone number field for django models."
+name = "django-phonenumber-field"
+optional = false
+python-versions = ">=3.5"
+version = "5.0.0"
+
+[package.dependencies]
+Django = ">=2.2"
+
+[package.extras]
+phonenumbers = ["phonenumbers (>=7.0.2)"]
+phonenumberslite = ["phonenumberslite (>=7.0.2)"]
+
+[[package]]
+category = "main"
 description = "Web APIs for Django, made easy."
 name = "djangorestframework"
 optional = false
@@ -198,6 +213,14 @@ name = "pathspec"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 version = "0.8.1"
+
+[[package]]
+category = "main"
+description = "Python version of Google's common library for parsing, formatting, storing and validating international phone numbers."
+name = "phonenumbers"
+optional = false
+python-versions = "*"
+version = "8.12.14"
 
 [[package]]
 category = "main"
@@ -361,7 +384,7 @@ version = "5.2.0"
 brotli = ["brotli"]
 
 [metadata]
-content-hash = "37cfc99c4b9b04322adda243582012e6532f668e2ac173d776bedea39a732214"
+content-hash = "435b06c71f00e8602d9f0d2fd86a5226b6a4655c83a1f7f96c62801097fb6deb"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -404,6 +427,10 @@ django-cors-headers = [
     {file = "django-cors-headers-3.5.0.tar.gz", hash = "sha256:db82b2840f667d47872ae3e4a4e0a0d72fbecb42779b8aa233fa8bb965f7836a"},
     {file = "django_cors_headers-3.5.0-py3-none-any.whl", hash = "sha256:9322255c296d5f75089571f29e520c83ff9693df17aa3cf9f6a4bea7c6740169"},
 ]
+django-phonenumber-field = [
+    {file = "django-phonenumber-field-5.0.0.tar.gz", hash = "sha256:1eb7af3a108744665f7c3939d38aa15b3728c57d13d45d656b0a2aa11e8cdc3c"},
+    {file = "django_phonenumber_field-5.0.0-py3-none-any.whl", hash = "sha256:adb46905cc4ecb19d8494424e1c4352f24946bb472340a2a17257d44bf8228e6"},
+]
 djangorestframework = [
     {file = "djangorestframework-3.12.2-py3-none-any.whl", hash = "sha256:0209bafcb7b5010fdfec784034f059d512256424de2a0f084cb82b096d6dd6a7"},
 ]
@@ -430,6 +457,10 @@ mypy-extensions = [
 pathspec = [
     {file = "pathspec-0.8.1-py2.py3-none-any.whl", hash = "sha256:aa0cb481c4041bf52ffa7b0d8fa6cd3e88a2ca4879c533c9153882ee2556790d"},
     {file = "pathspec-0.8.1.tar.gz", hash = "sha256:86379d6b86d75816baba717e64b1a3a3469deb93bb76d613c9ce79edc5cb68fd"},
+]
+phonenumbers = [
+    {file = "phonenumbers-8.12.14-py2.py3-none-any.whl", hash = "sha256:d60a3902d7648288624ee9568b8bc7a53b31de07bd7cb80993a3704c674dce32"},
+    {file = "phonenumbers-8.12.14.tar.gz", hash = "sha256:58817072cf2b80fcc8710e7a2c395cd32fce2b70a259e36ff81916862f578d61"},
 ]
 psycopg2-binary = [
     {file = "psycopg2-binary-2.8.6.tar.gz", hash = "sha256:11b9c0ebce097180129e422379b824ae21c8f2a6596b159c7659e2e5a00e1aa0"},

@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
+from phonenumber_field.modelfields import PhoneNumberField
 from .managers import UserManager
 from app.base import BaseModel
 
@@ -10,6 +11,7 @@ class User(BaseModel, AbstractUser):
     REQUIRED_FIELDS = ["email", "password"]
 
     balance = models.PositiveIntegerField(default=0, verbose_name="account balance")
+    phone = PhoneNumberField()
 
     objects = UserManager()
 
