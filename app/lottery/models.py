@@ -1,4 +1,3 @@
-import logging
 import random as rd
 import datetime as dt
 from django.db import models
@@ -6,9 +5,6 @@ from django.conf import settings
 from django.utils import timezone
 from app.base import BaseModel
 from scheduler.tasks import add_result_choice_job
-
-
-logger = logging.getLogger(__name__)
 
 
 def generate_random_picks():
@@ -31,6 +27,8 @@ class Draw(BaseModel):
     start_date = models.DateField(verbose_name="start date")
     pool = models.JSONField(default=generate_result_pool, verbose_name="result pool")
     results = models.JSONField(blank=True, default=list, verbose_name="results")
+
+    objects = DrawManager()
 
     def choose_results(self, k):
         results = rd.sample(population=self.pool, k=k)

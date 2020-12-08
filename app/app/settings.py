@@ -49,9 +49,9 @@ INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
     "phonenumber_field",
     # First party.
-    "scheduler.apps.SchedulerConfig",  # Load this app first!
     "accounts.apps.AccountsConfig",
     "lottery.apps.LotteryConfig",
+    "scheduler.apps.SchedulerConfig",  # Load this app last!
     # Built-in.
     "django.contrib.admin",
     "django.contrib.auth",
