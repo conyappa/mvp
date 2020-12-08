@@ -29,7 +29,7 @@ flake8 = "^3.8.4"
 [tool.black]
 line-length = 120
 target-version = ["py36", "py37", "py38"]
-exclude = '/(\.venv)/'
+exclude = '/(\.venv|migrations)/'
 
 [build-system]
 requires = ["poetry>=1.0.3"]

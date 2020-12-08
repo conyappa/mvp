@@ -34,10 +34,10 @@ ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(" ")
 # Constants.
 MAX_TICKETS = 4
 TICKET_COST = 2500
-TICKET_PICK_RANGE = range(1, 30)
+TICKET_PICK_RANGE = range(1, 31)
 TICKET_LENGTH = 7
-NEW_DRAW_DAY_OF_WEEK = 6
-NEW_DRAW_HOUR = 21
+DRAW_BEGINNING_DAY_OF_WEEK = 0
+DRAW_CREATION_DAYS_DELTA = 1
 DRAW_RESULTS_HOUR = 20
 
 
@@ -49,9 +49,9 @@ INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
     "phonenumber_field",
     # First party.
+    "scheduler.apps.SchedulerConfig",  # Load this app first!
     "accounts.apps.AccountsConfig",
     "lottery.apps.LotteryConfig",
-    "scheduler.apps.SchedulerConfig",
     # Built-in.
     "django.contrib.admin",
     "django.contrib.auth",
