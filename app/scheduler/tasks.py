@@ -17,8 +17,8 @@ def draw_cycle():
         draw = Draw.objects.create(start_date=now.date())
         draw.create_tickets()
     if Draw.objects.exists():
-        draw = Draw.objects.latest("created_at")
-        draw.choose_results(k=1)
+        draw = Draw.objects.current()
+        draw.choose_result()
 
 
 @use_scheduler

@@ -15,28 +15,39 @@ def generate_result_pool():
     return list(settings.TICKET_PICK_RANGE)
 
 
+class DrawManager(models.Manager):
+    def current(self):
+        return self.latest("created_at")
+
+
 class Draw(BaseModel):
     start_date = models.DateField(verbose_name="start date")
     pool = models.JSONField(default=generate_result_pool, verbose_name="result pool")
     results = models.JSONField(blank=True, default=list, verbose_name="results")
 
+    objects = DrawManager()
 
     def create_tickets(self):
         tickets = []
         for user in User.objects.all():
-            user_tickets = [Ticket(draw=self, user=user) for _ in user.number_of_tickets]
+            user_tickets = [Ticket(draw=self, user=user) for _ in range(user.number_of_tickets)]
             tickets += user_tickets
         with transaction.atomic():
             Ticket.objects.bulk_create(objs=tickets)
 
-    def choose_results(self, k):
-        results = rd.sample(population=self.pool, k=k)
+    def choose_result(self):
+        results = rd.sample(population=self.pool, k=1)
         self.pool = list(set(self.pool) - set(results))
         self.results += results
         self.save()
 
     def __str__(self):
         return f"{self.start_date}\n{self.pool}\n{self.results}"
+
+
+class TicketManager(models.Manager):
+    def current(self):
+        return self.filter(draw=Draw.objects.current())
 
 
 class Ticket(BaseModel):
@@ -53,3 +64,5 @@ class Ticket(BaseModel):
         related_name="tickets",
         on_delete=models.CASCADE,
     )
+
+    objects = TicketManager()

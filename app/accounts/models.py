@@ -20,12 +20,8 @@ class User(BaseModel, AbstractUser):
         return min(settings.MAX_TICKETS, self.balance // settings.TICKET_COST)
 
     @property
-    def current_draw_tickets(self):
-        pass
-
-    @property
-    def next_draw_tickets(self):
-        pass
+    def current_tickets(self):
+        return self.tickets.current()
 
     def delete(self, *args, **kwargs):
         self.is_active = False
