@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "app"
+name = "conyapa-mvp"
 version = "0.1.0"
 description = ""
 authors = [

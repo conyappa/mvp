@@ -1,4 +1,4 @@
-# MVP Cuenta de Ahorro
+# ConYapa MVP
 
 ## Requirements
 
