@@ -2,9 +2,9 @@ import random as rd
 import datetime as dt
 from django.db import models
 from django.conf import settings
-from django.utils import timezone
+from django.db import transaction
 from app.base import BaseModel
-from scheduler.tasks import add_result_choice_job
+from accounts.models import User
 
 
 def generate_random_picks():
@@ -15,20 +15,19 @@ def generate_result_pool():
     return list(settings.TICKET_PICK_RANGE)
 
 
-class DrawManager(models.Manager):
-    def create(*args, **kwargs):
-        start_date = timezone.now() + dt.timedelta(days=settings.DRAW_CREATION_DAYS_DELTA)
-        draw = super().create(start_date=start_date, *args, **kwargs)
-        add_result_choice_job(draw=draw)
-        return draw
-
-
 class Draw(BaseModel):
     start_date = models.DateField(verbose_name="start date")
     pool = models.JSONField(default=generate_result_pool, verbose_name="result pool")
     results = models.JSONField(blank=True, default=list, verbose_name="results")
 
-    objects = DrawManager()
+
+    def create_tickets(self):
+        tickets = []
+        for user in User.objects.all():
+            user_tickets = [Ticket(draw=self, user=user) for _ in user.number_of_tickets]
+            tickets += user_tickets
+        with transaction.atomic():
+            Ticket.objects.bulk_create(objs=tickets)
 
     def choose_results(self, k):
         results = rd.sample(population=self.pool, k=k)

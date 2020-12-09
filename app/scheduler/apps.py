@@ -5,9 +5,8 @@ class SchedulerConfig(AppConfig):
     name = "scheduler"
 
     def ready(self):
-        from lottery.models import Draw
         from .helpers import boot_scheduler
-        from .tasks import add_draw_creation_job
+        from .tasks import add_draw_cycle_job
 
         boot_scheduler()
-        add_draw_creation_job(Draw)
+        add_draw_cycle_job()

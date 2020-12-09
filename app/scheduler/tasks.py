@@ -1,20 +1,26 @@
+import datetime as dt
+from django.utils import timezone
 from django.conf import settings
+from lottery.models import Draw
 from .helpers import use_scheduler
 
 
-@use_scheduler
-def add_draw_creation_job(draw_model, scheduler):
-    draw_creation_day_of_week = (settings.DRAW_BEGINNING_DAY_OF_WEEK - settings.DRAW_CREATION_DAYS_DELTA) % 7
-    scheduler.add_job(
-        draw_model.objects.create,
-        "cron",
-        day_of_week=draw_creation_day_of_week,
-        hour=settings.DRAW_RESULTS_HOUR,
-    )
+# import the logging library
+import logging
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
+
+def draw_cycle():
+    now = timezone.now()
+    if now.weekday() == settings.DRAW_BEGINNING_DAY_OF_WEEK:
+        draw = Draw.objects.create(start_date=now.date())
+        draw.create_tickets()
+    if Draw.objects.exists():
+        draw = Draw.objects.latest("created_at")
+        draw.choose_results(k=1)
 
 
 @use_scheduler
-def add_result_choice_job(draw, scheduler):
-    for days_delta in range(0, 7):
-        run_date = draw.start_date + dt.timedelta(days=days_delta, hours=settings.DRAW_RESULTS_HOUR)
-        scheduler.add_job(draw.choose_results, "date", run_date=run_date, kwargs={"k": 1})
+def add_draw_cycle_job(scheduler):
+    scheduler.add_job(draw_cycle, "cron", hour=settings.DRAW_RESULTS_HOUR)
