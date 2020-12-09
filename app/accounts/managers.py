@@ -9,12 +9,12 @@ class UserManager(BaseUserManager):
         super().get_queryset()
 
     def create_user(self, username, email, phone, password, **extra_fields):
-        user = self.model(username=username, email=email, phone=phone, **extra_fields)
-        user.set_password(password)
+        user = self.model(phone=phone, **extra_fields)
+        # user.set_password(password)
         user.save()
         return user
 
     def create_superuser(self, username, password, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
-        return self.create_user(username=username, email=email, phone=phone, password=password, **extra_fields)
+        return self.create_user(phone=phone, password=password, **extra_fields)

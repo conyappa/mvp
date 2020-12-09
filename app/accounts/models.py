@@ -7,11 +7,13 @@ from app.base import BaseModel
 
 
 class User(BaseModel, AbstractUser):
-    USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ["email", "password"]
+    USERNAME_FIELD = "phone"
+    REQUIRED_FIELDS = []
+
+    password = None
 
     balance = models.PositiveIntegerField(default=0, verbose_name="account balance")
-    phone = PhoneNumberField()
+    phone = PhoneNumberField(unique=True)
 
     objects = UserManager()
 
