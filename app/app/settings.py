@@ -133,7 +133,7 @@ AUTH_USER_MODEL = "accounts.User"
 
 
 # Internationalization: https://docs.djangoproject.com/en/2.2/topics/i18n/.
-LANGUAGE_CODE = "es"
+LANGUAGE_CODE = "en"
 TIME_ZONE = "America/Santiago"
 USE_I18N = True
 USE_L10N = True
