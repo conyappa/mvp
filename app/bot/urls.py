@@ -1,8 +1,8 @@
 from django.urls import path
-from .views import respond_to_command
+from .views import Bot
 
 
 app_name = "bot"
 
 
-urlpatterns = [path("", respond_to_command, name="respond-to-command")]
+urlpatterns = [path("", Bot.as_view(), name="respond-to-command")]
