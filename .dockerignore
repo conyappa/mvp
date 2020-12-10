@@ -4,6 +4,7 @@
 # Include application files.
 !app/accounts
 !app/app
+!app/bot
 !app/lottery
 !app/scheduler
 !app/manage.py

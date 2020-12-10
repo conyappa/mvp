@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
     "phonenumber_field",
     # First party.
+    "bot.apps.BotConfig",  # Load this app first!
     "accounts.apps.AccountsConfig",
     "lottery.apps.LotteryConfig",
     "scheduler.apps.SchedulerConfig",  # Load this app last!

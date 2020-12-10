@@ -15,8 +15,8 @@ logger = logging.getLogger(__name__)
 def draw_cycle():
     now = timezone.now()
     if now.weekday() == settings.DRAW_BEGINNING_WEEKDAY:
-        Draw.objects.exists():
-            last_draw = Draw.objects.exists()
+        if Draw.objects.exists():
+            last_draw = Draw.objects.current()
             last_draw.conclude()
         current_draw = Draw.objects.create(start_date=now.date())
         current_draw.create_tickets()
