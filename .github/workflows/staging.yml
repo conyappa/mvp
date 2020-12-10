@@ -1,25 +1,24 @@
-name: staging
+name: Deploy
 
 on:
   push:
     branches:
-      - master
+      - development
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    env:
-      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-
     steps:
       - uses: actions/checkout@v2
-
-      - name: Log in to Heroku Container Registry
-        run: heroku container:login
-
-      # https://stackoverflow.com/questions/59537030/release-phase-with-container-registry-on-heroku-runs-container.
-      - name: Build and push
-        run: heroku container:push --app ${{ secrets.HEROKU_STAGING_NAME }} web release --recursive --arg DJANGO_ENV=production,DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}
-
-      - name: Release the image
-        run: heroku container:release --app ${{ secrets.HEROKU_STAGING_NAME }} release web
+      - uses: akhileshns/heroku-deploy@v3.7.8 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_STAGING_NAME}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          usedocker: true
+          docker_build_args: |
+            SECRET_KEY
+            DJANGO_ENV
+        env:
+          SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          DJANGO_ENV: production
