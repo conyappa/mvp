@@ -63,7 +63,7 @@ COPY . .
 WORKDIR /app/app
 
 # Collect the assets.
-# RUN python manage.py collectstatic --no-input
+RUN python manage.py collectstatic --no-input
 
 # Add the script to be executed every time the container starts.
 COPY entrypoint.sh /usr/bin/
