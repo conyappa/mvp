@@ -11,6 +11,6 @@ logger = logging.getLogger(__name__)
 
 class Bot(generics.GenericAPIView):
     def post(self, request):
-        message = request.body
+        message = request.body.decode()
         logger.error(message)
         return Response()
