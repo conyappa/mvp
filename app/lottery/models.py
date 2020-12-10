@@ -41,6 +41,16 @@ class Draw(BaseModel):
         self.results += results
         self.save()
 
+    def conclude(self):
+        result_set = set(self.results)
+        with transaction.atomic():
+            for ticket in self.tickets.all():
+                number_of_matches = len(result_set & set(ticket.picks))
+                user = ticket.user
+                prize = settings.PRIZES[number_of_matches]
+                user.balance += prize
+                user.save()
+
     def __str__(self):
         return f"{self.start_date}\n{self.pool}\n{self.results}"
 

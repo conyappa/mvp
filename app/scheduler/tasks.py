@@ -14,12 +14,15 @@ logger = logging.getLogger(__name__)
 
 def draw_cycle():
     now = timezone.now()
-    if now.weekday() == settings.DRAW_BEGINNING_DAY_OF_WEEK:
-        draw = Draw.objects.create(start_date=now.date())
-        draw.create_tickets()
+    if now.weekday() == settings.DRAW_BEGINNING_WEEKDAY:
+        Draw.objects.exists():
+            last_draw = Draw.objects.exists()
+            last_draw.conclude()
+        current_draw = Draw.objects.create(start_date=now.date())
+        current_draw.create_tickets()
     if Draw.objects.exists():
-        draw = Draw.objects.current()
-        draw.choose_result()
+        current_draw = Draw.objects.current()
+        current_draw.choose_result()
 
 
 @use_scheduler
