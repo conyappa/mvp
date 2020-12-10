@@ -56,3 +56,6 @@ class User(BaseModel, AbstractUser):
 
     def hard_delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
+
+    def __str__(self):
+        return str(self.phone)
