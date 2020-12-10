@@ -7,6 +7,8 @@
 !app/bot
 !app/lottery
 !app/scheduler
+!app/static
+!app/staticfiles
 !app/manage.py
 !app/run.sh
 
