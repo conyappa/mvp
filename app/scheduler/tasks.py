@@ -27,4 +27,4 @@ def draw_cycle():
 
 @use_scheduler
 def add_draw_cycle_job(scheduler):
-    scheduler.add_job(draw_cycle, "cron", hour=settings.DRAW_RESULTS_HOUR)
+    scheduler.add_job(draw_cycle, "cron", hour=settings.DRAW_RESULTS_HOUR, minute=settings.DRAW_RESULTS_MINUTE)
