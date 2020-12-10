@@ -18,7 +18,7 @@ jobs:
           usedocker: true
           docker_build_args: |
             SECRET_KEY
-            DJANGO_ENV
+            DJANGO_SECRET_KEY
         env:
-          SECRET_KEY: "${{ secrets.DJANGO_SECRET_KEY }}"
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
           DJANGO_ENV: production
