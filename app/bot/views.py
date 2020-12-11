@@ -13,6 +13,6 @@ logger = logging.getLogger(__name__)
 class Bot(generics.GenericAPIView):
     def post(self, request):
         request_msg = request.body.decode()
-        handler = getattr(handlers, request_msg, "Lo siento, no sé a qué te refieres.")
+        handler = getattr(handlers, request_msg, lambda: "Lo siento, no sé a qué te refieres.")
         response_msg = handler()
         return Response(data=response_msg)
