@@ -34,7 +34,8 @@ def results(user):
 
 
 def tickets(user):
-    format_ticket = lambda x: ", ".join(map(str, self.picks))
-    formatted_tickets = "\n".join(map(lambda i, x: f"#{i}. {format_ticket}", enumerate(user.current_tickets, start=1)))
+    format_ticket = lambda x: ", ".join(map(str, x.picks))
+    tickets = user.current_tickets
+    formatted_tickets = "\n".join(map(lambda i, x: f"#{i}. {format_ticket(x)}", range(1, len(tickets) + 1), tickets))
     msg = f"Tus tickets de la semana son:\n\n{formatted_tickets}"
     return msg

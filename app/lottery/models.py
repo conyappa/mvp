@@ -81,12 +81,12 @@ class Ticket(BaseModel):
     @property
     def number_of_matches(self):
         result_set = set(self.draw.results)
-        return len(result_set & set(ticket.picks))
+        return len(result_set & set(self.picks))
 
     @property
     def prize(self):
         return settings.PRIZES[self.number_of_matches]
 
     def __str__(self):
-        formatted_picks = ", ".join(map(str, self.results))
+        formatted_picks = ", ".join(map(str, self.draw.results))
         return f"{formatted_picks} @ {self.draw.start_date} of {self.user}"
