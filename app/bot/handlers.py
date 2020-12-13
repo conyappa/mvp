@@ -1,3 +1,5 @@
+import itertools
+from django.conf import settings
 from lottery.models import Draw
 
 
@@ -12,7 +14,7 @@ def help(_user):
 
 
 def balance(user):
-    msg = f"Tu saldo actual es de ${user.balance}."
+    msg = f"Tu saldo actual es de ${user.balance}, lo que equivale a {user.number_of_tickets} tickets."
     return msg
 
 
@@ -21,12 +23,18 @@ def deposit(_user):
     return msg
 
 
-def results(_user):
-    draw = Draw.objects.current()
-    msg = f"Los números que han salido en el sorteo de esta semana son:\n{draw.results}"
+def results(user):
+    draw_results = Draw.objects.current().results
+    draw_results += itertools.repeat("?", 7 - len(draw_results))
+    days = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
+    formatted_results = "\n".join(map(lambda i: f"{days[i]}: {draw_results[i]}", range(7)))
+    formatted_prize = f"Por ahora llevas ganado *${user.current_prize}*."
+    msg = f"Los números de la semana son:\n\n{formatted_results}\n\n{formatted_prize}"
     return msg
 
 
 def tickets(user):
-    msg = "Estos son tus tickets para esta semana:\n1. ####\n2. ####"
+    format_ticket = lambda x: ", ".join(map(str, self.picks))
+    formatted_tickets = ", ".join(map(format_ticket, user.current_tickets))
+    msg = f"Tus tickets de la semana son:\n\n{formatted_tickets}"
     return msg

@@ -52,6 +52,10 @@ class User(BaseModel, AbstractUser):
     def current_tickets(self):
         return self.tickets.current()
 
+    @property
+    def current_prize(self):
+        return sum(map(lambda x: x.prize, self.current_tickets))
+
     def delete(self, *args, **kwargs):
         self.is_active = False
         self.save(*args, **kwargs)

@@ -8,7 +8,7 @@ from accounts.models import User
 
 
 def generate_random_picks():
-    return rd.sample(population=settings.TICKET_PICK_RANGE, k=settings.TICKET_LENGTH)
+    return rd.sample(population=settings.TICKET_PICK_RANGE, k=7)
 
 
 def generate_result_pool():
@@ -52,7 +52,8 @@ class Draw(BaseModel):
                 user.save()
 
     def __str__(self):
-        return f"{self.start_date}\n{self.pool}\n{self.results}"
+        formatted_results = ", ".join(map(str, self.results))
+        return f"{formatted_results} @ {self.start_date}"
 
 
 class TicketManager(models.Manager):
@@ -76,3 +77,16 @@ class Ticket(BaseModel):
     )
 
     objects = TicketManager()
+
+    @property
+    def number_of_matches(self):
+        result_set = set(self.draw.results)
+        return len(result_set & set(ticket.picks))
+
+    @property
+    def prize(self):
+        return settings.PRIZES[self.number_of_matches]
+
+    def __str__(self):
+        formatted_picks = ", ".join(map(str, self.results))
+        return f"{formatted_picks} @ {self.draw.start_date} of {self.user}"
