@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 def use_twilio(view):
     def wrapper(bot, request, *args, **kwargs):
         body = request.body.decode()
-        request.twilio = parse_qs(body)
+        request.twilio = {k: v[0] for k, v in parse_qs(body).items()}
         return view(bot, request, *args, **kwargs)
 
     return wrapper
@@ -24,8 +24,7 @@ def use_twilio(view):
 class Bot(generics.GenericAPIView):
     @use_twilio
     def post(self, request):
-        incoming_text = request.twilio.get("Body", [])[0]
-        logger.error(incoming_text)
+        incoming_text = request.twilio.get("Body", [])
         handler = getattr(handlers, incoming_text.lower(), lambda: "Lo siento, no sé a qué te refieres.")
         outgoing_text = handler()
         response = MessagingResponse()
