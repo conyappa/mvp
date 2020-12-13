@@ -13,10 +13,10 @@ class UserManager(BaseUserManager):
     def everything(self):
         super().get_queryset()
 
-    def create(self, **fields):
-        user = super().create(**fields)
-        user.set_password(fields["password"])
-        user.save()
+    # def create(self, **fields):
+    #     user = super().create(**fields)
+    #     user.set_password(fields["password"])
+    #     user.save()
 
     def create_superuser(self, **fields):
         fields.setdefault("is_staff", True)
@@ -29,21 +29,29 @@ class User(BaseModel, AbstractUser):
 
     username = None
 
-    twilio_account_sid = models.CharField(
-        null=True,
-        unique=True,
-        error_messages={"unique": "A user with that Twilio account SID already exists."},
-        max_length=100,
-        verbose_name="Twilio account SID",
-    )
     balance = models.PositiveIntegerField(default=0, verbose_name="balance")
+
     phone = PhoneNumberField(
         unique=True,
         error_messages={"unique": "A user with that phone number already exists."},
         verbose_name="phone number",
     )
+    twilio_account_sid = models.CharField(
+        null=True,
+        blank=True,
+        unique=True,
+        error_messages={"unique": "A user with that Twilio account SID already exists."},
+        max_length=100,
+        verbose_name="Twilio account SID",
+    )
 
     objects = UserManager()
+
+    def __init__(self, *args, **kwargs):
+        ret = super().__init__(*args, **kwargs)
+        if "password" in kwargs.keys():
+            self.set_password(kwargs["password"])
+        return ret
 
     @property
     def number_of_tickets(self):

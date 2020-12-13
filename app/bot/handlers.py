@@ -12,7 +12,7 @@ def help(_user):
 
 
 def balance(user):
-    msg = "Tienes un saldo de $."
+    msg = f"Tu saldo actual es de ${user.balance}."
     return msg
 
 

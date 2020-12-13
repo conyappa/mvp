@@ -18,7 +18,3 @@ class BaseModel(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="created at")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="last updated at")
-
-    def save(self, *args, **kwargs):
-        self.clean_fields()
-        return super().save(*args, **kwargs)

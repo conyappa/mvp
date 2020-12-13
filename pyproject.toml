@@ -22,6 +22,7 @@ apscheduler = "^3.6.3"
 phonenumbers = "^8.12.14"
 django-phonenumber-field = "^5.0.0"
 twilio = "^6.50.0"
+inflection = "^0.5.1"
 
 [tool.poetry.dev-dependencies]
 black = "^20.8b1"
