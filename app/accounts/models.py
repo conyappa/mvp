@@ -11,7 +11,7 @@ class UserManager(BaseUserManager):
         return super().get_queryset().filter(is_active=True)
 
     def everything(self):
-        super().get_queryset()
+        return super().get_queryset()
 
     # def create(self, **fields):
     #     user = super().create(**fields)
