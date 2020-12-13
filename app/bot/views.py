@@ -35,6 +35,6 @@ class Bot(generics.GenericAPIView):
     @use_twilio
     def post(self, request):
         incoming_msg = request.twilio_params["msg"]
-        handler = getattr(handlers, incoming_msg.lower(), lambda: "Lo siento, no sé a qué te refieres.")
+        handler = getattr(handlers, incoming_msg.lower(), lambda _user: "Lo siento, no sé a qué te refieres.")
         outgoing_msg = handler(request.twilio_params["user"])
         return outgoing_msg
