@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 class Bot(generics.GenericAPIView):
     def post(self, request):
         # incoming_text = decompose(request).body
-        incoming_text = request.__getitem__('Body')
+        incoming_text = request.json()['Body']
         logger.error(incoming_text)
         handler = getattr(handlers, incoming_text.lower(), lambda: "Lo siento, no sé a qué te refieres.")
         outgoing_text = handler()
