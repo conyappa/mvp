@@ -29,7 +29,14 @@ class User(BaseModel, AbstractUser):
 
     username = None
 
-    balance = models.PositiveIntegerField(default=0, verbose_name="account balance")
+    twilio_account_sid = models.CharField(
+        null=True,
+        unique=True,
+        error_messages={"unique": "A user with that Twilio account SID already exists."},
+        max_length=100,
+        verbose_name="Twilio account SID",
+    )
+    balance = models.PositiveIntegerField(default=0, verbose_name="balance")
     phone = PhoneNumberField(
         unique=True,
         error_messages={"unique": "A user with that phone number already exists."},

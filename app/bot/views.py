@@ -15,7 +15,8 @@ logger = logging.getLogger(__name__)
 def use_twilio(view):
     def wrapper(bot, request, *args, **kwargs):
         body = request.body.decode()
-        request.twilio = {k: v[0] for k, v in parse_qs(body).items()}
+        params = {k: v[0] for k, v in parse_qs(body).items()}
+
         return view(bot, request, *args, **kwargs)
 
     return wrapper

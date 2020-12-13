@@ -1,33 +1,32 @@
-def greeting():
+from lottery.models import Draw
+
+
+def greeting(_user):
     msg = "¡Bienvenido a ConYapa! Mi nombre es YapaBot y seré tu asistente personal."
     return msg
 
 
-def help():
+def help(_user):
     msg = "Los comandos disponilbes son:\nreglas\nsaldo\ndeposito\netc..."
     return msg
 
 
-def balance():
-    msg = "Tienes un saldo de $###."
+def balance(user):
+    msg = "Tienes un saldo de $."
     return msg
 
 
-def deposit():
+def deposit(_user):
     msg = f"Aquí es a donde debes transferir."
     return msg
 
 
-def withdraw():
-    msg = f"Por favor indícanos a que cuenta transferirte tu dinero."
+def results(_user):
+    draw = Draw.objects.current()
+    msg = f"Los números que han salido en el sorteo de esta semana son:\n{draw.results}"
     return msg
 
 
-def results():
-    msg = "Los numeros de esta semana son:..."
-    return msg
-
-
-def tickets():
+def tickets(user):
     msg = "Estos son tus tickets para esta semana:\n1. ####\n2. ####"
     return msg
