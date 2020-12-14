@@ -18,7 +18,7 @@ def rules(_user):
 
 
 def help(_user):
-    msg = "Los comandos disponilbes son:\nreglas\nsaldo\ndeposito\netc..."
+    msg = "Los comandos disponibles son:\nrules\nbalance\ndeposit\nresults\ntickets"
     return msg
 
 
