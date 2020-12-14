@@ -21,7 +21,7 @@ def rules(_user):
 
 
 def help(_user):
-    msg = "Los comandos aue puedes utilizar son:\nrules: Te recuerdo de las reglas\nbalance: Te entrego tu saldo actual"
+    msg = "Los comandos que puedes utilizar son:\n\nrules: Te recuerdo de las reglas\nbalance: Te entrego tu saldo actual"
     msg += "\ndeposit: Para saber como depositar más\nresults: Ver que números han salido\ntickets: Cuales son tus números ganadores?"
     return msg
 
@@ -71,4 +71,3 @@ def prizes(_user):
     formatted_prizes = "\n".join(map(lambda i: f"{numbers[i]}: {settings.PRIZES[i]}", range(0, 7)))
     msg += f"{formatted_prizes}"
     return msg
-    
