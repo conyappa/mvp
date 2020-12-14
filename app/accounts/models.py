@@ -13,11 +13,6 @@ class UserManager(BaseUserManager):
     def everything(self):
         return super().get_queryset()
 
-    # def create(self, **fields):
-    #     user = super().create(**fields)
-    #     user.set_password(fields["password"])
-    #     user.save()
-
     def create_superuser(self, **fields):
         fields.setdefault("is_staff", True)
         fields.setdefault("is_superuser", True)
