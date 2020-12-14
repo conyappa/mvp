@@ -39,7 +39,11 @@ def tickets(user):
     tickets = user.current_tickets
     numbers = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
     formatted_tickets = "\n".join(
-        map(lambda i, x: f"*({numbers[i]})*{' ' * 6}{format_ticket(x)}", range(1, len(tickets) + 1), tickets)
+        map(lambda n, x: f"{n}{' ' * 6}{format_ticket(x)}", numbers[0 : len(tickets)], tickets)
     )
-    msg = f"Tus tickets de esta semana son:\n\n{formatted_tickets}"
+    msg = (
+        f"Tus tickets de esta semana son:\n\n{formatted_tickets}"
+        if tickets.exists()
+        else "No tienes tickets esta semana 😢"
+    )
     return msg
