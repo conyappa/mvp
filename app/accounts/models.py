@@ -39,6 +39,17 @@ class User(BaseModel, AbstractUser):
             self.set_password(kwargs["password"])
         return ret
 
+    def delete(self, *args, **kwargs):
+        self.is_active = False
+        self.save(*args, **kwargs)
+
+    def restore(self, *args, **kwargs):
+        self.is_active = True
+        self.save(*args, **kwargs)
+
+    def hard_delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+
     @property
     def number_of_tickets(self):
         return min(settings.MAX_TICKETS, self.balance // settings.TICKET_COST)
@@ -50,17 +61,6 @@ class User(BaseModel, AbstractUser):
     @property
     def current_prize(self):
         return sum(map(lambda x: x.prize, self.current_tickets))
-
-    def delete(self, *args, **kwargs):
-        self.is_active = False
-        self.save(*args, **kwargs)
-
-    def restore(self, *args, **kwargs):
-        self.is_active = True
-        self.save(*args, **kwargs)
-
-    def hard_delete(self, *args, **kwargs):
-        super().delete(*args, **kwargs)
 
     def __str__(self):
         return str(self.phone)

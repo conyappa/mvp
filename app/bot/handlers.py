@@ -14,7 +14,10 @@ def help(_user):
 
 
 def balance(user):
-    msg = f"Tu saldo actual es de ${user.balance}, lo que equivale a {user.number_of_tickets} tickets."
+    msg = f"Tu saldo actual es de *${user.balance}*, lo que equivale a *{user.number_of_tickets} tickets*."
+    if user.number_of_tickets < settings.MAX_TICKETS:
+        money_for_next_ticket = settings.TICKET_COST - (user.balance % settings.TICKET_COST)
+        msg +=  f" ¡Deposita ${money_for_next_ticket} para aumentar tus probabilidades de ganar!"
     return msg
 
 
@@ -26,8 +29,8 @@ def deposit(_user):
 def results(user):
     draw_results = Draw.objects.current().results
     draw_results += itertools.repeat("❓", 7 - len(draw_results))
-    days = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
-    formatted_results = "\n".join(map(lambda i: f"{days[i]}: {draw_results[i]}", range(7)))
+    weekdays = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
+    formatted_results = "\n".join(map(lambda i: f"{weekdays[i]}: {draw_results[i]}", range(7)))
     formatted_prize = f"¡Por ahora has ganado *${user.current_prize}*! 💰💰"
     msg = f"Los números de esta semana son:\n\n{formatted_results}\n\n{formatted_prize}"
     return msg
