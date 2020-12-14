@@ -88,5 +88,5 @@ class Ticket(BaseModel):
         return settings.PRIZES[self.number_of_matches]
 
     def __str__(self):
-        formatted_picks = ", ".join(map(str, self.draw.results))
+        formatted_picks = ", ".join(map(str, self.picks))
         return f"{formatted_picks} @ {self.draw.start_date} of {self.user}"
