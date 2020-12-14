@@ -8,6 +8,13 @@ def greeting(_user):
     return msg
 
 
+def rules(_user):
+    msg = "Esta es una lotería que te premia por ahorrar!! 💰"
+    msg += f"\nPor cada ${settings.TICKET_COST} que tengas ahorrado te daremos un ticket para participar en nuestra lotería semanal. 🎁"
+    msg += f"\n\nCada día a las {settings.DRAW_RESULTS_HOUR}:{settings.DRAW_RESULTS_MINUTE} saldrá un nuevo número."
+    msg += "\n\nMientras más aciertos tenga tu ticket, más ganas!! 🤑"
+    return msg
+
 def help(_user):
     msg = "Los comandos disponilbes son:\nreglas\nsaldo\ndeposito\netc..."
     return msg
