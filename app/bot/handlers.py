@@ -9,7 +9,7 @@ def greeting(_user):
 
 
 def rules(_user):
-    minutes_format = f"{itertools.repeat("0", 2 - len(settings.DRAW_RESULTS_MINUTE))}{settings.DRAW_RESULTS_MINUTE}"
+    minutes_format = f"{itertools.repeat("0", 2 - len(str(settings.DRAW_RESULTS_MINUTE)))}{settings.DRAW_RESULTS_MINUTE}"
     msg = "Esta es una lotería que te premia por ahorrar!! 💰"
     msg += f"\nPor cada *${settings.TICKET_COST}* que tengas ahorrado te daremos un ticket para participar en nuestra lotería semanal. 🎁"
     msg += f"\n\nCada día a las {settings.DRAW_RESULTS_HOUR}:{minutes_format} saldrá un nuevo número."
