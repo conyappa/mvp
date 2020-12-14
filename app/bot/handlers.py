@@ -18,7 +18,8 @@ def rules(_user):
 
 
 def help(_user):
-    msg = "Los comandos disponibles son:\nrules\nbalance\ndeposit\nresults\ntickets"
+    msg = "Los comandos aue puedes utilizar son:\nrules: Te recuerdo de las reglas\nbalance: Te entrego tu saldo actual"
+    msg += "\ndeposit: Para saber como depositar más\nresults: Ver que números han salido\ntickets: Cuales son tus números ganadores?"
     return msg
 
 
