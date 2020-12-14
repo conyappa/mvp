@@ -18,8 +18,8 @@ def use_twilio(view):
     def wrapper(bot, request, *args, **kwargs):
         body = request.body.decode()
         params = {inflection.underscore(k): v[0] for k, v in parse_qs(body).items()}
-        phone = params["from"].strip("whatsapp:")
 
+        phone = params["from"].strip("whatsapp:")
         user, created = User.objects.get_or_create(defaults={"password": phone}, phone=phone)
         request.twilio_params = {"user": user, "new_user": created, "msg": params["body"]}
 
