@@ -1,4 +1,4 @@
-# ConYapa MVP
+# ConYappa MVP
 
 ## Requirements
 

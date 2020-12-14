@@ -4,7 +4,7 @@ from lottery.models import Draw
 
 
 def greeting(_user):
-    msg = "¡Bienvenido a ConYapa! Mi nombre es YapaBot y seré tu asistente personal."
+    msg = "¡Bienvenido a ConYappa! Mi nombre es YappaBot y seré tu asistente personal."
     return msg
 
 
