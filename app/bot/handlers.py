@@ -37,8 +37,9 @@ def tickets(user):
     draw_results = Draw.objects.current().results
     format_ticket = lambda x: ", ".join(map(lambda y: f"*{y}*" if (y in draw_results) else str(y), x.picks))
     tickets = user.current_tickets
+    numbers = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
     formatted_tickets = "\n".join(
-        map(lambda i, x: f"*({i})*{' ' * 6}{format_ticket(x)}", range(1, len(tickets) + 1), tickets)
+        map(lambda i, x: f"*({numbers[i]})*{' ' * 6}{format_ticket(x)}", range(1, len(tickets) + 1), tickets)
     )
     msg = f"Tus tickets de esta semana son:\n\n{formatted_tickets}"
     return msg
