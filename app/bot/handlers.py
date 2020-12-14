@@ -63,3 +63,12 @@ def tickets(user):
         else "No tienes tickets esta semana 😢"
     )
     return msg
+
+
+def prizes(_user):
+    msg = "Los premios para cada acierto son:\n\n"
+    numbers = ["0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣"]
+    formatted_prizes = "\n".join(map(lambda i: f"{numbers[i]}: {settings.PRIZES[i]}", range(0, 7)))
+    msg += f"{formatted_prizes}"
+    return msg
+    
