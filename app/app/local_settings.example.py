@@ -4,6 +4,8 @@ from .settings import *  # noqa: F401,F403
 
 # Secrets.
 SECRET_KEY = "m[4xQ]go~21)h6'HWh@Xz4ydn8X]H1vON4E8~`'>zv+cf+rZww"
+TWILIO_ACCOUNT_SID = "Z9RhuwLgtVPZlyf6ei9H6nVXYYeBbzeDjg"
+TWILIO_AUTH_TOKEN = "iLskXIhauahGmtTHzze5iDH6vIZdDXhF"
 
 
 # Other environmental variables.
