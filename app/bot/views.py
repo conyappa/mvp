@@ -1,7 +1,8 @@
 import inflection
 from urllib.parse import parse_qs
 from twilio.twiml.messaging_response import MessagingResponse
-from rest_framework import generics
+from rest_framework import generics, status
+from django.conf import settings
 from django.http import HttpResponse
 from accounts.models import User
 from . import handlers
@@ -19,9 +20,14 @@ def use_twilio(view):
         body = request.body.decode()
         params = {inflection.underscore(k): v[0] for k, v in parse_qs(body).items()}
 
+        if params.get("account_sid") != settings.TWILIO_ACCOUNT_SID:
+            return HttpResponse("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)
+        if "from" not in params.keys():
+            return HttpResponse("Bad Request", status=status.HTTP_400_BAD_REQUEST)
+
         phone = params["from"].strip("whatsapp:")
         user, created = User.objects.get_or_create(defaults={"password": phone}, phone=phone)
-        request.twilio_params = {"user": user, "new_user": created, "msg": params["body"]}
+        request.twilio_params = {"user": user, "new_user": created, "msg": params.get("body", "")}
 
         outgoing_msg = view(bot, request, *args, **kwargs)
         response = MessagingResponse()
