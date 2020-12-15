@@ -20,13 +20,17 @@ def use_twilio(view):
         body = request.body.decode()
         params = {inflection.underscore(k): v[0] for k, v in parse_qs(body).items()}
 
-        if params.get("account_sid") != settings.TWILIO_ACCOUNT_SID:
-            return HttpResponse("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)
-        if "from" not in params:
+        try:
+            twilio_account_sid = params["account_sid"]
+            from_phone = params["from"].split(":")[1]
+            to_phone = params["to"].split(":")[1]
+        except (KeyError, IndexError):
             return HttpResponse("Bad Request", status=status.HTTP_400_BAD_REQUEST)
 
-        phone = params["from"].strip("whatsapp:")
-        user, created = User.objects.get_or_create(defaults={"password": phone}, phone=phone)
+        if (twilio_account_sid != settings.TWILIO_ACCOUNT_SID) or (to_phone != settings.TWILIO_PHONE_NUMBER):
+            return HttpResponse("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)
+
+        user, created = User.objects.get_or_create(defaults={"password": from_phone}, phone=from_phone)
         request.twilio_params = {"user": user, "new_user": created, "msg": params.get("body", "")}
 
         outgoing_msg = view(bot, request, *args, **kwargs)
