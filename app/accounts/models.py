@@ -35,7 +35,7 @@ class User(BaseModel, AbstractUser):
 
     def __init__(self, *args, **kwargs):
         ret = super().__init__(*args, **kwargs)
-        if "password" in kwargs.keys():
+        if "password" in kwargs:
             self.set_password(kwargs["password"])
         return ret
 

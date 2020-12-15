@@ -16,13 +16,13 @@ logger = logging.getLogger(__name__)
 
 
 def use_twilio(view):
-    def wrapper(bot, request, *args, **kwargs):
+    def twilio_view_wrapper(bot, request, *args, **kwargs):
         body = request.body.decode()
         params = {inflection.underscore(k): v[0] for k, v in parse_qs(body).items()}
 
         if params.get("account_sid") != settings.TWILIO_ACCOUNT_SID:
             return HttpResponse("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)
-        if "from" not in params.keys():
+        if "from" not in params:
             return HttpResponse("Bad Request", status=status.HTTP_400_BAD_REQUEST)
 
         phone = params["from"].strip("whatsapp:")
@@ -34,10 +34,10 @@ def use_twilio(view):
         response.message().body(outgoing_msg)
         return HttpResponse(content=response, content_type="text/xml")
 
-    return wrapper
+    return twilio_view_wrapper
 
 
-class Bot(generics.GenericAPIView):
+class ReplierView(generics.GenericAPIView):
     @use_twilio
     def post(self, request):
         incoming_msg = request.twilio_params["msg"]
