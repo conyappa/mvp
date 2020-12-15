@@ -21,7 +21,9 @@ def rules(_user):
 
 
 def help(_user):
-    msg = "Los comandos que puedes utilizar son:\n\nrules: Te recuerdo de las reglas\nbalance: Te entrego tu saldo actual"
+    msg = (
+        "Los comandos que puedes utilizar son:\n\nrules: Te recuerdo de las reglas\nbalance: Te entrego tu saldo actual"
+    )
     msg += "\ndeposit: Para saber como depositar más\nresults: Ver que números han salido\ntickets: Cuales son tus números ganadores?"
     return msg
 
@@ -30,7 +32,7 @@ def balance(user):
     msg = f"Tu saldo actual es de *${user.balance}*, lo que equivale a *{user.number_of_tickets} tickets*."
     if user.number_of_tickets < settings.MAX_TICKETS:
         money_for_next_ticket = settings.TICKET_COST - (user.balance % settings.TICKET_COST)
-        msg +=  f" ¡Deposita ${money_for_next_ticket} para aumentar tus probabilidades de ganar!"
+        msg += f" ¡Deposita ${money_for_next_ticket} para aumentar tus probabilidades de ganar!"
     return msg
 
 

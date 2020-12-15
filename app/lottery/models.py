@@ -8,11 +8,11 @@ from accounts.models import User
 
 
 def generate_random_picks():
-    return rd.sample(population=settings.TICKET_PICK_RANGE, k=7)
+    return rd.sample(population=settings.PICK_RANGE, k=7)
 
 
 def generate_result_pool():
-    return list(settings.TICKET_PICK_RANGE)
+    return list(settings.PICK_RANGE)
 
 
 class DrawManager(models.Manager):

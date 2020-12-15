@@ -27,18 +27,17 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # Other environmental variables.
 TEST = "test" in sys.argv
-DEBUG = os.getenv("DJANGO_ENV") == "development"
+DEBUG = os.environ.get("DJANGO_ENV") == "development"
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(" ")
 
 
 # Constants.
-MAX_TICKETS = 4
-TICKET_COST = 2500
-TICKET_PICK_RANGE = range(1, 31)
-DRAW_BEGINNING_WEEKDAY = 3
-DRAW_RESULTS_HOUR = 12
-DRAW_RESULTS_MINUTE = 0
-PRIZES = [0, 50, 100, 200, 400, 800, 1600, 3200]
+MAX_TICKETS = int(os.environ.get("MAX_TICKETS", "4"))
+TICKET_COST = int(os.environ.get("TICKET_COST", "2500"))
+PICK_RANGE = tuple(range(int(os.environ.get("MIN_PICK", "1")), int(os.environ.get("MAX_PICK", "30")) + 1))
+NEW_DRAW_WEEKDAY = int(os.environ.get("NEW_DRAW_WEEKDAY", "0"))
+DRAW_RESULTS_HOUR, DRAW_RESULTS_MINUTE = map(int, os.environ.get("DRAW_RESULTS_TIME", "20:00").split(":"))
+PRIZES = tuple(map(int, os.environ.get("PRIZES", "0 50 100 200 400 800 1600 3200").split(" ")))
 
 
 # Application definition.
@@ -144,7 +143,7 @@ PROPAGATE_EXCEPTIONS = True
 
 
 # Sentry: https://sentry.io/for/django/.
-sentry_sdk.init(dsn=os.getenv("SENTRY_DSN", ""), integrations=[DjangoIntegration()])
+sentry_sdk.init(dsn=os.environ.get("SENTRY_DSN", ""), integrations=[DjangoIntegration()])
 
 
 # pylint: disable=line-too-long

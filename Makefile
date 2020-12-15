@@ -9,7 +9,7 @@ setlocalenv:
 createvenv:
 	$(PYTHON) -m venv .venv
 	$(POETRY) run $(PIP) install --upgrade pip
-	$(POETRY) run poetry install
+	$(POETRY) ru-n poetry install
 
 makemigrations:
 	$(DOCKER-COMPOSE) run web python manage.py makemigrations
