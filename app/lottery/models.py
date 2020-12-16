@@ -33,7 +33,7 @@ class Draw(BaseModel):
         results += itertools.repeat("?", 7 - len(results))
 
     @property
-    def formated_results(self):
+    def formatted_results(self):
         return "\n".join(map(lambda weekday, result: f"{weekday}: {result}", settings.WEEKDAYS, self.filled_results))
 
     def create_tickets(self):
