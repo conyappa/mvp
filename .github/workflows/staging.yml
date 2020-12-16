@@ -3,7 +3,7 @@ name: staging
 on:
   push:
     branches:
-      - master
+      - development
 
 jobs:
   deploy:
@@ -23,5 +23,5 @@ jobs:
             DJANGO_ENV
             DJANGO_SECRET_KEY
         env:
-          DJANGO_ENV: production
+          DJANGO_ENV: development
           DJANGO_SECRET_KEY: "${{ secrets.DJANGO_SECRET_KEY }}"

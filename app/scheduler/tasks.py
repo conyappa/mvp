@@ -14,12 +14,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-sender = SenderClient()
-
-
 def draw_cycle():
     now = timezone.now()
     all_users = User.objects.all()
+    sender = SenderClient()
 
     if now.weekday() == settings.NEW_DRAW_WEEKDAY:
         if Draw.objects.exists():
