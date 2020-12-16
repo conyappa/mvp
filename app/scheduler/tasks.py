@@ -25,6 +25,7 @@ def draw_cycle():
             previous_draw = Draw.objects.current()
             previous_draw.conclude()
             # Broadcast a notification.
+            formatted_results = "\n".join(map(lambda day, res: f"{day}: {res}", weekdays, draw_results))
             sender.send_sms(users=all_users, msg_body=(
                 "¡Ha finalizado el sorteo! Los resultados son:\n\n"
                 f"{formatted_results}"
