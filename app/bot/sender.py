@@ -29,7 +29,7 @@ class SenderClient:
             to = f"{to_scheme}:{user.phone}"
             msg_body = msg_body_formatter(user)
             try:
-                self.twilio_client.messages.create(body=msg_body, from_=from_, to="to")
+                self.twilio_client.messages.create(body=msg_body, from_=from_, to=to)
             except TwilioRestException:
                 fails.append(user)
 
