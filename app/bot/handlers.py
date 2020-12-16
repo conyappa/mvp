@@ -38,6 +38,7 @@ def help(_user):
         "*deposit*: Deposítanos tus ahorros para obtener más boletos 🍀\n"
         "*results*: Enterate los números ganadores de esta semana 🎰\n"
         "*tickets*: Revisa cuáles son tus boletos de esta semana 🎟️"
+        "withdraw*: Retira tu dinero a una cuenta bancaria 😢"
     )
     return msg
 

@@ -26,13 +26,23 @@ def draw_cycle():
             # End the previous draw.
             previous_draw = Draw.objects.current()
             previous_draw.conclude()
-            sender.send_sms(users=all_users, msg_body="¡Ha finalizado el sorteo! Los resultados fueron...")
+            # Broadcast the results.
+            sender.send_sms(
+                users=all_users,
+                msg_body=(
+                    "¡Ha finalizado el sorteo! Los resultados son:\n\n"
+                    f"{formatted_results}"
+                    f"\n\n¡Ganaste *${user.current_prize}*! 🤑"
+                ),
+            )
 
         # Create a new draw.
         current_draw = Draw.objects.create(start_date=now.date())
         current_draw.create_tickets()
         current_draw.choose_result()
-        sender.send_sms(users=all_users, msg_body=f"¡Ha comenzado un nuevo sorteo! El número de hoy es...")
+        sender.send_sms(
+            users=all_users, msg_body=f"¡Ha comenzado un nuevo sorteo! El primer número es {current_draw.results[0]}"
+        )
 
     elif Draw.objects.exists():
         current_draw.choose_result()
