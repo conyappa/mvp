@@ -1,4 +1,3 @@
-import itertools
 import datetime as dt
 from django.conf import settings
 from lottery.models import Draw

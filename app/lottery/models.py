@@ -1,3 +1,4 @@
+import itertools
 import random as rd
 import datetime as dt
 from django.db import models
@@ -31,6 +32,7 @@ class Draw(BaseModel):
     def filled_results(self):
         results = self.results
         results += itertools.repeat("?", 7 - len(results))
+        return results
 
     @property
     def formatted_results(self):
