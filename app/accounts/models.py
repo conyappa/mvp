@@ -6,6 +6,10 @@ from phonenumber_field.modelfields import PhoneNumberField
 from app.base import BaseModel
 
 
+def generate_initial_extra_tickets_ttl():
+    return []
+
+
 class UserManager(BaseUserManager):
     def get_queryset(self):
         return super().get_queryset().filter(is_active=True)
@@ -30,7 +34,7 @@ class User(BaseModel, AbstractUser):
     )
 
     balance = models.PositiveIntegerField(default=0, verbose_name="balance")
-    # extra_tickets = JSONField(default=generate_initial_extra_tickets)
+    extra_tickets_ttl = models.JSONField(default=generate_initial_extra_tickets_ttl, verbose_name="extra tickets TTL")
 
     objects = UserManager()
 
@@ -52,8 +56,14 @@ class User(BaseModel, AbstractUser):
         super().delete(*args, **kwargs)
 
     @property
+    def extra_tickets(self):
+        self.extra_tickets_ttl = list(filter(bool, x))
+        self.save()
+        return len(self.extra_tickets_ttl)
+
+    @property
     def number_of_tickets(self):
-        return min(settings.MAX_TICKETS, self.balance // settings.TICKET_COST)
+        return min(settings.MAX_TICKETS, (self.balance // settings.TICKET_COST) + self.extra_tickets)
 
     @property
     def current_tickets(self):
