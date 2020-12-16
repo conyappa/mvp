@@ -136,8 +136,6 @@ if "DATABASE_URL" in os.environ:
     DATABASES["default"] = dj_database_url.config(ssl_require=True)
 
 
-
-
 # Mailer: https://docs.djangoproject.com/en/2.2/topics/email/.
 # Email: https://docs.djangoproject.com/en/2.2/ref/settings/#email.
 ADMINS = [("Ariel Martínez", "ariel@conyappa.cl")]
