@@ -39,7 +39,7 @@ ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(" ")
 MAX_TICKETS = int(os.environ.get("MAX_TICKETS", "4"))
 TICKET_COST = int(os.environ.get("TICKET_COST", "2500"))
 PICK_RANGE = tuple(range(int(os.environ.get("MIN_PICK", "1")), int(os.environ.get("MAX_PICK", "30")) + 1))
-NEW_DRAW_WEEKDAY = int(os.environ.get("NEW_DRAW_WEEKDAY", "2"))
+NEW_DRAW_WEEKDAY = int(os.environ.get("NEW_DRAW_WEEKDAY", "0"))
 DRAW_RESULTS_HOUR, DRAW_RESULTS_MINUTE = map(int, os.environ.get("DRAW_RESULTS_TIME", "20:00").split(":"))
 PRIZES = tuple(map(int, os.environ.get("PRIZES", "0 50 100 200 400 800 1600 3200").split(" ")))
 
