@@ -2,6 +2,8 @@ import datetime as dt
 from django.utils import timezone
 from django.conf import settings
 from lottery.models import Draw
+from accounts.models import User
+from bot.sender import SenderClient
 from .helpers import use_scheduler
 
 
@@ -12,17 +14,29 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+sender = SenderClient()
+
+
 def draw_cycle():
     now = timezone.now()
+    all_users = Users.objects.all()
+
     if now.weekday() == settings.NEW_DRAW_WEEKDAY:
         if Draw.objects.exists():
-            last_draw = Draw.objects.current()
-            last_draw.conclude()
+            # End the previous draw.
+            previous_draw = Draw.objects.current()
+            previous_draw.conclude()
+            sender.send_sms(users=all_users, msg_body="¡Ha finalizado el sorteo! Los resultados fueron...")
+
+        # Create a new draw.
         current_draw = Draw.objects.create(start_date=now.date())
         current_draw.create_tickets()
-    if Draw.objects.exists():
-        current_draw = Draw.objects.current()
         current_draw.choose_result()
+        sender.send_sms(users=all_users, msg_body=f"¡Ha comenzado un nuevo sorteo! El número de hoy es...")
+
+    elif Draw.objects.exists():
+        current_draw.choose_result()
+        sender.send_sms(users=all_users, msg_body=f"El número de hoy es...")
 
 
 @use_scheduler
