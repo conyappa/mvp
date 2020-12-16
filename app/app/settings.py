@@ -48,6 +48,7 @@ PRIZES = tuple(map(int, os.environ.get("PRIZES", "0 50 100 200 400 800 1600 3200
 WEEKDAYS = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
 WEEKDAYS = WEEKDAYS[NEW_DRAW_WEEKDAY:] + WEEKDAYS[:NEW_DRAW_WEEKDAY]
 FORMATTED_DRAW_RESULTS_TIME = dt.time(hour=DRAW_RESULTS_HOUR, minute=DRAW_RESULTS_MINUTE).isoformat(timespec="minutes")
+END_DRAW_WEEKDAY = (NEW_DRAW_WEEKDAY - 1) % 7
 
 
 # Application definition.

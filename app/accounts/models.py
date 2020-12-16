@@ -23,13 +23,14 @@ class User(BaseModel, AbstractUser):
     USERNAME_FIELD = "phone"
 
     username = None
-
-    balance = models.PositiveIntegerField(default=0, verbose_name="balance")
     phone = PhoneNumberField(
         unique=True,
         error_messages={"unique": "A user with that phone number already exists."},
         verbose_name="phone number",
     )
+
+    balance = models.PositiveIntegerField(default=0, verbose_name="balance")
+    extra_tickets = JSONField(default=generate_initial_extra_tickets)
 
     objects = UserManager()
 

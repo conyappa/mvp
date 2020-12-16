@@ -18,45 +18,45 @@ def draw_cycle():
     now = timezone.localtime()
     all_users = User.objects.all()
     sender = SenderClient()
+    weekday
 
     if now.weekday() == settings.NEW_DRAW_WEEKDAY:
+        # Create a new draw.
+        draw = Draw.objects.create(start_date=now.date())
+        draw.create_tickets()
+        draw.choose_result()
+        # Broadcast a notification.
+        sender.send_sms(
+            users=all_users,
+            msg_body=("¡Ha comenzado el nuevo sorteo! " f"El primer número es {draw.results[0]}"),
+        )
+
+    elif now.weekday() == settings.END_DRAW_WEEKDAY:
         if Draw.objects.exists():
             # End the previous draw.
-            previous_draw = Draw.objects.current()
-            previous_draw.conclude()
+            draw = Draw.objects.current()
+            draw.choose_result()
+            draw.conclude()
             # Broadcast a notification.
             sender.send_sms(
                 users=all_users,
                 msg_body=(
                     "¡Ha finalizado el sorteo! Los resultados son:\n\n"
-                    f"{previous_draw.formatted_results}\n\n"
+                    f"{draw.formatted_results}\n\n"
                     # f"¡Ganaste *${user.current_prize}*! 🤑"
                 ),
             )
 
-        # Create a new draw.
-        current_draw = Draw.objects.create(start_date=now.date())
-        current_draw.create_tickets()
-        current_draw.choose_result()
-        # Broadcast a notification.
-        sender.send_sms(
-            users=all_users,
-            msg_body=("¡Ha comenzado el nuevo sorteo! " f"El primer número es {current_draw.results[0]}"),
-        )
-
     elif Draw.objects.exists():
         # Continue with the ongoing draw.
-        current_draw = Draw.objects.current()
-        current_draw.choose_result()
+        draw = Draw.objects.current()
+        draw.choose_result()
         # Broadcast a notification.
-        formatted_time = dt.time(hour=settings.DRAW_RESULTS_HOUR, minute=settings.DRAW_RESULTS_MINUTE).isoformat(
-            timespec="minutes"
-        )
         sender.send_sms(
             users=all_users,
             msg_body=(
                 "¡Llegó la hora de sacar un número!\n"
-                f"El número del hoy es el *{current_draw.results[-1]}* 🎉\n\n"
+                f"El número del hoy es el *{draw.results[-1]}* 🎉\n\n"
                 "Envía 'results' para revisar los resultados de la semana."
             ),
         )
