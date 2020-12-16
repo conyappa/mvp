@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 def draw_cycle():
-    now = timezone.now()
+    now = timezone.localtime()
     all_users = User.objects.all()
     sender = SenderClient()
 
