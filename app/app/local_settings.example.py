@@ -14,7 +14,6 @@ DEBUG = True
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 
-# Database: https://docs.djangoproject.com/en/2.2/ref/settings/#databases.
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -27,5 +26,10 @@ DATABASES = {
 }
 
 
-# Mailer: https://docs.djangoproject.com/en/2.2/topics/email/.
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = "gmail.com"
+EMAIL_HOST_PASSWORD = "password"
+EMAIL_HOST_USER = "example"
+EMAIL_PORT = 25
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = False

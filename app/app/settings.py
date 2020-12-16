@@ -129,9 +129,26 @@ DATABASES = {
         "PORT": os.environ.get("DATABASE_PORT"),
     }
 }
+
+
 # Configure `DATABASE_URL` as the main database in production.
 if "DATABASE_URL" in os.environ:
     DATABASES["default"] = dj_database_url.config(ssl_require=True)
+
+
+
+
+# Mailer: https://docs.djangoproject.com/en/2.2/topics/email/.
+# Email: https://docs.djangoproject.com/en/2.2/ref/settings/#email.
+ADMINS = [("Ariel Martínez", "ariel@conyappa.cl")]
+MANAGERS = [("Ariel Martínez", "ariel@conyappa.cl")]
+EMAIL_HOST = os.environ.get("EMAIL_HOST")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_PORT = int(os.environ.get("EMAIL_HOST_PORT", "25"))
+EMAIL_USE_TLS = bool(int(os.environ.get("EMAIL_USE_TLS", "0")))
+EMAIL_USE_SSL = bool(int(os.environ.get("EMAIL_USE_SSL", "0")))
+EMAIL_USE_LOCALTIME = True
 
 
 # Django REST framework.
