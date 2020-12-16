@@ -99,6 +99,7 @@ class Ticket(BaseModel):
 
     @property
     def formatted_picks(self):
+        draw_results = self.draw.results
         return ", ".join(map(lambda pick: f"*{pick}*" if (pick in draw_results) else str(pick), self.picks))
 
     def __str__(self):
