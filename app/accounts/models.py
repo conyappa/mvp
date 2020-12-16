@@ -30,7 +30,7 @@ class User(BaseModel, AbstractUser):
     )
 
     balance = models.PositiveIntegerField(default=0, verbose_name="balance")
-    extra_tickets = JSONField(default=generate_initial_extra_tickets)
+    # extra_tickets = JSONField(default=generate_initial_extra_tickets)
 
     objects = UserManager()
 
