@@ -19,34 +19,43 @@ sender = SenderClient()
 
 def draw_cycle():
     now = timezone.now()
-    all_users = Users.objects.all()
+    all_users = User.objects.all()
 
     if now.weekday() == settings.NEW_DRAW_WEEKDAY:
         if Draw.objects.exists():
             # End the previous draw.
             previous_draw = Draw.objects.current()
             previous_draw.conclude()
-            # Broadcast the results.
-            sender.send_sms(
-                users=all_users,
-                msg_body=(
-                    "¡Ha finalizado el sorteo! Los resultados son:\n\n"
-                    f"{formatted_results}"
-                    f"\n\n¡Ganaste *${user.current_prize}*! 🤑"
-                ),
-            )
+            # Broadcast a notification.
+            sender.send_sms(users=all_users, msg_body=(
+                "¡Ha finalizado el sorteo! Los resultados son:\n\n"
+                f"{formatted_results}"
+                f"\n\n¡Ganaste *${user.current_prize}*! 🤑"
+            ))
 
         # Create a new draw.
         current_draw = Draw.objects.create(start_date=now.date())
         current_draw.create_tickets()
         current_draw.choose_result()
-        sender.send_sms(
-            users=all_users, msg_body=f"¡Ha comenzado un nuevo sorteo! El primer número es {current_draw.results[0]}"
-        )
+        # Broadcast a notification.
+        sender.send_sms(users=all_users, msg_body=(
+            "¡Ha comenzado el nuevo sorteo! "
+            f"El primer número es {current_draw.results[0]}"
+        ))
 
     elif Draw.objects.exists():
+        # Continue with the ongoing draw.
+        current_draw = Draw.objects.current()
         current_draw.choose_result()
-        sender.send_sms(users=all_users, msg_body=f"El número de hoy es...")
+        # Broadcast a notification.
+        formatted_time = dt.time(hour=settings.DRAW_RESULTS_HOUR, minute=settings.DRAW_RESULTS_MINUTE).isoformat(
+            timespec="minutes"
+        )
+        sender.send_sms(users=all_users, msg_body=(
+            "¡Llegó la hora de sacar un número! "
+            f"El número del hoy es el *{current_draw.results[-1]}* 🎉\n\n"
+            "Envía 'results' para revisar los resultados de la semana."
+        ))
 
 
 @use_scheduler
