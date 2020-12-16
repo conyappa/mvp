@@ -23,4 +23,3 @@ class SenderClient:
                 self.twilio_client.messages.create(body=msg_body, from_=from_, to=to)
             except TwilioRestException:
                 pass  # Send an email to staff.
-

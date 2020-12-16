@@ -23,7 +23,8 @@ def create_new_draw(timestamp):
     SenderClient().send_sms(
         users=User.objects.all(),
         msg_body_formatter=lambda _user: (
-            "¡Ha comenzado un nuevo sorteo! " f"El primer número es el *{draw.results[0]}* 🎰\n\n"
+            "¡Ha comenzado un nuevo sorteo! "
+            f"El primer número es el *{draw.results[0]}* 🎰\n\n"
             "Envía *tickets* para ver si le achuntaste."
         ),
     )
