@@ -3,7 +3,7 @@ from django.conf import settings
 from lottery.models import Draw
 
 
-numbers = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
+numbers = ["0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
 
 
 def greeting(_user):
@@ -68,7 +68,11 @@ def tickets(user):
     tickets = user.current_tickets
     if tickets.exists():
         formatted_tickets = "\n".join(
-            map(lambda number, ticket: f"{number}{' ' * 6}{ticket.formatted_picks}", numbers[0 : len(tickets)], tickets)
+            map(
+                lambda number, ticket: f"{number}{' ' * 6}{ticket.formatted_picks}",
+                numbers[1 : len(tickets) + 1],
+                tickets,
+            )
         )
         msg = f"Tus boletos de esta semana son:\n\n{formatted_tickets}"
     else:
