@@ -16,14 +16,11 @@ def greeting(_user):
 
 
 def rules(_user):
-    formatted_time = dt.time(hour=settings.DRAW_RESULTS_HOUR, minute=settings.DRAW_RESULTS_MINUTE).isoformat(
-        timespec="minutes"
-    )
     msg = (
-        f"\nPor cada *${settings.TICKET_COST}* que tengas ahorrados te regalaremos",
-        "un boleto para participar en nuestra lotería semanal. 🎁\n\n",
-        f"Cada día a las {formatted_time} saldrá un nuevo número",
-        "\n\n¡Mientras más aciertos tenga tu boleto, más ganas! 🤑",
+        f"\nPor cada *${settings.TICKET_COST}* que tengas ahorrados te regalaremos"
+        "un boleto para participar en nuestra lotería semanal. 🎁\n\n"
+        f"Cada día a las {settings.FORMATTED_DRAW_RESULTS_TIME} saldrá un nuevo número"
+        "\n\n¡Mientras más aciertos tenga tu boleto, más ganas! 🤑"
     )
     return msg
 
@@ -31,12 +28,12 @@ def rules(_user):
 def help(_user):
     msg = (
         "Los comandos disponibles son:\n\n"
-        "*rules*: Échale un vistazo a las reglas 📜\n"
-        "*balance*: Consulta tu saldo actual 💲\n"
-        "*deposit*: Deposítanos tus ahorros para obtener más boletos 🍀\n"
-        "*results*: Enterate los números ganadores de esta semana 🎰\n"
-        "*tickets*: Revisa cuáles son tus boletos de esta semana 🎟️"
-        "withdraw*: Retira tu dinero a una cuenta bancaria 😢"
+        "*rules*: Échale un vistazo a las reglas 📜\n\n"
+        "*balance*: Consulta tu saldo actual 💲\n\n"
+        "*deposit*: Deposítanos tus ahorros para obtener más boletos 🍀\n\n"
+        "*results*: Entérate los números ganadores de esta semana 🎰\n\n"
+        "*tickets*: Revisa cuáles son tus boletos de esta semana 🎟️\n\n"
+        "*withdraw*: Retira tu dinero a una cuenta bancaria 😢"
     )
     return msg
 
@@ -48,8 +45,8 @@ def balance(user):
     if number_of_tickets < settings.MAX_TICKETS:
         money_for_next_ticket = settings.TICKET_COST - (balance % settings.TICKET_COST)
         msg += (
-            f" ¡Deposita ${money_for_next_ticket} para tener {number_of_tickets + 1}"
-            "y aumentar tus probabilidades de ganar!"
+            f" ¡Deposita ${money_for_next_ticket} para tener {number_of_tickets + 1} "
+            "y aumentar tus probabilidades de ganar! 🍀"
         )
     return msg
 
@@ -60,24 +57,19 @@ def deposit(_user):
 
 
 def results(user):
-    draw_results = Draw.objects.current().results
-    draw_results += itertools.repeat("?", 7 - len(draw_results))
-    formatted_results = "\n".join(map(lambda day, res: f"{day}: {res}", settings.WEEKDAYS, draw_results))
     msg = (
         "Los números de esta semana son:\n\n"
-        f"{formatted_results}"
+        f"{Draw.objects.current().formatted_results}"
         f"\n\n¡Por ahora has ganado *${user.current_prize}*! 💰💰"
     )
     return msg
 
 
 def tickets(user):
-    draw_results = Draw.objects.current().results
-    format_ticket = lambda x: ", ".join(map(lambda y: f"*{y}*" if (y in draw_results) else str(y), x.picks))
     tickets = user.current_tickets
     if tickets.exists():
         formatted_tickets = "\n".join(
-            map(lambda num, tic: f"{num}{' ' * 6}{format_ticket(tic)}", numbers[0 : len(tickets)], tickets)
+            map(lambda number, ticket: f"{number}{' ' * 6}{ticket.formatted_picks}", numbers[0 : len(tickets)], tickets)
         )
         msg = f"Tus boletos de esta semana son:\n\n{formatted_tickets}"
     else:
@@ -86,6 +78,8 @@ def tickets(user):
 
 
 def prizes(_user):
-    formatted_prizes = "\n".join(map(lambda n, x: f"{n}: {x}", numbers[0 : len(settings.PRIZES)], settings.PRIZES))
-    msg = "Los premios por cada acierto son:\n\n" f"{formatted_prizes}"
+    formatted_prizes = "\n".join(
+        map(lambda number, prize: f"{number}: {prize}", numbers[0 : len(settings.PRIZES)], settings.PRIZES)
+    )
+    msg = f"Los premios por cada acierto son:\n\n{formatted_prizes}"
     return msg

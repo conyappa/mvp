@@ -14,6 +14,7 @@ import os
 import sys
 import dj_database_url
 import sentry_sdk
+import datetime as dt
 from sentry_sdk.integrations.django import DjangoIntegration
 
 
@@ -45,7 +46,8 @@ PRIZES = tuple(map(int, os.environ.get("PRIZES", "0 50 100 200 400 800 1600 3200
 
 # Properties.
 WEEKDAYS = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
-WEEKDAYS = WEEKDAYS[NEW_DRAW_WEEKDAY :] + WEEKDAYS[: NEW_DRAW_WEEKDAY]
+WEEKDAYS = WEEKDAYS[NEW_DRAW_WEEKDAY:] + WEEKDAYS[:NEW_DRAW_WEEKDAY]
+FORMATTED_DRAW_RESULTS_TIME = dt.time(hour=DRAW_RESULTS_HOUR, minute=DRAW_RESULTS_MINUTE).isoformat(timespec="minutes")
 
 
 # Application definition.

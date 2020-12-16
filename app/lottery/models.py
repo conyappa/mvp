@@ -27,6 +27,15 @@ class Draw(BaseModel):
 
     objects = DrawManager()
 
+    @property
+    def filled_results(self):
+        results = self.results
+        results += itertools.repeat("?", 7 - len(results))
+
+    @property
+    def formated_results(self):
+        return "\n".join(map(lambda weekday, result: f"{weekday}: {result}", settings.WEEKDAYS, self.filled_results))
+
     def create_tickets(self):
         tickets = []
         for user in User.objects.all():
@@ -52,8 +61,7 @@ class Draw(BaseModel):
                 user.save()
 
     def __str__(self):
-        formatted_results = ", ".join(map(str, self.results))
-        return f"{formatted_results} @ {self.start_date}"
+        return f"{', '.join(map(str, self.filled_results))} @ {self.start_date}"
 
 
 class TicketManager(models.Manager):
@@ -87,6 +95,9 @@ class Ticket(BaseModel):
     def prize(self):
         return settings.PRIZES[self.number_of_matches]
 
+    @property
+    def formatted_picks(self):
+        return ", ".join(map(lambda pick: f"*{pick}*" if (pick in draw_results) else str(pick), self.picks))
+
     def __str__(self):
-        formatted_picks = ", ".join(map(str, self.picks))
-        return f"{formatted_picks} @ {self.draw.start_date} of {self.user}"
+        return f"{', '.join(map(str, self.picks))} @ {self.draw.start_date} of {self.user}"
