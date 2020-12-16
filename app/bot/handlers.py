@@ -5,8 +5,6 @@ from lottery.models import Draw
 
 
 numbers = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
-weekdays = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
-weekdays = weekdays[settings.NEW_DRAW_WEEKDAY :] + weekdays[: settings.NEW_DRAW_WEEKDAY]
 
 
 def greeting(_user):
@@ -64,7 +62,7 @@ def deposit(_user):
 def results(user):
     draw_results = Draw.objects.current().results
     draw_results += itertools.repeat("?", 7 - len(draw_results))
-    formatted_results = "\n".join(map(lambda day, res: f"{day}: {res}", weekdays, draw_results))
+    formatted_results = "\n".join(map(lambda day, res: f"{day}: {res}", settings.WEEKDAYS, draw_results))
     msg = (
         "Los números de esta semana son:\n\n"
         f"{formatted_results}"
