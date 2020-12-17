@@ -34,6 +34,7 @@ class User(BaseModel, AbstractUser):
     )
 
     balance = models.PositiveIntegerField(default=0, verbose_name="balance")
+    winnings = models.PositiveIntegerField(default=0, verbose_name="winnings")
     extra_tickets_ttl = models.JSONField(default=generate_initial_extra_tickets_ttl, verbose_name="extra tickets TTL")
 
     objects = UserManager()
@@ -54,6 +55,11 @@ class User(BaseModel, AbstractUser):
 
     def hard_delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
+
+    def award_prize(self, value):
+        self.balance += value
+        self.winnings += value
+        self.save()
 
     @property
     def extra_tickets(self):

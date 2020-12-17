@@ -58,9 +58,8 @@ class Draw(BaseModel):
             for ticket in self.tickets.all():
                 number_of_matches = len(result_set & set(ticket.picks))
                 user = ticket.user
-                prize = settings.PRIZES[number_of_matches]
-                user.balance += prize
-                user.save()
+                value = settings.PRIZES[number_of_matches]
+                user.award_prize(value)
 
     def __str__(self):
         return f"{', '.join(map(str, self.filled_results))} @ {self.start_date}"
