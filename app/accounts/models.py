@@ -35,7 +35,9 @@ class User(BaseModel, AbstractUser):
 
     balance = models.PositiveIntegerField(default=0, verbose_name="balance")
     winnings = models.PositiveIntegerField(default=0, verbose_name="winnings")
-    extra_tickets_ttl = models.JSONField(default=generate_initial_extra_tickets_ttl, verbose_name="extra tickets TTL")
+    extra_tickets_ttl = models.JSONField(
+        blank=True, default=generate_initial_extra_tickets_ttl, verbose_name="extra tickets TTL"
+    )
 
     objects = UserManager()
 
