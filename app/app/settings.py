@@ -42,6 +42,7 @@ PICK_RANGE = tuple(range(int(os.environ.get("MIN_PICK", "1")), int(os.environ.ge
 NEW_DRAW_WEEKDAY = int(os.environ.get("NEW_DRAW_WEEKDAY", "0"))
 DRAW_RESULTS_HOUR, DRAW_RESULTS_MINUTE = map(int, os.environ.get("DRAW_RESULTS_TIME", "20:00").split(":"))
 PRIZES = tuple(map(int, os.environ.get("PRIZES", "0 50 100 200 400 800 1600 3200").split(" ")))
+BANK_ACCOUNT = os.environ.get("BANK_ACCOUNT")
 
 
 # Properties.

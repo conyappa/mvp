@@ -51,7 +51,11 @@ def balance(user):
 
 
 def deposit(_user):
-    msg = f"Aquí es a donde debes transferir."
+    msg = (
+        ("Ups 🙊... No estamos aceptando depósitos en este momento.")
+        if (settings.BANK_ACCOUNT is None)
+        else ("Deposítanos a la siguiente cuenta bancaria:\n\n" f"{settings.BANK_ACCOUNT}")
+    )
     return msg
 
 
