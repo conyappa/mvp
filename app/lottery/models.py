@@ -1,6 +1,6 @@
 import itertools
 import random as rd
-import datetime as dt
+import copy as cp
 from django.db import models
 from django.conf import settings
 from django.db import transaction
@@ -30,7 +30,7 @@ class Draw(BaseModel):
 
     @property
     def filled_results(self):
-        results = self.results
+        results = cp.deepcopy(self.results)
         results += itertools.repeat("?", 7 - len(results))
         return results
 
