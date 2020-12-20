@@ -1,4 +1,4 @@
-import datetime as dt
+import logging
 from django.utils import timezone
 from django.conf import settings
 from lottery.models import Draw
@@ -7,10 +7,6 @@ from bot import twilio
 from .helpers import use_scheduler
 
 
-# import the logging library
-import logging
-
-# Get an instance of a logger
 logger = logging.getLogger(__name__)
 
 

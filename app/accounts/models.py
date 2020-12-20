@@ -24,9 +24,6 @@ class UserManager(BaseUserManager):
 
 
 class User(BaseModel, AbstractUser):
-    USERNAME_FIELD = "email"
-
-    username = None
     phone = PhoneNumberField(
         unique=True,
         blank=True,
