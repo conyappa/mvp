@@ -180,7 +180,7 @@ sentry_sdk.init(dsn=os.environ.get("SENTRY_DSN", ""), integrations=[DjangoIntegr
 
 
 # pylint: disable=line-too-long
-# Static files (CSS, JavaScript, Images): https://docs.djangoproject.com/en/2.2/howto/static-files/.  # noqa=E501
+# Static files (CSS, JavaScript, Images): https://docs.djangoproject.com/en/2.2/howto/static-files/.
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
