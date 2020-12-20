@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.conf import settings
 from lottery.models import Draw
 from accounts.models import User
-from bot.sender import SenderClient
+from bot import twilio
 from .helpers import use_scheduler
 
 
@@ -20,7 +20,7 @@ def create_new_draw(timestamp):
     draw.create_tickets()
     draw.choose_result()
     # Send a notification.
-    SenderClient().send_sms(
+    twilio.SenderClient().send(
         users=User.objects.all(),
         msg_body_formatter=lambda _user: (
             "¡Ha comenzado un nuevo sorteo! "
@@ -36,7 +36,7 @@ def end_current_draw():
     draw.choose_result()
     draw.conclude()
     # Send a notification.
-    SenderClient().send_sms(
+    twilio.SenderClient().send(
         users=User.objects.all(),
         msg_body_formatter=lambda user: (
             "¡Finalizó el sorteo! Los resultados fueron:\n\n"
@@ -51,7 +51,7 @@ def choose_number_from_current_draw():
     draw = Draw.objects.current()
     draw.choose_result()
     # Broadcast a notification.
-    SenderClient().send_sms(
+    twilio.SenderClient().send(
         users=User.objects.all(),
         msg_body_formatter=lambda _user: (
             "¡Llegó la hora de sacar un número!\n"
