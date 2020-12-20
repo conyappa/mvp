@@ -24,7 +24,7 @@ class UserManager(BaseUserManager):
 
 
 class User(BaseModel, AbstractUser):
-    USERNAME_FIELD = "phone"
+    USERNAME_FIELD = "email"
 
     username = None
     phone = PhoneNumberField(
@@ -42,10 +42,9 @@ class User(BaseModel, AbstractUser):
     objects = UserManager()
 
     def __init__(self, *args, **kwargs):
-        ret = super().__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if "password" in kwargs:
             self.set_password(kwargs["password"])
-        return ret
 
     def delete(self, *args, **kwargs):
         self.is_active = False
@@ -65,7 +64,7 @@ class User(BaseModel, AbstractUser):
 
     @property
     def extra_tickets(self):
-        self.extra_tickets_ttl = list(filter(bool, x))
+        self.extra_tickets_ttl = list(filter(bool, self.extra_tickets_ttl))
         self.save()
         return len(self.extra_tickets_ttl)
 
