@@ -1,6 +1,5 @@
 import uuid
 from django.db import models
-from django.utils import timezone
 
 
 class BaseModel(models.Model):
@@ -13,8 +12,17 @@ class BaseModel(models.Model):
         primary_key=True,
         serialize=False,
         unique=True,
-        verbose_name="identifier",
+        verbose_name="ID",
     )
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="created at")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="last updated at")
+
+
+class BaseSingletone:
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if not isinstance(cls._instance, cls):
+            cls._instance = object.__new__(cls, *args, **kwargs)
+        return cls._instance

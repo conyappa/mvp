@@ -24,9 +24,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Secrets.
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+
+# Twilio.
 TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID")
 TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN")
 TWILIO_PHONE_NUMBER = os.environ.get("TWILIO_PHONE_NUMBER")
+
+
+# Telegram.
+TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN")
 
 
 # Other environmental variables.
@@ -119,6 +125,19 @@ CORS_ORIGIN_ALLOW_ALL = True
 # ]
 
 
+# Mailer: https://docs.djangoproject.com/en/2.2/topics/email/.
+# Email: https://docs.djangoproject.com/en/2.2/ref/settings/#email.
+ADMINS = [("Ariel Martínez", "ariel@conyappa.cl")]
+MANAGERS = [("Ariel Martínez", "ariel@conyappa.cl")]
+EMAIL_HOST = os.environ.get("EMAIL_HOST")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_PORT = int(os.environ.get("EMAIL_HOST_PORT", "25"))
+EMAIL_USE_TLS = bool(int(os.environ.get("EMAIL_USE_TLS", "0")))
+EMAIL_USE_SSL = bool(int(os.environ.get("EMAIL_USE_SSL", "0")))
+EMAIL_USE_LOCALTIME = True
+
+
 # Database: https://docs.djangoproject.com/en/2.2/ref/settings/#databases.
 DATABASES = {
     "default": {
@@ -135,19 +154,6 @@ DATABASES = {
 # Configure `DATABASE_URL` as the main database in production.
 if "DATABASE_URL" in os.environ:
     DATABASES["default"] = dj_database_url.config(ssl_require=True)
-
-
-# Mailer: https://docs.djangoproject.com/en/2.2/topics/email/.
-# Email: https://docs.djangoproject.com/en/2.2/ref/settings/#email.
-ADMINS = [("Ariel Martínez", "ariel@conyappa.cl")]
-MANAGERS = [("Ariel Martínez", "ariel@conyappa.cl")]
-EMAIL_HOST = os.environ.get("EMAIL_HOST")
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
-EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
-EMAIL_PORT = int(os.environ.get("EMAIL_HOST_PORT", "25"))
-EMAIL_USE_TLS = bool(int(os.environ.get("EMAIL_USE_TLS", "0")))
-EMAIL_USE_SSL = bool(int(os.environ.get("EMAIL_USE_SSL", "0")))
-EMAIL_USE_LOCALTIME = True
 
 
 # Django REST framework.
