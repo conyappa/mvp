@@ -48,6 +48,6 @@ def boot_updater():
     if settings.TELEGRAM_WEBHOOK_DOMAIN is None:
         updater_daemon = th.Thread(target=updater.start_polling, daemon=True)
     else:
-        updater_daemon = th.Thread(setup_webhook, daemon=True, args=(updater,))
+        updater_daemon = th.Thread(target=setup_webhook, daemon=True, args=(updater,))
 
     updater_daemon.start()
