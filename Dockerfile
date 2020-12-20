@@ -69,7 +69,7 @@ RUN python manage.py collectstatic --no-input
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
 ENTRYPOINT ["entrypoint.sh"]
-EXPOSE 3000
+EXPOSE 80 88 443 8443
 
 # Run as a non-root user (`appuser`).
 RUN useradd -m appuser
