@@ -5,4 +5,4 @@ from . import twilio
 app_name = "bot"
 
 
-urlpatterns = [path("twilio", twilio.ReplierView.as_view())]
+urlpatterns = [path("twilio", twilio.replier.ReplierView.as_view())]

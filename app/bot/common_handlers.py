@@ -34,14 +34,6 @@ def deposit(_user):
     return msg
 
 
-# def greeting(_user):
-#     msg = (
-#         "¡Bienvenido a ConYappa, una lotería que te premia por ahorrar! 💰💰\n"
-#         "Mi nombre es YappaBot y seré tu asistente personal."
-#     )
-#     return msg
-
-
 def help_(_user):
     msg = (
         "Los comandos disponibles son:\n\n"
@@ -104,7 +96,7 @@ def withdraw(_user):
     return msg
 
 
-handlers = {
+commands = {
     "ayuda": help_,
     "boletos": tickets,
     "depositar": deposit,
