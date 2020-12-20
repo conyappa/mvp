@@ -1,8 +1,8 @@
 from django.urls import path
-from . import views
+from . import twilio
 
 
 app_name = "bot"
 
 
-urlpatterns = [path("", views.ReplierView.as_view())]
+urlpatterns = [path("", twilio.ReplierView.as_view())]
