@@ -29,7 +29,7 @@ def telegram_adapter(handler):
 
 
 def setup_webhook(updater):
-    webhook_url_base = f"{settings.TELEGRAM_WEBHOOK_URL}:{settings.TELEGRAM_WEBHOOK_PORT}/"
+    webhook_url_base = f"https://{settings.TELEGRAM_WEBHOOK_DOMAIN}:{settings.TELEGRAM_WEBHOOK_PORT}/"
     webhook_url_path = f"bot/telegram/{settings.TELEGRAM_TOKEN}"
     updater.start_webhook(listen="localhost", port=settings.TELEGRAM_WEBHOOK_PORT, url_path=webhook_url_path)
     updater.bot.set_webhook(url=webhook_url_base + webhook_url_path)
