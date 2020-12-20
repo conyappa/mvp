@@ -7,6 +7,6 @@ class BotConfig(AppConfig):
 
     def ready(_self):
         if settings.TELEGRAM_TOKEN is not None:
-            from .telegram import replier
+            from .telegram import replier as telegram_replier
 
-            replier.boot_updater()
+            telegram_replier.boot_updater()
