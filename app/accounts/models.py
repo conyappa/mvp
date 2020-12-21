@@ -87,4 +87,4 @@ class User(BaseModel, AbstractUser):
         return sum(map(lambda x: x.prize, self.current_tickets))
 
     def __str__(self):
-        return str(self.phone)
+        return " | ".join([self.username, str(self.phone)])
