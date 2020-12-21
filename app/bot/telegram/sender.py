@@ -1,3 +1,4 @@
+from telegram.constants import PARSEMODE_MARKDOWN
 from telegram import Bot
 from django.conf import settings
 from app.base import BaseSingletone
@@ -16,7 +17,7 @@ class SenderClient(BaseSingletone):
         for user in users:
             msg_body = msg_body_formatter(user)
             # requests.get(url=url, params={"chat_id": user.telegram_id, "text": msg_body})
-            self.telegram_client.send_message(chat_id=user.telegram_id, text=msg_body)
+            self.telegram_client.send_message(chat_id=user.telegram_id, text=msg_body, parse_mode=PARSEMODE_MARKDOWN)
 
         if fails:
             msg_subject_formatter = lambda _user: "[Telegram] Failed to send SMS"

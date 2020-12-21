@@ -23,7 +23,7 @@ def telegram_adapter(handler):
             user.last_name = telegram_user.last_name or ""
             user.save()
             msg = handler(user)
-            update.message.reply_text(msg)
+            update.message.reply_markdown(msg)
 
     return wrapper
 
