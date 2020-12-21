@@ -3,9 +3,10 @@ from accounts.models import User
 
 def start(update, context):
     telegram_user = update.message.from_user
+    username = telegram_user.username or str(telegram_user.id)
 
     user, _created = User.objects.get_or_create(
-        defaults={"username": telegram_user.username, "password": telegram_user.username},
+        defaults={"username": username, "password": username},
         telegram_id=telegram_user.id,
     )
 
