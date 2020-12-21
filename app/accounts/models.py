@@ -86,5 +86,11 @@ class User(BaseModel, AbstractUser):
     def current_prize(self):
         return sum(map(lambda x: x.prize, self.current_tickets))
 
+    @property
+    def full_name(self):
+        name_components = filter(bool, [self.first_name, self.last_name])
+        return " ".join(name_components)
+
     def __str__(self):
-        return " | ".join([self.username, str(self.phone)])
+        fields_to_display = filter(bool, [self.full_name, self.username, self.phone])
+        return " | ".join(map(str, fields_to_display))
