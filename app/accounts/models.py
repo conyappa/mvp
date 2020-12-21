@@ -24,19 +24,19 @@ class UserManager(BaseUserManager):
 
 
 class User(BaseModel, AbstractUser):
-    phone = PhoneNumberField(
-        unique=True,
-        blank=True,
-        null=True,
-        error_messages={"unique": "A user with that phone number already exists."},
-        verbose_name="phone number",
-    )
     telegram_id = models.PositiveBigIntegerField(
         unique=True,
         blank=True,
         null=True,
         error_messages={"unique": "A user with that Telegram ID already exists."},
         verbose_name="Telegram user ID",
+    )
+    phone = PhoneNumberField(
+        unique=True,
+        blank=True,
+        null=True,
+        error_messages={"unique": "A user with that phone number already exists."},
+        verbose_name="phone number",
     )
 
     balance = models.PositiveIntegerField(default=0, verbose_name="balance")
