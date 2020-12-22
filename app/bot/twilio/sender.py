@@ -13,6 +13,7 @@ class SenderClient(BaseSingletone):
     def send(self, users, msg_body_formatter, from_scheme="whatsapp", to_scheme="whatsapp"):
         from_ = f"{from_scheme}:{settings.TWILIO_PHONE_NUMBER}"
         fails = set()
+
         for user in users:
             to = f"{to_scheme}:{user.phone}"
             msg_body = msg_body_formatter(user)

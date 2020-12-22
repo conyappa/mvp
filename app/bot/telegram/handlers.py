@@ -16,6 +16,7 @@ def start(update, context):
 
     greeting_msg = (
         "¡Bienvenido a ConYappa, una lotería que te premia por ahorrar! 💰💰\n\n"
-        "Mi nombre es YappaBot y seré tu asistente personal."
+        "Mi nombre es YappaBot y seré tu asistente personal. "
+        "Envía /reglas y te explicaré cómo participar."
     )
     update.message.reply_text(greeting_msg)
