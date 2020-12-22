@@ -37,13 +37,13 @@ def deposit(_user):
 def help_(_user):
     msg = (
         "Los comandos disponibles son:\n\n"
-        "*boletos*: Revisa cuáles son tus boletos de esta semana 🎟️\n\n"
-        "*depositar*: Deposítanos tus ahorros para obtener más boletos 🍀\n\n"
-        "*premios*: Mira cuáles son los premios disponibles 👀\n\n"
-        "*reglas*: Échale un vistazo a las reglas 📜\n\n"
-        "*resultados*: Entérate los números ganadores de esta semana 🎰\n\n"
-        "*retirar*: Retira tu dinero a una cuenta bancaria 😢\n\n"
-        "*saldo*: Consulta tu saldo actual 💲"
+        "/boletos: Revisa cuáles son tus boletos de esta semana 🎟️\n\n"
+        "/depositar: Deposítanos tus ahorros para obtener más boletos 🍀\n\n"
+        "/premios: Mira cuáles son los premios disponibles 👀\n\n"
+        "/reglas: Échale un vistazo a las reglas 📜\n\n"
+        "/resultados: Entérate los números ganadores de esta semana 🎰\n\n"
+        "/retirar: Retira tu dinero a una cuenta bancaria 😢\n\n"
+        "/saldo: Consulta tu saldo actual 💲"
     )
     return msg
 
@@ -58,10 +58,10 @@ def prizes(_user):
 
 def rules(_user):
     msg = (
-        f"\nPor cada *${settings.TICKET_COST}* que tengas ahorrados te regalaremos"
+        f"\nPor cada *${settings.TICKET_COST}* que tengas ahorrados te regalaremos "
         "un boleto para participar en nuestra lotería semanal. 🎁\n\n"
-        f"Cada día a las {settings.FORMATTED_DRAW_RESULTS_TIME} saldrá un nuevo número"
-        "\n\n¡Mientras más aciertos tenga tu boleto, más ganas! 🤑"
+        f"Cada día a las {settings.FORMATTED_DRAW_RESULTS_TIME} saldrá un nuevo número. "
+        "¡Mientras más aciertos tenga tu boleto, más ganas! 🤑"
     )
     return msg
 
@@ -69,8 +69,8 @@ def rules(_user):
 def results(user):
     msg = (
         "Los números de esta semana son:\n\n"
-        f"{Draw.objects.current().formatted_results}"
-        f"\n\n¡Por ahora has ganado *${user.current_prize}*! 💰💰"
+        f"{Draw.objects.current().formatted_results}\n\n"
+        f"¡Esta semana llevas *${user.current_prize}* ganados! 💰💰"
     )
     return msg
 

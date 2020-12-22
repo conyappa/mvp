@@ -21,7 +21,7 @@ def create_new_draw(timestamp):
         msg_body_formatter=lambda _user: (
             "¡Ha comenzado un nuevo sorteo! "
             f"El primer número es el *{draw.results[0]}* 🎰\n\n"
-            "Envía *tickets* para ver si le achuntaste."
+            "Envía /tickets para ver si le achuntaste."
         ),
         telegram=True,
         twilio=True,
@@ -56,7 +56,7 @@ def choose_number_from_current_draw():
         msg_body_formatter=lambda _user: (
             "¡Llegó la hora de sacar un número!\n"
             f"El número del hoy es el *{draw.results[-1]}* 🎉\n\n"
-            "Envía *results* para revisar los resultados de la semana."
+            "Envía /resultados para revisar los resultados de la semana."
         ),
         telegram=True,
         twilio=True,
