@@ -2,6 +2,8 @@
 
 > The backend application of YappaBot
 
+![ER Diagram](docs/er_diagram.png "ER Diagram")
+
 ## Servers
 
 [![Heroku production app](https://img.shields.io/website?label=conyappa-mvp@production<stable>&logo=heroku&url=https://conyappa.cl)](https://conyappa.cl)
