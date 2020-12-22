@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "whitenoise.runserver_nostatic",
     "phonenumber_field",
+    "django_extensions",
     # First party.
     "bot.apps.BotConfig",  # Load this app first!
     "accounts.apps.AccountsConfig",
