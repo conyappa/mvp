@@ -8,7 +8,7 @@
 
 [![Heroku production app](https://img.shields.io/website?label=conyappa-mvp@production<stable>&logo=heroku&url=https://conyappa.cl)](https://conyappa.cl)
 
-[![AWS EC2 staging app](https://img.shields.io/website?label=conyappa-mvp@staging<master>&logo=amazon&url=https://staging.conyappa.cl)](https://staging.conyappa.cl)
+[![AWS EC2 staging app](https://img.shields.io/website?label=conyappa-mvp@staging<master>&logo=heroku&url=https://staging.conyappa.cl)](https://staging.conyappa.cl)
 
 ## Requirements
 
