@@ -6,14 +6,14 @@ from .settings import *  # noqa: F401,F403
 SECRET_KEY = "m[4xQ]go~21)h6'HWh@Xz4ydn8X]H1vON4E8~`'>zv+cf+rZww"
 
 
+# Telegram.
+TELEGRAM_TOKEN = "6381479124:WgiZ7xCC5EWQ_GncQe0vwvB71-0CXuDXods"
+
+
 # Twilio.
 TWILIO_ACCOUNT_SID = "Z9RhuwLgtVPZlyf6ei9H6nVXYYeBbzeDjg"
 TWILIO_AUTH_TOKEN = "iLskXIhauahGmtTHzze5iDH6vIZdDXhF"
 TWILIO_PHONE_NUMBER = "+0123456789"
-
-
-# Telegram.
-TELEGRAM_TOKEN = "6381479124:WgiZ7xCC5EWQ_GncQe0vwvB71-0CXuDXods"
 
 
 # Email.

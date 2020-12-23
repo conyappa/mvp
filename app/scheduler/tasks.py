@@ -24,7 +24,7 @@ def create_new_draw(timestamp):
             "Envía /tickets para ver si le achuntaste."
         ),
         telegram=True,
-        twilio=True,
+        twilio=False,
     )
 
 
@@ -42,7 +42,7 @@ def end_current_draw():
             f"¡Ganaste *${user.current_prize}*! 🤑"
         ),
         telegram=True,
-        twilio=True,
+        twilio=False,
     )
 
 
@@ -59,7 +59,7 @@ def choose_number_from_current_draw():
             "Envía /resultados para revisar los resultados de la semana."
         ),
         telegram=True,
-        twilio=True,
+        twilio=False,
     )
 
 
