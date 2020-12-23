@@ -70,7 +70,7 @@ def results(user):
     msg = (
         "Los números de esta semana son:\n\n"
         f"{Draw.objects.current().formatted_results}\n\n"
-        f"¡Esta semana llevas *${user.current_prize}* ganados! 💰💰"
+        f"Envía /boletos para revisar tus aciertos! 🤑"
     )
     return msg
 
@@ -85,7 +85,10 @@ def tickets(user):
                 tickets,
             )
         )
-        msg = f"Tus boletos de esta semana son:\n\n{formatted_tickets}"
+        msg = (
+            f"Tus boletos de esta semana son:\n\n{formatted_tickets}\n\n"
+            f"¡Esta semana llevas *${user.current_prize}* ganados! 💰💰"
+        )
     else:
         msg = "No tienes boletos esta semana 😢"
     return msg
