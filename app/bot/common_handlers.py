@@ -29,7 +29,12 @@ def deposit(_user):
     msg = (
         ("Ups 🙊... No estamos aceptando depósitos en este momento.")
         if (settings.BANK_ACCOUNT is None)
-        else ("Deposítanos a la siguiente cuenta bancaria:\n\n" f"{settings.BANK_ACCOUNT}")
+        else (
+            "Deposítanos a la siguiente cuenta bancaria:\n\n"
+            f"{settings.BANK_ACCOUNT}"
+            f"\n\nPor ahora tenemos un limite de *${settings.MAX_TICKETS * settings.TICKET_COST}* por persona,"
+            " te avisaremos cuando puedas ahorrar más ConYappa! 😎"
+            )
     )
     return msg
 
