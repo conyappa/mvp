@@ -62,7 +62,7 @@ def rules(_user):
         "un boleto para participar en nuestra lotería semanal. 🎁\n\n"
         f"Cada día a las {settings.FORMATTED_DRAW_RESULTS_TIME} saldrá un nuevo número. "
         "¡Mientras más aciertos tenga tu boleto, más ganas! 🤑\n"
-        "Envía /premios para ver cuánto puedes ganar cpn cada boleto 💸"
+        "Envía /premios para ver cuánto puedes ganar con cada boleto 💸"
         " o envía /ayuda para saber mas sobre los comandos disponibles."
     )
     return msg
