@@ -29,7 +29,12 @@ def deposit(_user):
     msg = (
         ("Ups 🙊... No estamos aceptando depósitos en este momento.")
         if (settings.BANK_ACCOUNT is None)
-        else ("Deposítanos a la siguiente cuenta bancaria:\n\n" f"{settings.BANK_ACCOUNT}")
+        else (
+            "Deposítanos a la siguiente cuenta bancaria:\n\n"
+            f"{settings.BANK_ACCOUNT}"
+            f"\n\nPor ahora tenemos un limite de *${settings.MAX_TICKETS * settings.TICKET_COST}* por persona,"
+            " te avisaremos cuando puedas ahorrar más ConYappa! 😎"
+            )
     )
     return msg
 
@@ -61,7 +66,9 @@ def rules(_user):
         f"\nPor cada *${settings.TICKET_COST}* que tengas ahorrados te regalaremos "
         "un boleto para participar en nuestra lotería semanal. 🎁\n\n"
         f"Cada día a las {settings.FORMATTED_DRAW_RESULTS_TIME} saldrá un nuevo número. "
-        "¡Mientras más aciertos tenga tu boleto, más ganas! 🤑"
+        "¡Mientras más aciertos tenga tu boleto, más ganas! 🤑\n"
+        "Envía /premios para ver cuánto puedes ganar con cada boleto 💸"
+        " o envía /ayuda para saber mas sobre los comandos disponibles."
     )
     return msg
 
