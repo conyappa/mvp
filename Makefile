@@ -18,7 +18,7 @@ migrate:
 	$(DOCKER-COMPOSE) run web python manage.py migrate
 
 shell:
-	$(DOCKER-COMPOSE) run web python manage.py shell
+	$(DOCKER-COMPOSE) run web python manage.py shell_plus
 
 black:
 	$(POETRY) run black app

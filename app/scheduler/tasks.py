@@ -11,13 +11,13 @@ logger = logging.getLogger(__name__)
 
 
 def create_new_draw(timestamp):
+    all_users = User.objects.all()
     # Create a new draw.
-    draw = Draw.objects.create(start_date=timestamp.date())
-    draw.create_tickets()
+    draw = Draw.objects.create(users=all_users, start_date=timestamp.date())
     draw.choose_result()
     # Send a notification.
     multisender.send(
-        users=User.objects.all(),
+        users=all_users,
         msg_body_formatter=lambda _user: (
             "¡Ha comenzado un nuevo sorteo! "
             f"El primer número es el *{draw.results[0]}* 🎰\n\n"
@@ -65,11 +65,13 @@ def choose_number_from_current_draw():
 
 def draw_cycle():
     now = timezone.localtime()
+    draw_exists = Draw.objects.exists()
+
     if now.weekday() == settings.NEW_DRAW_WEEKDAY:
         create_new_draw(now)
-    elif (now.weekday() == settings.END_DRAW_WEEKDAY) and Draw.objects.exists():
+    elif (now.weekday() == settings.END_DRAW_WEEKDAY) and draw_exists:
         end_current_draw()
-    elif Draw.objects.exists():
+    elif draw_exists:
         choose_number_from_current_draw()
 
 

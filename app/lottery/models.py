@@ -5,11 +5,10 @@ from django.db import models
 from django.conf import settings
 from django.db import transaction
 from app.base import BaseModel
-from accounts.models import User
 
 
 def generate_random_picks():
-    return rd.sample(population=settings.PICK_RANGE, k=7)
+    return rd.sample(population=Draw.objects.current().pool, k=7)
 
 
 def generate_result_pool():
@@ -19,6 +18,17 @@ def generate_result_pool():
 class DrawManager(models.Manager):
     def current(self):
         return self.latest("created_at")
+
+    def create(self, users, **fields):
+        draw = super().create(**fields)
+        all_tickets = []
+        with transaction.atomic():
+            for user in users:
+                user_tickets = draw.generate_user_tickets(user=user)
+                all_tickets += user_tickets
+                user.consume_extra_tickets()
+            Ticket.objects.bulk_create(objs=all_tickets)
+        return draw
 
 
 class Draw(BaseModel):
@@ -38,13 +48,13 @@ class Draw(BaseModel):
     def formatted_results(self):
         return "\n".join(map(lambda weekday, result: f"{weekday}: {result}", settings.WEEKDAYS, self.filled_results))
 
-    def create_tickets(self):
-        tickets = []
-        for user in User.objects.all():
-            user_tickets = [Ticket(draw=self, user=user) for _ in range(user.number_of_tickets)]
-            tickets += user_tickets
+    def generate_user_tickets(self, user):
+        return [Ticket(draw=self, user=user) for _ in range(user.number_of_tickets)]
+
+    def include_new_user(self, user):
         with transaction.atomic():
-            Ticket.objects.bulk_create(objs=tickets)
+            user_tickets = self.generate_user_tickets(user=user)
+            Ticket.objects.bulk_create(objs=user_tickets)
 
     def choose_result(self):
         results = rd.sample(population=self.pool, k=1)
