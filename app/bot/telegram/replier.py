@@ -19,9 +19,11 @@ def telegram_adapter(handler):
         except User.DoesNotExist:
             update.message.reply_text("¡No nos hemos presentado! Envía /start para comenzar.")
         else:
-            user.first_name = telegram_user.first_name or ""
-            user.last_name = telegram_user.last_name or ""
+            user.username = telegram_user.username or user.username
+            user.first_name = telegram_user.first_name or user.first_name
+            user.last_name = telegram_user.last_name or user.last_name
             user.save()
+
             msg = handler(user)
             update.message.reply_markdown(msg)
 
@@ -42,7 +44,9 @@ def boot_updater():
     for command, handler in common_handlers.commands.items():
         dp.add_handler(CommandHandler(command, telegram_adapter(handler)))
 
-    dp.add_handler(CommandHandler("start", handlers.start))
+    for command, handler in handlers.commands.items():
+        dp.add_handler(CommandHandler(command, handler))
+
     dp.add_handler(MessageHandler(Filters.text, telegram_adapter(common_handlers.default)))
 
     if settings.TELEGRAM_WEBHOOK_DOMAIN is None:

@@ -20,11 +20,11 @@ def balance(user):
 
     msg = (
         f"\nSaldo actual: *${balance}*"
-        f"\nGanancias: {user.winnings}"
-        f"\nNúmero de boletos: *${number_of_standard_tickets}*"
+        f"\nGanancias: *${user.winnings}*"
+        f"\nNúmero de boletos: *{number_of_standard_tickets}*"
     )
     if number_of_extra_tickets > 0:
-        msg += (f"(+ {q(number_of_extra_tickets, 'boleto')} de regalo 😉)")
+        msg += (f" (+ {q(number_of_extra_tickets, 'boleto')} de regalo 😉)")
 
     if number_of_standard_tickets < settings.MAX_TICKETS:
         money_for_next_ticket = settings.TICKET_COST - (balance % settings.TICKET_COST)
@@ -42,7 +42,7 @@ def deposit(_user):
         else (
             "Deposítanos a la siguiente cuenta bancaria:"
             f"\n\n{settings.BANK_ACCOUNT}"
-            f"Por ahora tenemos un limite de *${settings.MAX_TICKETS * settings.TICKET_COST}* por persona,"
+            f"\n\nPor ahora tenemos un limite de *${settings.MAX_TICKETS * settings.TICKET_COST}* por persona,"
             " te avisaremos cuando puedas ahorrar más ConYappa 😎"
             )
     )

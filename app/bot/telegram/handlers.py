@@ -1,3 +1,6 @@
+import ast
+import json
+# from telegram.constants import PARSEMODE_MARKDOWN
 from accounts.models import User
 
 
@@ -5,18 +8,37 @@ def start(update, context):
     telegram_user = update.message.from_user
     username = telegram_user.username or str(telegram_user.id)
 
-    user, _created = User.objects.get_or_create(
-        defaults={"username": username, "password": username},
-        telegram_id=telegram_user.id,
-    )
+    user, created = User.objects.get_or_create(telegram_id=telegram_user.id, defaults={"username": username})
 
-    user.first_name = telegram_user.first_name or ""
-    user.last_name = telegram_user.last_name or ""
+    user.username = username or user.username
+    user.first_name = telegram_user.first_name or user.first_name
+    user.last_name = telegram_user.last_name or user.last_name
     user.save()
 
     greeting_msg = (
-        "¡Bienvenido a ConYappa, una lotería que te premia por ahorrar! 💰💰\n\n"
+        "¡Bienvenido a *ConYappa*, una lotería que te premia por ahorrar! 💰💰\n\n"
         "Mi nombre es YappaBot y seré tu asistente personal. "
         "Envía /reglas y te explicaré cómo participar."
     )
-    update.message.reply_text(greeting_msg)
+    update.message.reply_markdown(greeting_msg)
+
+    # if created:
+    #     new_user_msg = (
+    #         "¡Nuevo usuario! 🎉"
+    #         f"\n\nUsername: {user.username}"
+    #         f"\n\nNombre: {user.full_name}"
+
+    #     )
+    #     context.bot.send_message(chat_id=user.telegram_id, text=msg_body, parse_mode=PARSEMODE_MARKDOWN)
+
+
+def echo(update, context):
+    parsed_update = ast.literal_eval(str(update))
+    update_as_json = json.dumps(parsed_update, indent=4)
+    update.message.reply_text(update_as_json)
+
+
+commands = {
+    "start": start,
+    "echo": echo,
+}
