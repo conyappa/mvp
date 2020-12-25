@@ -1,3 +1,5 @@
+import ast
+import json
 # from telegram.constants import PARSEMODE_MARKDOWN
 from accounts.models import User
 
@@ -28,3 +30,15 @@ def start(update, context):
 
     #     )
     #     context.bot.send_message(chat_id=user.telegram_id, text=msg_body, parse_mode=PARSEMODE_MARKDOWN)
+
+
+def echo(update, context):
+    parsed_update = ast.literal_eval(str(update))
+    update_as_json = json.dumps(parsed_update, indent=4)
+    update.message.reply_text(update_as_json)
+
+
+commands = {
+    "start": start,
+    "echo": echo,
+}

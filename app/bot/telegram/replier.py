@@ -44,7 +44,9 @@ def boot_updater():
     for command, handler in common_handlers.commands.items():
         dp.add_handler(CommandHandler(command, telegram_adapter(handler)))
 
-    dp.add_handler(CommandHandler("start", handlers.start))
+    for command, handler in handlers.commands.items():
+        dp.add_handler(CommandHandler(command, handler))
+
     dp.add_handler(MessageHandler(Filters.text, telegram_adapter(common_handlers.default)))
 
     if settings.TELEGRAM_WEBHOOK_DOMAIN is None:
