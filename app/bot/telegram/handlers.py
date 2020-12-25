@@ -1,7 +1,7 @@
 import ast
 import json
-# from telegram.constants import PARSEMODE_MARKDOWN
 from accounts.models import User
+from . import sender
 
 
 def start(update, context):
@@ -22,14 +22,13 @@ def start(update, context):
     )
     update.message.reply_markdown(greeting_msg)
 
-    # if created:
-    #     new_user_msg = (
-    #         "¡Nuevo usuario! 🎉"
-    #         f"\n\nUsername: {user.username}"
-    #         f"\n\nNombre: {user.full_name}"
-
-    #     )
-    #     context.bot.send_message(chat_id=user.telegram_id, text=msg_body, parse_mode=PARSEMODE_MARKDOWN)
+    if created:
+        new_user_msg = (
+            "¡Nuevo usuario! 🎉"
+            f"\n\nUsername: {user.username}"
+            f"\nNombre: {user.full_name}"
+        )
+        sender.send_to_staff_group(msg_body=new_user_msg)
 
 
 def echo(update, context):
