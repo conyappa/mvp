@@ -2,6 +2,16 @@ import ast
 import json
 from accounts.models import User
 from . import sender
+from .utils import telegram_adapter
+
+
+# In alphabetical order.
+
+
+def echo(update, context):
+    parsed_update = ast.literal_eval(str(update))
+    update_as_json = json.dumps(parsed_update, indent=4)
+    update.message.reply_text(update_as_json)
 
 
 def start(update, context):
@@ -31,13 +41,12 @@ def start(update, context):
         sender.send_to_staff_group(msg_body=new_user_msg)
 
 
-def echo(update, context):
-    parsed_update = ast.literal_eval(str(update))
-    update_as_json = json.dumps(parsed_update, indent=4)
-    update.message.reply_text(update_as_json)
+def test(update, context):
+    pass
 
 
 commands = {
-    "start": start,
     "echo": echo,
+    "start": start,
+    "test": test
 }
