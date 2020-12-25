@@ -1,10 +1,13 @@
 import itertools
-import random as rd
 import copy as cp
+from random import SystemRandom
 from django.db import models
 from django.conf import settings
 from django.db import transaction
 from app.base import BaseModel
+
+
+rd = SystemRandom()  # Alternative random generator that uses os.urandom.
 
 
 def generate_random_picks():
