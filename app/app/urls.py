@@ -7,5 +7,5 @@ urlpatterns = [
     path("admin", admin.site.urls),
     path("exception", views.trigger_exception),
     path("", views.landing_page),
-    path("bot", include("bot.urls")),
+    path("bot/", include("bot.urls")),
 ]

@@ -72,8 +72,8 @@ INSTALLED_APPS = [
     "django_extensions",
     # First party.
     "bot.apps.BotConfig",  # Load this app first!
-    "accounts.apps.AccountsConfig",
     "lottery.apps.LotteryConfig",
+    "accounts.apps.AccountsConfig",  # Load this app second to last!
     "scheduler.apps.SchedulerConfig",  # Load this app last!
     # Built-in.
     "django.contrib.admin",

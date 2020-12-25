@@ -1,13 +1,18 @@
+import logging
+from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
-from phonenumber_field.modelfields import PhoneNumberField
 from app.base import BaseModel
+from lottery.models import Draw
+
+
+logger = logging.getLogger(__name__)
 
 
 def generate_initial_extra_tickets_ttl():
-    return []
+    return settings.INITIAL_EXTRA_TICKETS_TTL
 
 
 class UserManager(BaseUserManager):
@@ -47,11 +52,6 @@ class User(BaseModel, AbstractUser):
 
     objects = UserManager()
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if "password" in kwargs:
-            self.set_password(kwargs["password"])
-
     def delete(self, *args, **kwargs):
         self.is_active = False
         self.save(*args, **kwargs)
@@ -63,20 +63,28 @@ class User(BaseModel, AbstractUser):
     def hard_delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
 
+    def consume_extra_tickets(self):
+        self.extra_tickets_ttl = [(x - 1) for x in self.extra_tickets_ttl]
+        self.save()
+
     def award_prize(self, value):
         self.balance += value
         self.winnings += value
         self.save()
 
     @property
-    def extra_tickets(self):
-        self.extra_tickets_ttl = list(filter(bool, self.extra_tickets_ttl))
+    def number_of_standard_tickets(self):
+        return min(settings.MAX_TICKETS, self.balance // settings.TICKET_COST)
+
+    @property
+    def number_of_extra_tickets(self):
+        self.extra_tickets_ttl = [x for x in self.extra_tickets_ttl if (x > 0)]
         self.save()
         return len(self.extra_tickets_ttl)
 
     @property
     def number_of_tickets(self):
-        return min(settings.MAX_TICKETS, (self.balance // settings.TICKET_COST) + self.extra_tickets)
+        return self.number_of_standard_tickets + self.number_of_extra_tickets
 
     @property
     def current_tickets(self):
