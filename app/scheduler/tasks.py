@@ -21,7 +21,7 @@ def create_new_draw(timestamp):
         msg_body_formatter=lambda _user: (
             "¡Ha comenzado un nuevo sorteo! "
             f"El primer número es el *{draw.results[0]}* 🎰\n\n"
-            "Envía /tickets para ver si le achuntaste."
+            "Envía /boletos para ver si le achuntaste."
         ),
         telegram=True,
         twilio=False,
