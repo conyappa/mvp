@@ -21,10 +21,9 @@ def balance(user):
     msg = (
         f"\nSaldo actual: *${balance}*"
         f"\nGanancias: *${user.winnings}*"
-        f"\nNúmero de boletos: *{number_of_standard_tickets}*"
+        f"\n\nCon tu saldo actual obtendrás *{q(number_of_standard_tickets, 'boleto')}* en el próximo sorteo"
     )
-    if number_of_extra_tickets > 0:
-        msg += (f" (+ {q(number_of_extra_tickets, 'boleto')} de regalo 😉)")
+    msg += (f" (*+{q(number_of_extra_tickets, 'boleto')}* de regalo 😉).") if (number_of_extra_tickets > 0) else "."
 
     if number_of_standard_tickets < settings.MAX_TICKETS:
         money_for_next_ticket = settings.TICKET_COST - (balance % settings.TICKET_COST)
