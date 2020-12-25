@@ -111,11 +111,6 @@ def tickets(user):
     return msg
 
 
-def withdraw(_user):
-    msg = ""
-    return msg
-
-
 commands = {
     "ayuda": help_,
     "boletos": tickets,
@@ -123,6 +118,5 @@ commands = {
     "premios": prizes,
     "reglas": rules,
     "resultados": results,
-    "retirar": withdraw,
     "saldo": balance,
 }

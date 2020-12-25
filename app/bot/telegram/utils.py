@@ -1,4 +1,8 @@
+import logging
 from accounts.models import User
+
+
+logger = logging.getLogger(__name__)
 
 
 def telegram_adapter(handler):
