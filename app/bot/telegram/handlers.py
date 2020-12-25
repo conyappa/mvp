@@ -48,18 +48,18 @@ def test(update, context):
 @telegram_adapter
 def withdraw(user):
     withdraw_msg = (
-        "Solicitud de retiro"
+        "Solicitud de retiro 💔"
         f"\n\nUsername: {user.username}"
         f"\nNombre: {user.full_name}"
     )
     sender.send_to_staff_group(msg_body=withdraw_msg)
-    msg = "Hemos recibido tu solicitud de retiro, nos pondremos en contacto lo antes posible!"
+    msg = "Hemos recibido tu solicitud de retiro. ¡Nos pondremos en contacto lo antes posible! 👨‍💻"
     return msg
 
 
 commands = {
     "echo": echo,
+    "retirar": withdraw,
     "start": start,
     "test": test,
-    "retirar": withdraw,
 }
