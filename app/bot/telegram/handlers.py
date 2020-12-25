@@ -1,3 +1,4 @@
+# from telegram.constants import PARSEMODE_MARKDOWN
 from accounts.models import User
 
 
@@ -5,7 +6,7 @@ def start(update, context):
     telegram_user = update.message.from_user
     username = telegram_user.username or str(telegram_user.id)
 
-    user, _created = User.objects.get_or_create(telegram_id=telegram_user.id, defaults={"username": username})
+    user, created = User.objects.get_or_create(telegram_id=telegram_user.id, defaults={"username": username})
 
     user.username = username or user.username
     user.first_name = telegram_user.first_name or user.first_name
@@ -18,3 +19,12 @@ def start(update, context):
         "Envía /reglas y te explicaré cómo participar."
     )
     update.message.reply_markdown(greeting_msg)
+
+    # if created:
+    #     new_user_msg = (
+    #         "¡Nuevo usuario! 🎉"
+    #         f"\n\nUsername: {user.username}"
+    #         f"\n\nNombre: {user.full_name}"
+
+    #     )
+    #     context.bot.send_message(chat_id=user.telegram_id, text=msg_body, parse_mode=PARSEMODE_MARKDOWN)
