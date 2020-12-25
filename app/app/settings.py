@@ -47,6 +47,7 @@ ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(" ")
 # Constants.
 MAX_TICKETS = int(os.environ.get("MAX_TICKETS", "4"))
 TICKET_COST = int(os.environ.get("TICKET_COST", "5000"))
+INITIAL_EXTRA_TICKETS_TTL = list(map(int, os.environ.get("INITIAL_EXTRA_TICKETS_TTL", "1").split(" ")))
 PICK_RANGE = tuple(range(int(os.environ.get("MIN_PICK", "1")), int(os.environ.get("MAX_PICK", "30")) + 1))
 NEW_DRAW_WEEKDAY = int(os.environ.get("NEW_DRAW_WEEKDAY", "0"))
 DRAW_RESULTS_HOUR, DRAW_RESULTS_MINUTE = map(int, os.environ.get("DRAW_RESULTS_TIME", "20:00").split(":"))
@@ -129,6 +130,25 @@ CORS_ORIGIN_ALLOW_ALL = True
 # ]
 
 
+# Logging: https://docs.djangoproject.com/en/2.2/topics/logging/.
+DEFAULT_LOGGING_LEVEL = ("INFO" if DEBUG else "WARNING")
+LOGGING_LEVEL = os.environ.get("LOGGING_LEVEL", DEFAULT_LOGGING_LEVEL)
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": LOGGING_LEVEL,
+    },
+}
+PROPAGATE_EXCEPTIONS = True
+
+
 # Mailer: https://docs.djangoproject.com/en/2.2/topics/email/.
 # Email: https://docs.djangoproject.com/en/2.2/ref/settings/#email.
 ADMINS = [("Ariel Martínez", "ariel@conyappa.cl")]
@@ -174,9 +194,6 @@ TIME_ZONE = "America/Santiago"
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-
-
-PROPAGATE_EXCEPTIONS = True
 
 
 # Sentry: https://sentry.io/for/django/.
