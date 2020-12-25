@@ -54,7 +54,7 @@ def withdraw(user):
             f"\nNombre: {user.full_name}"
         )
         sender.send_to_staff_group(msg_body=withdraw_msg)
-        msg = "Hemos recibido tu solicitud de retiro. ¡Nos pondremos en contacto en breve! 👨‍💻"
+        msg = "Hemos recibido tu solicitud de retiro. ¡Nos pondremos en contacto a la brevedad! 👨‍💻"
     else:
         msg = "No tienes nada para retirar 🥺"
     return msg
