@@ -43,6 +43,7 @@ def deposit(_user):
             f"\n\n{settings.BANK_ACCOUNT}"
             f"\n\nPor ahora tenemos un limite de *${settings.MAX_TICKETS * settings.TICKET_COST}* por persona,"
             " te avisaremos cuando puedas ahorrar más ConYappa 😎"
+            "\n\n¡Te hablaremos cuando recibamos tu depósito!"
             )
     )
     return msg
