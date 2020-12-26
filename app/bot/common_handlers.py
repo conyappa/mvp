@@ -65,7 +65,7 @@ def help_(_user):
 
 def prizes(_user):
     formatted_prizes = "\n".join(
-        map(lambda number, prize: f"{number}: {prize} clp", numbers[0 : len(settings.PRIZES)], settings.PRIZES)
+        map(lambda number, prize: f"{number}: ${prize}", numbers[0 : len(settings.PRIZES)], settings.PRIZES)
     )
     msg = f"Los premios por cada acierto son:\n\n{formatted_prizes}"
     return msg
