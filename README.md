@@ -65,4 +65,4 @@ Create a development-friendly virtual environment (do the same at each submodule
 make createvenv
 ```
 
-Un-ignore new files at the `.dockerignore` of each submodule as needed.
+Un-ignore new files at the `.dockerignore` as needed.
