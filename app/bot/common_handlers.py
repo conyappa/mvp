@@ -43,6 +43,7 @@ def deposit(_user):
             f"\n\n{settings.BANK_ACCOUNT}"
             f"\n\nPor ahora tenemos un limite de *${settings.MAX_TICKETS * settings.TICKET_COST}* por persona,"
             " te avisaremos cuando puedas ahorrar más ConYappa 😎"
+            "\n\n¡Te hablaremos cuando recibamos tu depósito!"
             )
     )
     return msg
@@ -64,7 +65,7 @@ def help_(_user):
 
 def prizes(_user):
     formatted_prizes = "\n".join(
-        map(lambda number, prize: f"{number}: {prize}", numbers[0 : len(settings.PRIZES)], settings.PRIZES)
+        map(lambda number, prize: f"{number}: ${prize}", numbers[0 : len(settings.PRIZES)], settings.PRIZES)
     )
     msg = f"Los premios por cada acierto son:\n\n{formatted_prizes}"
     return msg
