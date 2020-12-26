@@ -25,20 +25,20 @@ def start(update, context):
     user.last_name = telegram_user.last_name or user.last_name
     user.save()
 
-    greeting_msg = (
+    user_msg = (
         "¡Bienvenido a *ConYappa*, una lotería que te premia por ahorrar! 💰💰\n\n"
         "Mi nombre es YappaBot y seré tu asistente personal. "
         "Envía /reglas y te explicaré cómo participar."
     )
-    update.message.reply_markdown(greeting_msg)
+    update.message.reply_markdown(user_msg)
 
     if created:
-        new_user_msg = (
+        staff_msg = (
             "¡Nuevo usuario! 🎉"
             f"\n\nUsername: {user.username}"
             f"\nNombre: {user.full_name}"
         )
-        sender.send_to_staff_group(msg_body=new_user_msg)
+        sender.send_to_staff_group(msg_body=staff_msg)
 
 
 def test(update, context):
@@ -47,17 +47,17 @@ def test(update, context):
 
 @telegram_adapter
 def withdraw(user):
-    if user.balance:
-        withdraw_msg = (
+    if user.balance > 0:
+        staff_msg = (
             "Solicitud de retiro 💔"
             f"\n\nUsername: {user.username}"
             f"\nNombre: {user.full_name}"
         )
-        sender.send_to_staff_group(msg_body=withdraw_msg)
-        msg = "Hemos recibido tu solicitud de retiro. ¡Nos pondremos en contacto a la brevedad! 👨‍💻"
+        sender.send_to_staff_group(msg_body=staff_msg)
+        user_msg = "Hemos recibido tu solicitud de retiro. ¡Nos pondremos en contacto a la brevedad! 👨‍💻"
     else:
-        msg = "No tienes nada para retirar 🥺"
-    return msg
+        user_msg = "No tienes nada para retirar 👀"
+    return user_msg
 
 
 commands = {
