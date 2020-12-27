@@ -67,18 +67,24 @@ def prizes(_user):
     formatted_prizes = "\n".join(
         map(lambda number, prize: f"{number}: ${prize}", numbers[0 : len(settings.PRIZES)], settings.PRIZES)
     )
-    msg = f"Los premios por cada acierto son:\n\n{formatted_prizes}"
+    msg = (
+        f":\n\n{formatted_prizes}"
+        "Al finalizar el sorteo, "
+    )
     return msg
 
 
 def rules(_user):
     msg = (
-        f"\nPor cada *${settings.TICKET_COST}* que tengas ahorrados obtendrás"
-        " un boleto para participar en nuestra lotería semanal 🎁"
-        f"\n\nCada día a las {settings.FORMATTED_DRAW_RESULTS_TIME} saldrá un nuevo número."
-        " ¡Mientras más aciertos tenga tu boleto, más ganas! 🤑"
+        "*ConYappa* es una lotería que te premia por ahorrar 🏆."
+        f" Por cada *${settings.TICKET_COST}* que tengas ahorrados obtendrás"
+        " un boleto para participar en nuestro sorteo semanal 🎁,"
+        f" que comienza todos los {settings.WEEKDAYS[settings.NEW_DRAW_WEEKDAY]}"
+        f" a las {settings.FORMATTED_DRAW_RESULTS_TIME}."
+        f"\n\nCada día a la misma hora saldrá un nuevo número."
+        " ¡Mientras más aciertos tengas por boleto al finalizar el sorteo, más ganas! 🤑"
         "\n\nEnvía /premios para ver cuánto puedes ganar con cada boleto 💸"
-        " o envía /ayuda para saber mas sobre los comandos disponibles."
+        " o envía /ayuda para conocer los comandos disponibles."
     )
     return msg
 
@@ -87,7 +93,7 @@ def results(user):
     msg = (
         "Los números de esta semana son:"
         f"\n\n{Draw.objects.current().formatted_results}"
-        f"\n\nEnvía /boletos para revisar tus aciertos! 🤑"
+        f"\n\n¡Envía /boletos para revisar tus aciertos! 🤑"
     )
     return msg
 
@@ -107,7 +113,7 @@ def tickets(user):
             f"\n\n¡Esta semana llevas *${user.current_prize}* ganados! 💰💰"
         )
     else:
-        msg = "No tienes boletos esta semana 😢"
+        msg = "No tienes boletos esta semana 😢."
     return msg
 
 
