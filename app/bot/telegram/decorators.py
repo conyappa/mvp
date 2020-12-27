@@ -31,9 +31,10 @@ def process_response(handler):
             sender.send_to_staff_group(msg_body=msg_for_staff, parse_mode=msg_for_staff_parse_mode)
 
         callback = response.get("callback")
-        callback_args = response.get("callback_args") or ()
-        callback_kwargs = response.get("callback_kwargs") or {}
-        callback(*callback_args, **callback_kwargs)
+        callback_args = response.get("callback_args", ())
+        callback_kwargs = response.get("callback_kwargs", {})
+        if callback is not None:
+            callback(*callback_args, **callback_kwargs)
 
     return wrapper
 
