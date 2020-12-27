@@ -133,7 +133,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 
 # Logging: https://docs.djangoproject.com/en/2.2/topics/logging/.
-DEFAULT_LOGGING_LEVEL = ("INFO" if DEBUG else "WARNING")
+DEFAULT_LOGGING_LEVEL = "INFO" if DEBUG else "WARNING"
 LOGGING_LEVEL = os.environ.get("LOGGING_LEVEL", DEFAULT_LOGGING_LEVEL)
 LOGGING = {
     "version": 1,

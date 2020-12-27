@@ -4,7 +4,7 @@ from django.conf import settings
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from .. import common_handlers
 from . import handlers
-from .utils import telegram_adapter
+from .decorators import adapter
 
 
 logger = logging.getLogger(__name__)
@@ -22,12 +22,12 @@ def boot_updater():
     dp = updater.dispatcher
 
     for command, handler in common_handlers.commands.items():
-        dp.add_handler(CommandHandler(command, telegram_adapter(handler)))
+        dp.add_handler(CommandHandler(command, adapter(handler)))
 
     for command, handler in handlers.commands.items():
-        dp.add_handler(CommandHandler(command, handler))
+        dp.add_handler(CommandHandler(command, adapter(handler)))
 
-    dp.add_handler(MessageHandler(Filters.text, telegram_adapter(common_handlers.default)))
+    dp.add_handler(MessageHandler(Filters.text, adapter(common_handlers.default)))
 
     if settings.TELEGRAM_WEBHOOK_DOMAIN is None:
         th.Thread(target=updater.start_polling, daemon=True).start()

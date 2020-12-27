@@ -6,14 +6,14 @@ from app import email
 from accounts.models import User
 
 
-def send(users, msg_body_formatter):
+def send(users, msg_body_formatter, parse_mode=PARSEMODE_MARKDOWN):
     telegram_client = Bot(token=settings.TELEGRAM_TOKEN)
     fails = set()
 
     for user in users:
         msg_body = msg_body_formatter(user)
         try:
-            telegram_client.send_message(chat_id=user.telegram_id, text=msg_body, parse_mode=PARSEMODE_MARKDOWN)
+            telegram_client.send_message(chat_id=user.telegram_id, text=msg_body, parse_mode=parse_mode)
         except BadRequest:
             fails.add(user)
 
@@ -28,6 +28,6 @@ def send(users, msg_body_formatter):
         email.send(User.objects.filter(is_staff=True), msg_subject_formatter, msg_body_formatter)
 
 
-def send_to_staff_group(msg_body):
+def send_to_staff_group(msg_body, parse_mode=PARSEMODE_MARKDOWN):
     telegram_client = Bot(token=settings.TELEGRAM_TOKEN)
-    telegram_client.send_message(chat_id=settings.TELEGRAM_STAFF_GROUP_ID, text=msg_body, parse_mode=PARSEMODE_MARKDOWN)
+    telegram_client.send_message(chat_id=settings.TELEGRAM_STAFF_GROUP_ID, text=msg_body, parse_mode=parse_mode)

@@ -6,36 +6,38 @@ from lottery.models import Draw
 numbers = ["0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"]
 
 
-def default(_user):
+def default(user, *args, **kwargs):
     return "Lo siento, no sé a qué te refieres."
 
 
 # In alphabetical order.
 
 
-def balance(user):
+def balance(user, *args, **kwargs):
     balance = user.balance
     number_of_standard_tickets = user.number_of_standard_tickets
     number_of_extra_tickets = user.number_of_extra_tickets
 
-    msg = (
+    msg_for_user = (
         f"\nSaldo actual: *${balance}*"
         f"\nGanancias: *${user.winnings}*"
         f"\n\nCon tu saldo actual obtendrás *{q(number_of_standard_tickets, 'boleto')}* en el próximo sorteo"
     )
-    msg += (f" (*+{q(number_of_extra_tickets, 'boleto')}* de regalo 😉).") if (number_of_extra_tickets > 0) else "."
+    msg_for_user += (
+        (f" (*+{q(number_of_extra_tickets, 'boleto')}* de regalo 😉).") if (number_of_extra_tickets > 0) else "."
+    )
 
     if number_of_standard_tickets < settings.MAX_TICKETS:
         money_for_next_ticket = settings.TICKET_COST - (balance % settings.TICKET_COST)
-        msg += (
+        msg_for_user += (
             f"\n\n¡Solo te faltan ${money_for_next_ticket} para obtener otro boleto"
             " y aumentar tus probabilidades de ganar! 🍀"
         )
-    return msg
+    return {"msg_for_user": msg_for_user}
 
 
-def deposit(_user):
-    msg = (
+def deposit(user, *args, **kwargs):
+    msg_for_user = (
         ("Ups 🙊... No estamos aceptando depósitos en este momento.")
         if (settings.BANK_ACCOUNT is None)
         else (
@@ -44,13 +46,13 @@ def deposit(_user):
             f"\n\nPor ahora tenemos un limite de *${settings.MAX_TICKETS * settings.TICKET_COST}* por persona,"
             " te avisaremos cuando puedas ahorrar más ConYappa 😎"
             "\n\n¡Te hablaremos cuando recibamos tu depósito!"
-            )
+        )
     )
-    return msg
+    return {"msg_for_user": msg_for_user}
 
 
-def help_(_user):
-    msg = (
+def help_(user, *args, **kwargs):
+    msg_for_user = (
         "Los comandos disponibles son:"
         "\n\n/boletos: Revisa cuáles son tus boletos de esta semana 🎟️"
         "\n\n/depositar: Deposítanos tus ahorros para obtener más boletos 🍀"
@@ -60,24 +62,21 @@ def help_(_user):
         "\n\n/retirar: Retira tu dinero a una cuenta bancaria 😢"
         "\n\n/saldo: Consulta tu saldo actual 💲"
     )
-    return msg
+    return {"msg_for_user": msg_for_user}
 
 
-def prizes(_user):
+def prizes(user, *args, **kwargs):
     formatted_prizes = "\n".join(
         map(lambda number, prize: f"{number}: ${prize}", numbers[0 : len(settings.PRIZES)], settings.PRIZES)
     )
-    msg = (
-        f":\n\n{formatted_prizes}"
-        "Al finalizar el sorteo, "
-    )
-    return msg
+    msg_for_user = f":\n\n{formatted_prizes}" "Al finalizar el sorteo, "
+    return {"msg_for_user": msg_for_user}
 
 
-def rules(_user):
-    msg = (
+def rules(user, *args, **kwargs):
+    msg_for_user = (
         "*ConYappa* es una lotería que te premia por ahorrar 🏆."
-        f" Por cada *${settings.TICKET_COST}* que tengas ahorrados obtendrás"
+        f"\n\nPor cada *${settings.TICKET_COST}* que tengas ahorrados obtendrás"
         " un boleto para participar en nuestro sorteo semanal 🎁,"
         f" que comienza todos los {settings.WEEKDAYS[settings.NEW_DRAW_WEEKDAY]}"
         f" a las {settings.FORMATTED_DRAW_RESULTS_TIME}."
@@ -86,19 +85,19 @@ def rules(_user):
         "\n\nEnvía /premios para ver cuánto puedes ganar con cada boleto 💸"
         " o envía /ayuda para conocer los comandos disponibles."
     )
-    return msg
+    return {"msg_for_user": msg_for_user}
 
 
-def results(user):
-    msg = (
+def results(user, *args, **kwargs):
+    msg_for_user = (
         "Los números de esta semana son:"
         f"\n\n{Draw.objects.current().formatted_results}"
         f"\n\n¡Envía /boletos para revisar tus aciertos! 🤑"
     )
-    return msg
+    return {"msg_for_user": msg_for_user}
 
 
-def tickets(user):
+def tickets(user, *args, **kwargs):
     tickets = user.current_tickets
     if tickets.exists():
         formatted_tickets = "\n".join(
@@ -108,13 +107,13 @@ def tickets(user):
                 tickets,
             )
         )
-        msg = (
+        msg_for_user = (
             f"Tus boletos de esta semana son:\n\n{formatted_tickets}"
             f"\n\n¡Esta semana llevas *${user.current_prize}* ganados! 💰💰"
         )
     else:
-        msg = "No tienes boletos esta semana 😢."
-    return msg
+        msg_for_user = "No tienes boletos esta semana 😢."
+    return {"msg_for_user": msg_for_user}
 
 
 commands = {

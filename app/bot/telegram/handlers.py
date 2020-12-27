@@ -1,68 +1,53 @@
+import logging
 import ast
 import json
-from accounts.models import User
-from . import sender
-from .utils import telegram_adapter
+
+
+logger = logging.getLogger(__name__)
 
 
 # In alphabetical order.
 
 
-def echo(update, context):
+def echo(user, update, context):
     parsed_update = ast.literal_eval(str(update))
     update_as_json = json.dumps(parsed_update, indent=4)
     update.message.reply_text(update_as_json)
 
 
-def start(update, context):
-    telegram_user = update.message.from_user
-    username = telegram_user.username or str(telegram_user.id)
+def error(user, update, context):
+    raise Exception("This is just a test.")
 
-    user, created = User.objects.get_or_create(telegram_id=telegram_user.id, defaults={"username": username})
 
-    user.username = username or user.username
-    user.first_name = telegram_user.first_name or user.first_name
-    user.last_name = telegram_user.last_name or user.last_name
-    user.save()
-
-    user_msg = (
+def start(user, update, context):
+    response = {}
+    response["msg_for_user"] = (
         "¡Bienvenido a *ConYappa*, una lotería que te premia por ahorrar! 💰💰\n\n"
         "Mi nombre es YappaBot y seré tu asistente personal. "
-        "Envía /reglas y te explicaré cómo participar."
+        "Haz click en /reglas y te explicaré cómo participar."
     )
-    update.message.reply_markdown(user_msg)
-
-    if created:
-        staff_msg = (
-            "¡Nuevo usuario! 🎉"
-            f"\n\nUsername: {user.username}"
-            f"\nNombre: {user.full_name}"
-        )
-        sender.send_to_staff_group(msg_body=staff_msg)
+    return response
 
 
-def test(update, context):
-    pass
+def withdraw(user, update, context):
+    response = {}
 
-
-@telegram_adapter
-def withdraw(user):
     if user.balance > 0:
-        staff_msg = (
-            "Solicitud de retiro 💔"
-            f"\n\nUsername: {user.username}"
-            f"\nNombre: {user.full_name}"
+        response[
+            "msg_for_user"
+        ] = "Hemos recibido tu solicitud de retiro. ¡Nos pondremos en contacto a la brevedad! 👨‍💻"
+        response["msg_for_staff"] = (
+            "Solicitud de retiro 💔." f"\n\nUsername: {user.username}" f"\nNombre: {user.full_name}"
         )
-        sender.send_to_staff_group(msg_body=staff_msg)
-        user_msg = "Hemos recibido tu solicitud de retiro. ¡Nos pondremos en contacto a la brevedad! 👨‍💻"
     else:
-        user_msg = "No tienes nada para retirar 👀"
-    return user_msg
+        response["msg_for_user"] = "No tienes nada para retirar 👀"
+
+    return response
 
 
 commands = {
     "echo": echo,
+    "error": error,
     "retirar": withdraw,
     "start": start,
-    "test": test,
 }
