@@ -1,5 +1,5 @@
 from django.conf import settings
-from .utils import q
+from app.utils import q
 from lottery.models import Draw
 
 
@@ -67,9 +67,13 @@ def help_(user, *args, **kwargs):
 
 def prizes(user, *args, **kwargs):
     formatted_prizes = "\n".join(
-        map(lambda number, prize: f"{number}: ${prize}", numbers[0 : len(settings.PRIZES)], settings.PRIZES)
+        map(lambda index, prize: f"{numbers[index]}🎯{' ' * 3}...{' ' * 3}*${prize}*", *zip(*enumerate(settings.PRIZES)))
     )
-    msg_for_user = f":\n\n{formatted_prizes}" "Al finalizar el sorteo, "
+    msg_for_user = (
+        "Al finalizar el sorteo,"
+        " por cada boleto ganarás un premio de acuerdo con el número de aciertos obtenidos."
+        f"\n\n{formatted_prizes}"
+    )
     return {"msg_for_user": msg_for_user}
 
 
@@ -91,7 +95,7 @@ def rules(user, *args, **kwargs):
 def results(user, *args, **kwargs):
     msg_for_user = (
         "Los números de esta semana son:"
-        f"\n\n{Draw.objects.current().formatted_results}"
+        f"\n\n{Draw.objects.current().formatted=}"
         f"\n\n¡Envía /boletos para revisar tus aciertos! 🤑"
     )
     return {"msg_for_user": msg_for_user}
@@ -100,16 +104,15 @@ def results(user, *args, **kwargs):
 def tickets(user, *args, **kwargs):
     tickets = user.current_tickets
     if tickets.exists():
-        formatted_tickets = "\n".join(
+        formatted_tickets = "\n\n".join(
             map(
-                lambda number, ticket: f"{number}{' ' * 6}{ticket.formatted_picks}",
-                numbers[1 : len(tickets) + 1],
-                tickets,
+                lambda index, ticket: f"{numbers[index]}{' ' * 3}...{' ' * 3}{ticket.formatted}",
+                *zip(*enumerate(tickets, 1)),
             )
         )
         msg_for_user = (
             f"Tus boletos de esta semana son:\n\n{formatted_tickets}"
-            f"\n\n¡Esta semana llevas *${user.current_prize}* ganados! 💰💰"
+            f"\n\n¡Esta semana llevas *${user.current_prize}* ganados! 💰"
         )
     else:
         msg_for_user = "No tienes boletos esta semana 😢."

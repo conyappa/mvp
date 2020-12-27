@@ -55,7 +55,7 @@ def choose_number_from_current_draw():
         users=User.objects.all(),
         msg_body_formatter=lambda _user: (
             "¡Llegó la hora de sacar un número!\n"
-            f"El número del hoy es el *{draw.results[-1]}* 🎉\n\n"
+            f"El número de hoy es el *{draw.results[-1]}* 🎉\n\n"
             "Envía /resultados para revisar los resultados de la semana."
         ),
         telegram=True,

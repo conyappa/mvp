@@ -44,7 +44,7 @@ def report_exception(handler):
         try:
             return handler(user, update, context)
         except Exception as exception:
-            exception_msg = str(exception)
+            exception_msg = f"{type(exception).__name__}: {exception}"
             return {
                 "msg_for_user": "¡Oh no! Ha ocurrido un error 😓. Vuelve a intentarlo más tarde.",
                 "msg_for_staff": (
@@ -52,7 +52,7 @@ def report_exception(handler):
                     f"\n\nUsername: {user.username}"
                     f"\nNombre: {user.full_name}"
                     f"\nMensaje: {update.message.text}"
-                    f"\n\n`{type(exception).__name__}: {exception}`"
+                    f"\n\n`{exception_msg}`"
                 ),
                 "callback": lambda: raise_(exception_msg),
             }

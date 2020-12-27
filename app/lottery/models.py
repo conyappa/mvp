@@ -5,6 +5,7 @@ from django.db import models
 from django.conf import settings
 from django.db import transaction
 from app.base import BaseModel
+from app.utils import q
 
 
 rd = SystemRandom()  # Alternative random generator that uses os.urandom.
@@ -48,7 +49,7 @@ class Draw(BaseModel):
         return results
 
     @property
-    def formatted_results(self):
+    def formatted(self):
         return "\n".join(map(lambda weekday, result: f"{weekday}: {result}", settings.WEEKDAYS, self.filled_results))
 
     def generate_user_tickets(self, user):
@@ -110,9 +111,11 @@ class Ticket(BaseModel):
         return settings.PRIZES[self.number_of_matches]
 
     @property
-    def formatted_picks(self):
+    def formatted(self):
         draw_results = self.draw.results
-        return ", ".join(map(lambda pick: f"*{pick}*" if (pick in draw_results) else str(pick), self.picks))
+        formatted_picks = ", ".join(map(lambda pick: f"*{pick}*" if (pick in draw_results) else str(pick), self.picks))
+        formatted_prize = f"_({q(self.number_of_matches, 'acierto')}: ${self.prize})_"
+        return f"{formatted_picks}\n{' ' * 15}{formatted_prize}"
 
     def __str__(self):
         return f"{', '.join(map(str, self.picks))} @ {self.draw.start_date} of {self.user}"
