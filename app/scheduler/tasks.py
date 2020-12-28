@@ -38,8 +38,7 @@ def add_new_draw_reminder_cycle(scheduler):
 
 def create_new_draw():
     # Create a new draw.
-    timestamp = timezone.now()
-    Draw.objects.create(users=User.objects.all(), start_date=timestamp.date())
+    Draw.objects.create(users=User.objects.all(), start_date=timezone.localdate())
     # Broadcast a notification.
     multisender.send(
         users=User.objects.all(),

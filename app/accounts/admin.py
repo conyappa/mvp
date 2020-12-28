@@ -1,10 +1,31 @@
 from django.contrib import admin
 from .models import User
+from lottery.models import Draw, Ticket
+
+
+class AccountsAdminMixin:
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
+class TicketInline(admin.StackedInline):
+    model = Ticket
+    fields = ("draw",)
+    extra = 0
+
+    def get_queryset(self, request):
+        current_draw = Draw.objects.current()
+        queryset = super().get_queryset(request).filter(draw=current_draw)
+        return queryset
 
 
 @admin.register(User)
-class UserAdmin(admin.ModelAdmin):
-    readonly_fields = [
+class UserAdmin(AccountsAdminMixin, admin.ModelAdmin):
+    inlines = (TicketInline,)
+    readonly_fields = (
         "username",
         "password",
         "first_name",
@@ -15,4 +36,6 @@ class UserAdmin(admin.ModelAdmin):
         "phone",
         "winnings",
         "extra_tickets_ttl",
-    ]
+    )
+    list_filter = ("is_staff", "is_superuser", "date_joined")
+    search_fields = ("username", "first_name", "last_name")

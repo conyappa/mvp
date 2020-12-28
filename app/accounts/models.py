@@ -5,7 +5,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
 from app.base import BaseModel
-from lottery.models import Draw
 
 
 logger = logging.getLogger(__name__)

@@ -36,6 +36,9 @@ class DrawManager(models.Manager):
 
 
 class Draw(BaseModel):
+    class Meta:
+        ordering = ("-created_at",)
+
     start_date = models.DateField(verbose_name="start date")
     pool = models.JSONField(default=generate_result_pool, verbose_name="result pool")
     results = models.JSONField(blank=True, default=list, verbose_name="results")
