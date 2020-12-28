@@ -25,9 +25,9 @@ class TicketInline(admin.StackedInline):
 @admin.register(User)
 class UserAdmin(AccountsAdminMixin, admin.ModelAdmin):
     inlines = (TicketInline,)
+    exclude = ("password", "groups", "user_permissions")
     readonly_fields = (
         "username",
-        "password",
         "first_name",
         "last_name",
         "last_login",
