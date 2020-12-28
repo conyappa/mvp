@@ -53,13 +53,19 @@ INITIAL_EXTRA_TICKETS_TTL = list(map(int, os.environ.get("INITIAL_EXTRA_TICKETS_
 PICK_RANGE = tuple(range(int(os.environ.get("MIN_PICK", "1")), int(os.environ.get("MAX_PICK", "30")) + 1))
 NEW_DRAW_WEEKDAY = int(os.environ.get("NEW_DRAW_WEEKDAY", "0"))
 DRAW_RESULTS_HOUR, DRAW_RESULTS_MINUTE = map(int, os.environ.get("DRAW_RESULTS_TIME", "20:00").split(":"))
+NEW_DRAW_CREATION_DELTA_HOURS = int(os.environ.get("NEW_DRAW_CREATION_DELTA_HOURS", "3"))
+NEW_DRAW_REMINDER_DELTA_HOURS = int(os.environ.get("NEW_DRAW_REMINDER_DELTA_HOURS", "3"))
 PRIZES = tuple(map(int, os.environ.get("PRIZES", "10 20 50 100 200 500 1000 5000").split(" ")))
 BANK_ACCOUNT = os.environ.get("BANK_ACCOUNT")
-
-
-# Properties.
 WEEKDAYS = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
 WEEKDAYS = WEEKDAYS[NEW_DRAW_WEEKDAY:] + WEEKDAYS[:NEW_DRAW_WEEKDAY]
+
+# Properties.
+NEW_DRAW_CREATION_HOUR = DRAW_RESULTS_HOUR - NEW_DRAW_CREATION_DELTA_HOURS
+NEW_DRAW_REMINDER_HOUR = NEW_DRAW_CREATION_HOUR - NEW_DRAW_REMINDER_DELTA_HOURS
+FORMATTED_NEW_DRAW_CREATION_TIME = dt.time(hour=NEW_DRAW_CREATION_HOUR, minute=DRAW_RESULTS_MINUTE).isoformat(
+    timespec="minutes"
+)
 FORMATTED_DRAW_RESULTS_TIME = dt.time(hour=DRAW_RESULTS_HOUR, minute=DRAW_RESULTS_MINUTE).isoformat(timespec="minutes")
 END_DRAW_WEEKDAY = (NEW_DRAW_WEEKDAY - 1) % 7
 

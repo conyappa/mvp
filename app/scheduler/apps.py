@@ -6,7 +6,9 @@ class SchedulerConfig(AppConfig):
 
     def ready(self):
         from .helpers import boot_scheduler
-        from .tasks import add_draw_cycle_job
+        from . import tasks
 
         boot_scheduler()
-        add_draw_cycle_job()
+        tasks.add_new_draw_reminder_cycle()
+        tasks.add_new_draw_creation_cycle()
+        tasks.add_ongoing_draw_cycle()

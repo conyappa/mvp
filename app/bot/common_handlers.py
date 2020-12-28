@@ -95,7 +95,7 @@ def rules(user, *args, **kwargs):
 def results(user, *args, **kwargs):
     msg_for_user = (
         "Los números de esta semana son:"
-        f"\n\n{Draw.objects.current().formatted=}"
+        f"\n\n{Draw.objects.current().formatted}"
         f"\n\n¡Envía /boletos para revisar tus aciertos! 🤑"
     )
     return {"msg_for_user": msg_for_user}

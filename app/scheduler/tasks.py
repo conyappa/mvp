@@ -10,36 +10,71 @@ from .helpers import use_scheduler
 logger = logging.getLogger(__name__)
 
 
-def create_new_draw(timestamp):
-    all_users = User.objects.all()
-    # Create a new draw.
-    draw = Draw.objects.create(users=all_users, start_date=timestamp.date())
-    draw.choose_result()
-    # Send a notification.
+def remind_of_new_draw():
+    # Broadcast a notification.
     multisender.send(
-        users=all_users,
+        users=User.objects.all(),
         msg_body_formatter=lambda _user: (
-            "¡Ha comenzado un nuevo sorteo! "
-            f"El primer número es el *{draw.results[0]}* 🎰\n\n"
-            "Envía /boletos para ver si le achuntaste."
+            f"Recordatorio: ¡Hoy a las {settings.FORMATTED_DRAW_RESULTS_TIME} comienza el sorteo! 🎉"
+            f"\n\nA las {settings.FORMATTED_NEW_DRAW_CREATION_TIME} se generarán tus boletos;"
+            " recuerda depositar tus ahorros antes de esa hora para aumentar tus probabilidades de ganar 🍀."
+            "\n\nEnvía /saldo para consultar tu saldo y ver cuánto te falta para obtener tu próximo boleto."
         ),
         telegram=True,
         twilio=False,
     )
 
 
-def end_current_draw():
-    # End the ongoing draw.
+@use_scheduler
+def add_new_draw_reminder_cycle(scheduler):
+    scheduler.add_job(
+        remind_of_new_draw,
+        "cron",
+        day_of_week=settings.NEW_DRAW_WEEKDAY,
+        hour=settings.NEW_DRAW_REMINDER_HOUR,
+        minute=settings.DRAW_RESULTS_MINUTE,
+    )
+
+
+def create_new_draw():
+    # Create a new draw.
+    timestamp = timezone.now()
+    Draw.objects.create(users=User.objects.all(), start_date=timestamp.date())
+    # Broadcast a notification.
+    multisender.send(
+        users=User.objects.all(),
+        msg_body_formatter=lambda _user: (
+            f"Ya se han generado tus boletos para el sorteo de las {settings.FORMATTED_DRAW_RESULTS_TIME} 😱."
+            "\n\n¡Envía /boletos para revisarlos!"
+        ),
+        telegram=True,
+        twilio=False,
+    )
+
+
+@use_scheduler
+def add_new_draw_creation_cycle(scheduler):
+    scheduler.add_job(
+        create_new_draw,
+        "cron",
+        day_of_week=settings.NEW_DRAW_WEEKDAY,
+        hour=settings.NEW_DRAW_CREATION_HOUR,
+        minute=settings.DRAW_RESULTS_MINUTE,
+    )
+
+
+def publish_new_draw():
+    # Choose the first result.
     draw = Draw.objects.current()
     draw.choose_result()
-    draw.conclude()
+
     # Send a notification.
     multisender.send(
         users=User.objects.all(),
-        msg_body_formatter=lambda user: (
-            "¡Finalizó el sorteo! Los resultados fueron:\n\n"
-            f"{draw.formatted_results}\n\n"
-            f"¡Ganaste *${user.current_prize}*! 🤑"
+        msg_body_formatter=lambda _user: (
+            "¡Ha comenzado el sorteo! 🎉"
+            f"El primer número es el *{draw.results[0]}* 🎰\n\n"
+            "Envía /boletos para ver si le achuntaste."
         ),
         telegram=True,
         twilio=False,
@@ -63,12 +98,30 @@ def choose_number_from_current_draw():
     )
 
 
-def draw_cycle():
+def end_current_draw():
+    # End the ongoing draw.
+    draw = Draw.objects.current()
+    draw.choose_result()
+    draw.conclude()
+    # Send a notification.
+    multisender.send(
+        users=User.objects.all(),
+        msg_body_formatter=lambda user: (
+            "¡Finalizó el sorteo! Los resultados fueron:\n\n"
+            f"{draw.formatted}\n\n"
+            f"¡Ganaste *${user.current_prize}*! 🤑"
+        ),
+        telegram=True,
+        twilio=False,
+    )
+
+
+def ongoing_draw_cycle():
     now = timezone.localtime()
     draw_exists = Draw.objects.exists()
 
     if now.weekday() == settings.NEW_DRAW_WEEKDAY:
-        create_new_draw(now)
+        publish_new_draw()
     elif (now.weekday() == settings.END_DRAW_WEEKDAY) and draw_exists:
         end_current_draw()
     elif draw_exists:
@@ -76,5 +129,5 @@ def draw_cycle():
 
 
 @use_scheduler
-def add_draw_cycle_job(scheduler):
-    scheduler.add_job(draw_cycle, "cron", hour=settings.DRAW_RESULTS_HOUR, minute=settings.DRAW_RESULTS_MINUTE)
+def add_ongoing_draw_cycle(scheduler):
+    scheduler.add_job(ongoing_draw_cycle, "cron", hour=settings.DRAW_RESULTS_HOUR, minute=settings.DRAW_RESULTS_MINUTE)
