@@ -7,7 +7,8 @@ numbers = ["0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6�
 
 
 def default(user, *args, **kwargs):
-    return "Lo siento, no sé a qué te refieres."
+    msg_for_user = "Lo siento, no sé a qué te refieres."
+    return {"msg_for_user": msg_for_user}
 
 
 # In alphabetical order.
