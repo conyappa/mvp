@@ -42,6 +42,7 @@ class User(BaseModel, AbstractUser):
         error_messages={"unique": "A user with that phone number already exists."},
         verbose_name="phone number",
     )
+    alias = models.CharField(blank=True, null=True, max_length=50, verbose_name="alias/pseudonym")
 
     balance = models.PositiveIntegerField(default=0, verbose_name="balance")
     winnings = models.PositiveIntegerField(default=0, verbose_name="winnings")

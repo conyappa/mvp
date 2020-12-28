@@ -23,4 +23,4 @@ class DrawAdmin(LotteryAdminMixin, admin.ModelAdmin):
 class TicketAdmin(LotteryAdminMixin, admin.ModelAdmin):
     readonly_fields = ("picks", "draw", "user")
     list_filter = ("draw", "user")
-    search_fields = ("user__username", "user__first_name", "user__last_name")
+    search_fields = ("user__username", "user__first_name", "user__last_name", "user__alias")

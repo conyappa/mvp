@@ -38,4 +38,4 @@ class UserAdmin(AccountsAdminMixin, admin.ModelAdmin):
         "extra_tickets_ttl",
     )
     list_filter = ("is_staff", "is_superuser", "date_joined")
-    search_fields = ("username", "first_name", "last_name")
+    search_fields = ("username", "first_name", "last_name", "alias")
