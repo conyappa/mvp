@@ -100,5 +100,5 @@ class User(BaseModel, AbstractUser):
         return " ".join(name_components)
 
     def __str__(self):
-        fields_to_display = filter(bool, [self.full_name, self.username, self.phone])
+        fields_to_display = filter(bool, [self.full_name, self.username, self.phone, self.alias])
         return " | ".join(map(str, fields_to_display))
