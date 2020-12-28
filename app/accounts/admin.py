@@ -37,5 +37,17 @@ class UserAdmin(AccountsAdminMixin, admin.ModelAdmin):
         "winnings",
         "extra_tickets_ttl",
     )
+    list_display = (
+        "username",
+        "full_name",
+        "alias",
+        "telegram_id",
+        "balance",
+        "winnings",
+        "number_of_current_tickets",
+        "current_prize",
+        "is_staff",
+        "is_superuser",
+    )
     list_filter = ("is_staff", "is_superuser", "date_joined")
     search_fields = ("username", "first_name", "last_name", "alias")

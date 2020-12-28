@@ -91,6 +91,10 @@ class User(BaseModel, AbstractUser):
         return self.tickets.current()
 
     @property
+    def number_of_current_tickets(self):
+        return self.current_tickets.count()
+
+    @property
     def current_prize(self):
         return sum(map(lambda x: x.prize, self.current_tickets))
 
