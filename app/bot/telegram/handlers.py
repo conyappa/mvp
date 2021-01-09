@@ -19,6 +19,9 @@ logger = logging.getLogger(__name__)
 STATE_NAMES = (
     "SUPPORT__QUERY",
     "SUPPORT__CONTACT",
+    "WITHDRAW__AMOUNT",
+    "WITHDRAW__VALID_AMOUNT",
+    "WITHDRAW__CONTACT",
 )
 STATES = dict(zip(STATE_NAMES, range(len(STATE_NAMES))))
 
@@ -72,7 +75,7 @@ def support__query(user, update, context):
 def support__contact(user, update, context):
     context.user_data["support_query"] = update.message.text
 
-    cancel = KeyboardButton(text="Cancelar acción", callback_data=-1)
+    cancel = KeyboardButton(text="Cancelar acción")
     request_contact = KeyboardButton(text="Enviar información de contacto", request_contact=True)
     keyboard = ReplyKeyboardMarkup(keyboard=[[cancel, request_contact]], resize_keyboard=True, one_time_keyboard=True)
 
@@ -82,17 +85,6 @@ def support__contact(user, update, context):
             "reply_markup": keyboard,
         },
         "state": STATES["SUPPORT__CONTACT"],
-    }
-
-
-@adapter()
-def support__cancel(user, update, context):
-    return {
-        "to_user": {
-            "text": "Bueno 🙄.",
-            "reply_markup": ReplyKeyboardRemove(),
-        },
-        "state": ConversationHandler.END,
     }
 
 
@@ -110,7 +102,7 @@ def support__done(user, update, context):
         "to_staff": {
             "text": (
                 f"Solicitud de *soporte* 🙄.\n\nUsername: {user.username}\nNombre: {user.full_name}"
-                f"\n\n*Consuta:* {support_query}"
+                f"\n\n*Consulta:* {support_query}"
             ),
         },
         "state": ConversationHandler.END,
@@ -118,27 +110,108 @@ def support__done(user, update, context):
 
 
 @adapter()
-def withdraw(user, update, context):
+def support__cancel(user, update, context):
+    return {
+        "to_user": {
+            "text": "Bueno 🙄.",
+            "reply_markup": ReplyKeyboardRemove(),
+        },
+        "state": ConversationHandler.END,
+    }
+
+
+@adapter()
+def withdraw__amount(user, update, context):
     if user.balance > 0:
         return {
             "to_user": {
-                "text": "He recibido tu solicitud de retiro. ¡Nos pondremos en contacto a la brevedad! 👨‍💻",
+                "text": f"¿Cuánto deseas retirar? (Tienes ${user.balance})",
+                "reply_markup": ForceReply(),
             },
-            "to_staff": {
-                "text": f"Solicitud de *retiro* 💔.\n\nUsername: {user.username}\nNombre: {user.full_name}",
-            },
+            "state": STATES["WITHDRAW__AMOUNT"],
         }
 
     return {
         "to_user": {
-            "text": "No tienes nada para retirar 👀",
+            "text": "No tienes nada para retirar 👀.",
+        },
+        "state": ConversationHandler.END,
+    }
+
+
+@adapter()
+def withdraw__amount_is_nan(user, update, context):
+    return {
+        "to_user": {
+            "text": "⚠️ Ese no es un número válido. Ingresa otro valor:",
+            "reply_markup": ForceReply(),
+        },
+        "state": STATES["WITHDRAW__AMOUNT"],
+    }
+
+
+@adapter()
+def withdraw__contact(user, update, context):
+    amount = int(update.message.text)
+
+    if amount > user.balance:
+        return {
+            "to_user": {
+                "text": "⚠️ Excede máximo. Ingresa otro valor:",
+                "reply_markup": ForceReply(),
+            },
+            "state": STATES["WITHDRAW__AMOUNT"],
         }
+
+    context.user_data["withdraw_amount"] = amount
+
+    cancel = KeyboardButton(text="Cancelar acción")
+    request_contact = KeyboardButton(text="Enviar información de contacto", request_contact=True)
+    keyboard = ReplyKeyboardMarkup(keyboard=[[cancel, request_contact]], resize_keyboard=True, one_time_keyboard=True)
+
+    return {
+        "to_user": {
+            "text": "Perfecto. Envíame tu información de contacto y alguien te escribirá en breve.",
+            "reply_markup": keyboard,
+        },
+        "state": STATES["WITHDRAW__CONTACT"],
+    }
+
+
+@adapter()
+@save_contact
+@send_contact_to_staff
+def withdraw__done(user, update, context):
+    amount = context.user_data["withdraw_amount"]
+
+    return {
+        "to_user": {
+            "text": "Recibido 👌.",
+            "reply_markup": ReplyKeyboardRemove(),
+        },
+        "to_staff": {
+            "text": (
+                f"Solicitud de *retiro* 💔.\n\nUsername: {user.username}\nNombre: {user.full_name}"
+                f"\n\n*Monto:* ${amount}"
+            ),
+        },
+        "state": ConversationHandler.END,
+    }
+
+
+@adapter()
+def withdraw__cancel(user, update, context):
+    return {
+        "to_user": {
+            "text": "¡Genial! A seguir ahorrando 💸.",
+            "reply_markup": ReplyKeyboardRemove(),
+        },
+        "state": ConversationHandler.END,
     }
 
 
 commands = {
     "echo": echo,
     "error": error,
-    "retirar": withdraw,
     "start": start,
 }

@@ -1,7 +1,7 @@
 import logging
 import threading as th
 from django.conf import settings
-from telegram.ext import Updater, CommandHandler, ConversationHandler, CallbackQueryHandler, MessageHandler, Filters
+from telegram.ext import Updater, CommandHandler, ConversationHandler, MessageHandler, Filters
 from .. import common_handlers
 from . import handlers
 from .handlers import STATES
@@ -30,15 +30,40 @@ def boot_updater():
     for command, handler in handlers.commands.items():
         dp.add_handler(CommandHandler(command, handler))
 
-    # /support conversation flow.
+    # /support flow.
     dp.add_handler(
         ConversationHandler(
-            entry_points=[CommandHandler("soporte", handlers.support__query)],
+            entry_points=[
+                CommandHandler("soporte", handlers.support__query),
+            ],
             states={
-                STATES["SUPPORT__QUERY"]: [MessageHandler(Filters.text, handlers.support__contact)],
+                STATES["SUPPORT__QUERY"]: [
+                    MessageHandler(Filters.text, handlers.support__contact),
+                ],
                 STATES["SUPPORT__CONTACT"]: [
-                    MessageHandler(Filters.text, handlers.support__cancel),
                     MessageHandler(Filters.contact, handlers.support__done),
+                    MessageHandler(Filters.text, handlers.support__cancel),
+                ],
+            },
+            fallbacks=[],
+            allow_reentry=True,
+        )
+    )
+
+    # /withdraw flow.
+    dp.add_handler(
+        ConversationHandler(
+            entry_points=[
+                CommandHandler("retirar", handlers.withdraw__amount),
+            ],
+            states={
+                STATES["WITHDRAW__AMOUNT"]: [
+                    MessageHandler(Filters.regex(r"^[0-9]+$"), handlers.withdraw__contact),
+                    MessageHandler(Filters.text, handlers.withdraw__amount_is_nan),
+                ],
+                STATES["WITHDRAW__CONTACT"]: [
+                    MessageHandler(Filters.contact, handlers.withdraw__done),
+                    MessageHandler(Filters.text, handlers.withdraw__cancel),
                 ],
             },
             fallbacks=[],
