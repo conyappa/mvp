@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import admin
 from .models import User
 from lottery.models import Draw, Ticket
@@ -5,10 +6,10 @@ from lottery.models import Draw, Ticket
 
 class AccountsAdminMixin:
     def has_add_permission(self, request, obj=None):
-        return False
+        return settings.DEBUG
 
     def has_delete_permission(self, request, obj=None):
-        return True
+        return settings.DEBUG
 
 
 class TicketInline(admin.StackedInline):
