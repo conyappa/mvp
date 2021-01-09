@@ -40,7 +40,6 @@ class UserAdmin(AccountsAdminMixin, admin.ModelAdmin):
     list_display = (
         "username",
         "full_name",
-        "alias",
         "telegram_id",
         "balance",
         "winnings",

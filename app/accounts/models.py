@@ -1,5 +1,6 @@
 import logging
 from phonenumber_field.modelfields import PhoneNumberField
+from telegram import Contact
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -101,8 +102,21 @@ class User(BaseModel, AbstractUser):
     @property
     def full_name(self):
         name_components = filter(bool, [self.first_name, self.last_name])
-        return " ".join(name_components)
+        name = " ".join(name_components)
+        if self.alias:
+            name += f"(a.k.a. {self.alias})"
+        return name
+
+    @property
+    def telegram_contact(self):
+        if self.phone:
+            return Contact(
+                phone_number=self.phone, first_name=self.first_name, last_name=self.last_name, user_id=self.telegram_id
+            )
+        else:
+            phone_field = self._meta.get_field('phone')
+            raise AttributeError(f"'{type(self).__name__}' has no valid '{phone_field.verbose_name}'.")
 
     def __str__(self):
-        fields_to_display = filter(bool, [self.full_name, self.username, self.phone, self.alias])
+        fields_to_display = filter(bool, [self.full_name, self.username, self.phone])
         return " | ".join(map(str, fields_to_display))

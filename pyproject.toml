@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "conyappa-mvp"
 version = "0.5.1"
-description = ""
+description = "The prize-linked savings account."
 authors = [
     "Alex Apt Iberkleid <aapt@uc.cl>",
     "Ariel Martínez Silberstein <amartinez5@uc.cl>",
@@ -39,5 +39,3 @@ exclude = '/(\.venv|migrations)/'
 [build-system]
 requires = ["poetry>=1.0.3"]
 build-backend = "poetry.masonry.api"
-
-

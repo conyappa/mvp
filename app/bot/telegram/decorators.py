@@ -1,6 +1,7 @@
 import logging
 from telegram.constants import PARSEMODE_MARKDOWN
-from . import sender
+from telegram import Bot
+from django.conf import settings
 from accounts.models import User
 
 
@@ -11,30 +12,38 @@ class HandlerError(Exception):
     pass
 
 
-def raise_(msg):
-    raise HandlerError(msg)
-
-
 def process_response(handler):
     def wrapper(update, context):
+        bot = Bot(token=settings.TELEGRAM_TOKEN)
+
         response = handler(update, context) or {}
+        to_user = response.get("to_user")
+        to_staff = response.get("to_staff")
+        exception = response.get("exception")
+        next_state = response.get("next_state")
 
-        msg_for_user = response.get("msg_for_user")
-        if msg_for_user is not None:
-            repliers = {None: update.message.reply_text, PARSEMODE_MARKDOWN: update.message.reply_markdown}
-            msg_for_user_parse_mode = response.get("msg_for_user_parse_mode", PARSEMODE_MARKDOWN)
-            repliers[msg_for_user_parse_mode](msg_for_user)
+        if to_user:
+            to_user.setdefault("text", "")
+            to_user.setdefault("parse_mode", PARSEMODE_MARKDOWN)
+            user_id = update.message.from_user.id
+            bot.send_message(chat_id=user_id, **to_user)
 
-        msg_for_staff = response.get("msg_for_staff")
-        if msg_for_staff is not None:
-            msg_for_staff_parse_mode = response.get("msg_for_staff_parse_mode", PARSEMODE_MARKDOWN)
-            sender.send_to_staff_group(msg_body=msg_for_staff, parse_mode=msg_for_staff_parse_mode)
+        if to_staff:
+            contact = to_staff.pop("contact", None)
 
-        callback = response.get("callback")
-        callback_args = response.get("callback_args", ())
-        callback_kwargs = response.get("callback_kwargs", {})
-        if callback is not None:
-            callback(*callback_args, **callback_kwargs)
+            to_staff.setdefault("text", "")
+            to_staff.setdefault("parse_mode", PARSEMODE_MARKDOWN)
+            bot.send_message(chat_id=settings.TELEGRAM_STAFF_GROUP_ID, **to_staff)
+
+            if contact is not None:
+                bot.send_contact(chat_id=settings.TELEGRAM_STAFF_GROUP_ID, contact=contact)
+
+        if exception:
+            msg = exception.get("msg")
+            raise exception["obj"](msg)
+
+        if next_state is not None:
+            return next_state
 
     return wrapper
 
@@ -46,15 +55,22 @@ def report_exception(handler):
         except Exception as exception:
             exception_msg = f"{type(exception).__name__}: {exception}"
             return {
-                "msg_for_user": "¡Oh no! Ha ocurrido un error 😓. Vuelve a intentarlo más tarde.",
-                "msg_for_staff": (
-                    "¡Ha ocurrido un error! 🚨"
-                    f"\n\nUsername: {user.username}"
-                    f"\nNombre: {user.full_name}"
-                    f"\nMensaje: {update.message.text}"
-                    f"\n\n`{exception_msg}`"
-                ),
-                "callback": lambda: raise_(exception_msg),
+                "to_user": {
+                    "text": "¡Oh no! Ha ocurrido un error 😓. Vuelve a intentarlo más tarde.",
+                },
+                "to_staff": {
+                    "text": (
+                        "¡Ha ocurrido un error! 🚨"
+                        f"\n\nUsername: {user.username}"
+                        f"\nNombre: {user.full_name}"
+                        f"\nMensaje: {update.message.text or ''}"
+                        f"\n\n`{exception_msg}`"
+                    ),
+                },
+                "exception": {
+                    "obj": HandlerError,
+                    "msg": exception_msg,
+                },
             }
 
     return wrapper
@@ -62,6 +78,7 @@ def report_exception(handler):
 
 def use_user(handler):
     def wrapper(update, context):
+        bot = Bot(token=settings.TELEGRAM_TOKEN)
         telegram_user = update.message.from_user
 
         try:
@@ -78,8 +95,9 @@ def use_user(handler):
         user.save()
 
         if created:
-            sender.send_to_staff_group(
-                msg_body="¡Nuevo usuario! 🎉" f"\n\nUsername: {user.username}" f"\nNombre: {user.full_name}"
+            bot.send_message(
+                chat_id=settings.TELEGRAM_STAFF_GROUP_ID,
+                text="¡Nuevo usuario! 🎉" f"\n\nUsername: {user.username}" f"\nNombre: {user.full_name}",
             )
 
         return handler(user, update, context)
@@ -91,5 +109,15 @@ def adapter(handler):
     def wrapper(update, context):
         decorated_handler = process_response(use_user(report_exception(handler)))
         return decorated_handler(update, context)
+
+    return wrapper
+
+
+def save_contact(handler):
+    def wrapper(user, update, context):
+        contact = update.message.contact
+        user.phone = contact.phone_number
+        user.save()
+        return handler(user, update, context)
 
     return wrapper
