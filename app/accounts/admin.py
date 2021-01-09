@@ -8,7 +8,7 @@ class AccountsAdminMixin:
         return False
 
     def has_delete_permission(self, request, obj=None):
-        return False
+        return True
 
 
 class TicketInline(admin.StackedInline):

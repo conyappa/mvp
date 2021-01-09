@@ -114,7 +114,7 @@ class User(BaseModel, AbstractUser):
                 phone_number=self.phone, first_name=self.first_name, last_name=self.last_name, user_id=self.telegram_id
             )
         else:
-            phone_field = self._meta.get_field('phone')
+            phone_field = self._meta.get_field("phone")
             raise AttributeError(f"'{type(self).__name__}' has no valid '{phone_field.verbose_name}'.")
 
     def __str__(self):

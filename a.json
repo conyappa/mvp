@@ -1,0 +1,53 @@
+{
+    "update_id": 453265558,
+    "callback_query": {
+        "id": "2041035569942170979",
+        "chat_instance": "4588005984758410024",
+        "message": {
+            "message_id": 894,
+            "date": 1610200929,
+            "chat": {
+                "id": 475215625,
+                "type": "private",
+                "username": "amartinez5",
+                "first_name": "Ariel",
+                "last_name": "Mart\u00ednez Silberstein"
+            },
+            "text": "\u00bfEn qu\u00e9 te puedo ayudar? \ud83e\udd14",
+            "entities": [],
+            "caption_entities": [],
+            "photo": [],
+            "new_chat_members": [],
+            "new_chat_photo": [],
+            "delete_chat_photo": false,
+            "group_chat_created": false,
+            "supergroup_chat_created": false,
+            "channel_chat_created": false,
+            "reply_markup": {
+                "inline_keyboard": [
+                    [
+                        {
+                            "text": "Ya no necesito ayuda",
+                            "callback_data": "-1"
+                        }
+                    ]
+                ]
+            },
+            "from": {
+                "id": 1408928388,
+                "first_name": "Dev-AMS-AA",
+                "is_bot": true,
+                "username": "Dev_AMS_AA_Bot"
+            }
+        },
+        "data": "-1",
+        "from": {
+            "id": 475215625,
+            "first_name": "Ariel",
+            "is_bot": false,
+            "last_name": "Mart\u00ednez Silberstein",
+            "username": "amartinez5",
+            "language_code": "en"
+        }
+    }
+}

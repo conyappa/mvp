@@ -1,6 +1,5 @@
 import logging
 from telegram.constants import PARSEMODE_MARKDOWN
-from telegram import Bot
 from django.conf import settings
 from accounts.models import User
 
@@ -13,37 +12,28 @@ class HandlerError(Exception):
 
 
 def process_response(handler):
-    def wrapper(update, context):
-        bot = Bot(token=settings.TELEGRAM_TOKEN)
-
-        response = handler(update, context) or {}
+    def wrapper(update, context, callback=False):
+        response = handler(update, context, callback) or {}
         to_user = response.get("to_user")
         to_staff = response.get("to_staff")
         exception = response.get("exception")
-        next_state = response.get("next_state")
+        state = response.get("state")
 
         if to_user:
-            to_user.setdefault("text", "")
             to_user.setdefault("parse_mode", PARSEMODE_MARKDOWN)
-            user_id = update.message.from_user.id
-            bot.send_message(chat_id=user_id, **to_user)
+            telegram_user = update.from_user if callback else update.message.from_user
+            context.bot.send_message(chat_id=telegram_user.id, **to_user)
 
         if to_staff:
-            contact = to_staff.pop("contact", None)
-
-            to_staff.setdefault("text", "")
             to_staff.setdefault("parse_mode", PARSEMODE_MARKDOWN)
-            bot.send_message(chat_id=settings.TELEGRAM_STAFF_GROUP_ID, **to_staff)
-
-            if contact is not None:
-                bot.send_contact(chat_id=settings.TELEGRAM_STAFF_GROUP_ID, contact=contact)
+            context.bot.send_message(chat_id=settings.TELEGRAM_STAFF_GROUP_ID, **to_staff)
 
         if exception:
             msg = exception.get("msg")
             raise exception["obj"](msg)
 
-        if next_state is not None:
-            return next_state
+        if state is not None:
+            return state
 
     return wrapper
 
@@ -77,9 +67,8 @@ def report_exception(handler):
 
 
 def use_user(handler):
-    def wrapper(update, context):
-        bot = Bot(token=settings.TELEGRAM_TOKEN)
-        telegram_user = update.message.from_user
+    def wrapper(update, context, callback=False):
+        telegram_user = update.from_user if callback else update.message.from_user
 
         try:
             user = User.objects.get(telegram_id=telegram_user.id)
@@ -95,7 +84,7 @@ def use_user(handler):
         user.save()
 
         if created:
-            bot.send_message(
+            context.bot.send_message(
                 chat_id=settings.TELEGRAM_STAFF_GROUP_ID,
                 text="¡Nuevo usuario! 🎉" f"\n\nUsername: {user.username}" f"\nNombre: {user.full_name}",
             )
@@ -105,12 +94,15 @@ def use_user(handler):
     return wrapper
 
 
-def adapter(handler):
-    def wrapper(update, context):
-        decorated_handler = process_response(use_user(report_exception(handler)))
-        return decorated_handler(update, context)
+def adapter(callback=False):
+    def inner(handler):
+        def wrapper(update, context):
+            decorated_handler = process_response(use_user(report_exception(handler)))
+            return decorated_handler(update.callback_query if callback else update, context, callback)
 
-    return wrapper
+        return wrapper
+
+    return inner
 
 
 def save_contact(handler):
@@ -119,5 +111,15 @@ def save_contact(handler):
         user.phone = contact.phone_number
         user.save()
         return handler(user, update, context)
+
+    return wrapper
+
+
+def send_contact_to_staff(handler):
+    def wrapper(user, update, context):
+        response = handler(user, update, context)
+        contact = user.telegram_contact
+        context.bot.send_contact(chat_id=settings.TELEGRAM_STAFF_GROUP_ID, contact=contact)
+        return response
 
     return wrapper
