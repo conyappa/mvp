@@ -59,7 +59,7 @@ docker-compose down
 
 ## Write some code
 
-Create a development-friendly virtual environment (do the same at each submodule)
+Create a development-friendly virtual environment
 
 ```bash
 make createvenv
