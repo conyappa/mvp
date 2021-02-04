@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 class SenderInterfaceDelayer:
     def __init__(self, max_bulk_size, delay_seconds, **kwargs):
-        self.lock = th.Lock
+        self.lock = th.Lock()
         self.bulk_size = 0
         self.max_bulk_size = max_bulk_size
         self.delay_seconds = delay_seconds
@@ -27,6 +27,9 @@ class SenderInterfaceDelayer:
             else:
                 self.bulk_size += 1
 
+    def __exit__(self, _type, _value, _traceback):
+        logger.info(self.bulk_size)
+
 
 class MultiSender:
     interfaces = {
@@ -34,7 +37,7 @@ class MultiSender:
             "client": TelegramClient(token=settings.TELEGRAM_TOKEN).send_message,
             "msg_body_name": "text",
             "get_defaults": lambda user: {"chat_id": user.telegram_id, "parse_mode": PARSEMODE_MARKDOWN},
-            "manager": SenderInterfaceDelayer(
+            "delayer": SenderInterfaceDelayer(
                 max_bulk_size=settings.TELEGRAM_MAX_BULK_SIZE, delay_seconds=settings.TELEGRAM_DELAY_SECONDS
             ),
         },
@@ -45,7 +48,7 @@ class MultiSender:
                 "from_": f"whatsapp:{settings.TWILIO_PHONE_NUMBER}",
                 "to": f"whatsapp:{user.phone}",
             },
-            "manager": SenderInterfaceDelayer(
+            "delayer": SenderInterfaceDelayer(
                 max_bulk_size=settings.TWILIO_MAX_BULK_SIZE, delay_seconds=settings.TWILIO_DELAY_SECONDS
             ),
         },

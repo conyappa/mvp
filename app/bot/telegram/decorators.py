@@ -20,8 +20,6 @@ def process_response(handler):
         exception = response.get("exception")
         state = response.get("state")
 
-        logger.info(update)
-
         if to_user:
             to_user.setdefault("parse_mode", PARSEMODE_MARKDOWN)
             with MultiSender.interfaces["telegram"]["delayer"]:
