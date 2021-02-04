@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 class SenderInterfaceDelayer:
-    def __init__(self, max_bulk_size, delay_seconds, **kwargs):
+    def __init__(self, max_bulk_size, delay_seconds):
         self.lock = th.Lock()
         self.bulk_size = 0
         self.max_bulk_size = max_bulk_size
@@ -104,3 +104,7 @@ class MultiSender:
         )
 
         email.send(User.objects.filter(is_staff=True), msg_subject_formatter, msg_body_formatter)
+
+    @staticmethod
+    def send_async(*args, **kwargs):
+        th.Thread(target=MultiSender.send, args=args, kwargs=kwargs).start()
