@@ -20,15 +20,15 @@ class SenderInterfaceDelayer:
         self.delay_seconds = delay_seconds
 
     def __enter__(self):
+        pass
+
+    def __exit__(self, _type, _value, _traceback):
         with self.lock:
+            self.bulk_size += 1
+
             if self.bulk_size >= self.max_bulk_size:
                 time.sleep(self.delay_seconds)
                 self.bulk_size = 0
-            else:
-                self.bulk_size += 1
-
-    def __exit__(self, _type, _value, _traceback):
-        pass
 
 
 class MultiSender:
