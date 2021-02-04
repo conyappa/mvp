@@ -11,7 +11,7 @@ from .. import common_handlers
 def twilio_adapter(view):
     def wrapper(bot, request, *args, **kwargs):
         body = request.body.decode()
-        params = {inflection.underscore(k): v[0] for k, v in parse_qs(body).items()}
+        params = {inflection.underscore(k): v[0] for (k, v) in parse_qs(body).items()}
 
         try:
             twilio_account_sid = params["account_sid"]
