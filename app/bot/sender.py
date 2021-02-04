@@ -28,7 +28,7 @@ class SenderInterfaceDelayer:
                 self.bulk_size += 1
 
     def __exit__(self, _type, _value, _traceback):
-        logger.info(self.bulk_size)
+        pass
 
 
 class MultiSender:
