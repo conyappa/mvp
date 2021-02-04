@@ -24,4 +24,4 @@ jobs:
             DJANGO_SECRET_KEY
         env:
           DJANGO_ENV: production
-          DJANGO_SECRET_KEY: "${{ secrets.DJANGO_SECRET_KEY }}"
+          DJANGO_SECRET_KEY: "${{ secrets.DJANGO_SECRET_KEY_PRODUCTION }}"
