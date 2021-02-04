@@ -1,6 +1,6 @@
 import logging
 import time
-from collections import defaultdict
+import threading as th
 from telegram import Bot as TelegramClient
 from telegram.constants import PARSEMODE_MARKDOWN
 from twilio.rest import Client as TwilioClient
@@ -12,13 +12,31 @@ from accounts.models import User
 logger = logging.getLogger(__name__)
 
 
+class SenderInterfaceDelayer:
+    def __init__(self, max_bulk_size, delay_seconds, **kwargs):
+        self.lock = th.Lock
+        self.bulk_size = 0
+        self.max_bulk_size = max_bulk_size
+        self.delay_seconds = delay_seconds
+
+    def __enter__(self):
+        with self.lock:
+            if self.bulk_size >= self.max_bulk_size:
+                time.sleep(self.delay_seconds)
+                self.bulk_size = 0
+            else:
+                self.bulk_size += 1
+
+
 class MultiSender:
     interfaces = {
         "telegram": {
             "client": TelegramClient(token=settings.TELEGRAM_TOKEN).send_message,
             "msg_body_name": "text",
             "get_defaults": lambda user: {"chat_id": user.telegram_id, "parse_mode": PARSEMODE_MARKDOWN},
-            "settings": {"bulk_size": settings.TELEGRAM_BULK_SIZE, "delay_seconds": settings.TELEGRAM_DELAY_SECONDS},
+            "manager": SenderInterfaceDelayer(
+                max_bulk_size=settings.TELEGRAM_MAX_BULK_SIZE, delay_seconds=settings.TELEGRAM_DELAY_SECONDS
+            ),
         },
         "twilio": {
             "client": TwilioClient(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN).messages.create,
@@ -27,19 +45,23 @@ class MultiSender:
                 "from_": f"whatsapp:{settings.TWILIO_PHONE_NUMBER}",
                 "to": f"whatsapp:{user.phone}",
             },
-            "settings": {"bulk_size": settings.TWILIO_BULK_SIZE, "delay_seconds": settings.TWILIO_DELAY_SECONDS},
+            "manager": SenderInterfaceDelayer(
+                max_bulk_size=settings.TWILIO_MAX_BULK_SIZE, delay_seconds=settings.TWILIO_DELAY_SECONDS
+            ),
         },
     }
 
-    sent_counter = defaultdict(int)
-
     @staticmethod
-    def inc_send_count(interface_name):
-        MultiSender.sent_counter[interface_name] += 1
-        interface_settings = MultiSender.interfaces[interface_name]["settings"]
-        if MultiSender.sent_counter[interface_name] >= interface_settings["bulk_size"]:
-            time.sleep(interface_settings["delay_secs"])
-            MultiSender.sent_counter[interface_name] = 0
+    def wait_for(interface_name):
+        counter = MultiSender.sent_counter[interface_name]
+
+        with counter["lock"]:
+            counter["value"] += 1
+            interface_settings = MultiSender.interfaces[interface_name]["settings"]
+
+            if counter["value"] > interface_settings["bulk_size"]:
+                time.sleep(interface_settings["delay_secs"])
+                counter["value"] = 0
 
     @staticmethod
     def send(users, msg_body_formatter, interfaces="all", interfaces_kwargs={}, report_errors=True):
@@ -57,7 +79,10 @@ class MultiSender:
                 try:
                     kwargs = {**interface["get_defaults"](user), **interfaces_kwargs.get(interface_name, {})}
                     kwargs[interface["msg_body_name"]] = msg_body_formatter(user)
-                    interface["client"](**kwargs)
+
+                    with interface["delayer"]:
+                        interface["client"](**kwargs)
+
                 except Exception as e:
                     fails.add((user, e))
 

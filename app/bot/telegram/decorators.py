@@ -2,6 +2,7 @@ import logging
 from telegram.constants import PARSEMODE_MARKDOWN
 from django.conf import settings
 from accounts.models import User
+from ..sender import MultiSender
 
 
 logger = logging.getLogger(__name__)
@@ -23,16 +24,18 @@ def process_response(handler):
 
         if to_user:
             to_user.setdefault("parse_mode", PARSEMODE_MARKDOWN)
-            context.bot.send_message(
-                chat_id=update.message.chat.id,
-                reply_to_message_id=update.message.message_id,
-                allow_sending_without_reply=True,
-                **to_user,
-            )
+            with MultiSender.interfaces["telegram"]["delayer"]:
+                context.bot.send_message(
+                    chat_id=update.message.chat.id,
+                    reply_to_message_id=update.message.message_id,
+                    allow_sending_without_reply=True,
+                    **to_user,
+                )
 
         if to_staff:
             to_staff.setdefault("parse_mode", PARSEMODE_MARKDOWN)
-            context.bot.send_message(chat_id=settings.TELEGRAM_STAFF_GROUP_ID, **to_staff)
+            with MultiSender.interfaces["telegram"]["delayer"]:
+                context.bot.send_message(chat_id=settings.TELEGRAM_STAFF_GROUP_ID, **to_staff)
 
         if exception:
             msg = exception.get("msg")
