@@ -71,6 +71,7 @@ def help_(user, *args, **kwargs):
         "\n\n/resultados: Entérate los números ganadores de esta semana 🎰"
         "\n\n/retirar: Retira tu dinero a una cuenta bancaria 😢"
         "\n\n/saldo: Consulta tu saldo actual 💲"
+        "\n\n/soporte: ¿Necesitas ayuda con algo?"
     )
     return msg
 
