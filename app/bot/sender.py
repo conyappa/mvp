@@ -1,4 +1,6 @@
 import logging
+import time
+from collections import defaultdict
 from telegram import Bot as TelegramClient
 from telegram.constants import PARSEMODE_MARKDOWN
 from twilio.rest import Client as TwilioClient
@@ -16,6 +18,7 @@ class MultiSender:
             "client": TelegramClient(token=settings.TELEGRAM_TOKEN).send_message,
             "msg_body_name": "text",
             "get_defaults": lambda user: {"chat_id": user.telegram_id, "parse_mode": PARSEMODE_MARKDOWN},
+            "settings": {"bulk_size": settings.TELEGRAM_BULK_SIZE, "delay_seconds": settings.TELEGRAM_DELAY_SECONDS},
         },
         "twilio": {
             "client": TwilioClient(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN).messages.create,
@@ -24,8 +27,19 @@ class MultiSender:
                 "from_": f"whatsapp:{settings.TWILIO_PHONE_NUMBER}",
                 "to": f"whatsapp:{user.phone}",
             },
+            "settings": {"bulk_size": settings.TWILIO_BULK_SIZE, "delay_seconds": settings.TWILIO_DELAY_SECONDS},
         },
     }
+
+    sent_counter = defaultdict(int)
+
+    @staticmethod
+    def inc_send_count(interface_name):
+        MultiSender.sent_counter[interface_name] += 1
+        interface_settings = MultiSender.interfaces[interface_name]["settings"]
+        if MultiSender.sent_counter[interface_name] >= interface_settings["bulk_size"]:
+            time.sleep(interface_settings["delay_secs"])
+            MultiSender.sent_counter[interface_name] = 0
 
     @staticmethod
     def send(users, msg_body_formatter, interfaces="all", interfaces_kwargs={}, report_errors=True):

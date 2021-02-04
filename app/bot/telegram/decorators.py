@@ -19,10 +19,16 @@ def process_response(handler):
         exception = response.get("exception")
         state = response.get("state")
 
+        logger.info(update)
+
         if to_user:
             to_user.setdefault("parse_mode", PARSEMODE_MARKDOWN)
-            telegram_user = update.from_user if callback else update.message.from_user
-            context.bot.send_message(chat_id=telegram_user.id, **to_user)
+            context.bot.send_message(
+                chat_id=update.message.chat.id,
+                reply_to_message_id=update.message.message_id,
+                allow_sending_without_reply=True,
+                **to_user,
+            )
 
         if to_staff:
             to_staff.setdefault("parse_mode", PARSEMODE_MARKDOWN)

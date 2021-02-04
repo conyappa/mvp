@@ -23,7 +23,7 @@ def remind_of_new_draw():
             " recuerda depositar tus ahorros antes de esa hora para aumentar tus probabilidades de ganar 🍀."
             "\n\nEnvía /saldo para consultar tu saldo y ver cuánto te falta para obtener tu próximo boleto."
         ),
-        interfaces=("telegram",)
+        interfaces=("telegram",),
     )
 
 
@@ -48,7 +48,7 @@ def create_new_draw():
             f"Ya se han generado tus boletos para el sorteo de las {settings.FORMATTED_DRAW_RESULTS_TIME} 😱."
             "\n\n¡Envía /boletos para revisarlos!"
         ),
-        interfaces=("telegram",)
+        interfaces=("telegram",),
     )
 
 
@@ -76,7 +76,7 @@ def publish_new_draw():
             f"El primer número es el *{draw.results[0]}* 🎰\n\n"
             "Envía /boletos para ver si le achuntaste."
         ),
-        interfaces=("telegram",)
+        interfaces=("telegram",),
     )
 
 
@@ -92,7 +92,7 @@ def choose_number_from_current_draw():
             f"El número de hoy es el *{draw.results[-1]}* 🎉\n\n"
             "Envía /resultados para revisar los resultados de la semana."
         ),
-        interfaces=("telegram",)
+        interfaces=("telegram",),
     )
 
 
@@ -109,7 +109,7 @@ def end_current_draw():
             f"{draw.formatted}\n\n"
             f"¡Ganaste *${user.current_prize}*! 🤑"
         ),
-        interfaces=("telegram",)
+        interfaces=("telegram",),
     )
 
 
