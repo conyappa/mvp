@@ -31,48 +31,56 @@ class SenderInterfaceDelayer:
                 self.bulk_size = 0
 
 
-class MultiSender:
-    interfaces = {
-        "telegram": {
-            "client": TelegramClient(token=settings.TELEGRAM_TOKEN).send_message,
-            "msg_body_name": "text",
-            "get_defaults": lambda user: {"chat_id": user.telegram_id, "parse_mode": PARSEMODE_MARKDOWN},
-            "delayer": SenderInterfaceDelayer(
-                max_bulk_size=settings.TELEGRAM_MAX_BULK_SIZE, delay_seconds=settings.TELEGRAM_DELAY_SECONDS
-            ),
-        },
-        # "twilio": {
-        #     "client": TwilioClient(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN).messages.create,
-        #     "msg_body_name": "body",
-        #     "get_defaults": lambda user: {
-        #         "from_": f"whatsapp:{settings.TWILIO_PHONE_NUMBER}",
-        #         "to": f"whatsapp:{user.phone}",
-        #     },
-        #     "delayer": SenderInterfaceDelayer(
-        #         max_bulk_size=settings.TWILIO_MAX_BULK_SIZE, delay_seconds=settings.TWILIO_DELAY_SECONDS
-        #     ),
-        # },
-    }
+class Singleton(type):
+    _instances = {}
 
-    @staticmethod
-    def wait_for(interface_name):
-        counter = MultiSender.sent_counter[interface_name]
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super().__call__(*args, **kwargs)
+        return cls._instances[cls]
+
+
+class MultiSender(metaclass=Singleton):
+    def __init__(self):
+        self.interfaces = {
+            "telegram": {
+                "client": TelegramClient(token=settings.TELEGRAM_TOKEN).send_message,
+                "msg_body_name": "text",
+                "get_defaults": lambda user: {"chat_id": user.telegram_id, "parse_mode": PARSEMODE_MARKDOWN},
+                "delayer": SenderInterfaceDelayer(
+                    max_bulk_size=settings.TELEGRAM_MAX_BULK_SIZE, delay_seconds=settings.TELEGRAM_DELAY_SECONDS
+                ),
+            },
+            # "twilio": {
+            #     "client": TwilioClient(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN).messages.create,
+            #     "msg_body_name": "body",
+            #     "get_defaults": lambda user: {
+            #         "from_": f"whatsapp:{settings.TWILIO_PHONE_NUMBER}",
+            #         "to": f"whatsapp:{user.phone}",
+            #     },
+            #     "delayer": SenderInterfaceDelayer(
+            #         max_bulk_size=settings.TWILIO_MAX_BULK_SIZE, delay_seconds=settings.TWILIO_DELAY_SECONDS
+            #     ),
+            # },
+        }
+
+    def wait_for(self, interface_name):
+        counter = self.sent_counter[interface_name]
 
         with counter["lock"]:
             counter["value"] += 1
-            interface_settings = MultiSender.interfaces[interface_name]["settings"]
+            interface_settings = self.interfaces[interface_name]["settings"]
 
             if counter["value"] > interface_settings["bulk_size"]:
                 time.sleep(interface_settings["delay_secs"])
                 counter["value"] = 0
 
-    @staticmethod
-    def send(users, msg_body_formatter, interfaces="all", interfaces_kwargs={}, report_errors=True):
+    def send(self, users, msg_body_formatter, interfaces="all", interfaces_kwargs={}, report_errors=True):
         if interfaces == "all":
-            interfaces = MultiSender.interfaces
+            interfaces = self.interfaces
         else:
             interfaces = {
-                name: interface for (name, interface) in MultiSender.interfaces.items() if (name in interfaces)
+                name: interface for (name, interface) in self.interfaces.items() if (name in interfaces)
             }
 
         for (interface_name, interface) in interfaces.items():
@@ -90,10 +98,9 @@ class MultiSender:
                     fails.add((user, e))
 
             if report_errors and fails:
-                MultiSender.report_fails(interface_name, fails)
+                self.report_fails(interface_name, fails)
 
-    @staticmethod
-    def report_fails(interface_name, fails):
+    def report_fails(self, interface_name, fails):
         msg_subject_formatter = lambda _user: f"Failed to send SMS from {interface_name} interface"
 
         formatted_users = "\n\n".join(map(lambda fail: f"{fail[0]}: {fail[1]}", fails))
@@ -105,6 +112,5 @@ class MultiSender:
 
         email.send(User.objects.filter(is_staff=True), msg_subject_formatter, msg_body_formatter)
 
-    @staticmethod
-    def send_async(*args, **kwargs):
-        th.Thread(target=MultiSender.send, args=args, kwargs=kwargs).start()
+    def send_async(self, *args, **kwargs):
+        th.Thread(target=self.send, args=args, kwargs=kwargs).start()

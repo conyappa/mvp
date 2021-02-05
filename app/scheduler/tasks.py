@@ -3,19 +3,16 @@ from django.utils import timezone
 from django.conf import settings
 from lottery.models import Draw
 from accounts.models import User
-from bot import sender
+from bot.sender import MultiSender
 from .helpers import use_scheduler
 
 
 logger = logging.getLogger(__name__)
 
 
-multisender = sender.MultiSender
-
-
 def remind_of_new_draw():
     # Broadcast a notification.
-    multisender.send_async(
+    MultiSender().send_async(
         users=User.objects.all(),
         msg_body_formatter=lambda _user: (
             f"Recordatorio: ¡Hoy a las {settings.FORMATTED_DRAW_RESULTS_TIME} comienza el sorteo! 🎉"
@@ -42,7 +39,7 @@ def create_new_draw():
     # Create a new draw.
     Draw.objects.create(users=User.objects.all(), start_date=timezone.localdate())
     # Broadcast a notification.
-    multisender.send_async(
+    MultiSender().send_async(
         users=User.objects.all(),
         msg_body_formatter=lambda _user: (
             f"Ya se han generado tus boletos para el sorteo de las {settings.FORMATTED_DRAW_RESULTS_TIME} 😱."
@@ -69,7 +66,7 @@ def publish_new_draw():
     draw.choose_result()
 
     # Send a notification.
-    multisender.send_async(
+    MultiSender().send_async(
         users=User.objects.all(),
         msg_body_formatter=lambda _user: (
             "¡Ha comenzado el sorteo! 🎉"
@@ -85,7 +82,7 @@ def choose_number_from_current_draw():
     draw = Draw.objects.current()
     draw.choose_result()
     # Broadcast a notification.
-    multisender.send_async(
+    MultiSender().send_async(
         users=User.objects.all(),
         msg_body_formatter=lambda _user: (
             "¡Llegó la hora de sacar un número!\n"
@@ -102,7 +99,7 @@ def end_current_draw():
     draw.choose_result()
     draw.conclude()
     # Send a notification.
-    multisender.send_async(
+    MultiSender().send_async(
         users=User.objects.all(),
         msg_body_formatter=lambda user: (
             "¡Finalizó el sorteo! Los resultados fueron:\n\n"

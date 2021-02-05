@@ -22,7 +22,7 @@ def process_response(handler):
 
         if to_user:
             to_user.setdefault("parse_mode", PARSEMODE_MARKDOWN)
-            with MultiSender.interfaces["telegram"]["delayer"]:
+            with MultiSender().interfaces["telegram"]["delayer"]:
                 context.bot.send_message(
                     chat_id=update.message.chat.id,
                     reply_to_message_id=update.message.message_id,
@@ -32,7 +32,7 @@ def process_response(handler):
 
         if to_staff:
             to_staff.setdefault("parse_mode", PARSEMODE_MARKDOWN)
-            with MultiSender.interfaces["telegram"]["delayer"]:
+            with MultiSender().interfaces["telegram"]["delayer"]:
                 context.bot.send_message(chat_id=settings.TELEGRAM_STAFF_GROUP_ID, **to_staff)
 
         if exception:
