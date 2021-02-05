@@ -64,17 +64,6 @@ class MultiSender(metaclass=Singleton):
             # },
         }
 
-    def wait_for(self, interface_name):
-        counter = self.sent_counter[interface_name]
-
-        with counter["lock"]:
-            counter["value"] += 1
-            interface_settings = self.interfaces[interface_name]["settings"]
-
-            if counter["value"] > interface_settings["bulk_size"]:
-                time.sleep(interface_settings["delay_secs"])
-                counter["value"] = 0
-
     def send(self, users, msg_body_formatter, interfaces="all", interfaces_kwargs={}, report_errors=True):
         if interfaces == "all":
             interfaces = self.interfaces
