@@ -79,9 +79,7 @@ class MultiSender(metaclass=Singleton):
         if interfaces == "all":
             interfaces = self.interfaces
         else:
-            interfaces = {
-                name: interface for (name, interface) in self.interfaces.items() if (name in interfaces)
-            }
+            interfaces = {name: interface for (name, interface) in self.interfaces.items() if (name in interfaces)}
 
         for (interface_name, interface) in interfaces.items():
             fails = set()
