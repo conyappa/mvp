@@ -41,17 +41,17 @@ class MultiSender:
                 max_bulk_size=settings.TELEGRAM_MAX_BULK_SIZE, delay_seconds=settings.TELEGRAM_DELAY_SECONDS
             ),
         },
-        "twilio": {
-            "client": TwilioClient(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN).messages.create,
-            "msg_body_name": "body",
-            "get_defaults": lambda user: {
-                "from_": f"whatsapp:{settings.TWILIO_PHONE_NUMBER}",
-                "to": f"whatsapp:{user.phone}",
-            },
-            "delayer": SenderInterfaceDelayer(
-                max_bulk_size=settings.TWILIO_MAX_BULK_SIZE, delay_seconds=settings.TWILIO_DELAY_SECONDS
-            ),
-        },
+        # "twilio": {
+        #     "client": TwilioClient(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN).messages.create,
+        #     "msg_body_name": "body",
+        #     "get_defaults": lambda user: {
+        #         "from_": f"whatsapp:{settings.TWILIO_PHONE_NUMBER}",
+        #         "to": f"whatsapp:{user.phone}",
+        #     },
+        #     "delayer": SenderInterfaceDelayer(
+        #         max_bulk_size=settings.TWILIO_MAX_BULK_SIZE, delay_seconds=settings.TWILIO_DELAY_SECONDS
+        #     ),
+        # },
     }
 
     @staticmethod
