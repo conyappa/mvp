@@ -73,16 +73,3 @@ class MessageAdmin(admin.ModelAdmin):
         max_lenght = 100
         suffix = "…" if (len(obj.text) > max_lenght) else ""
         return obj.text[:max_lenght] + suffix
-
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-
-        logger.info(request.GET)
-        if not request.GET:
-            now = timezone.localtime()
-            yesterday = now - dt.timedelta(days=1)
-
-            query = Q(scheduled_for__gte=yesterday) | (~Q(status=Message.Status.SENT))
-            qs = qs.filter(query)
-
-        return qs
