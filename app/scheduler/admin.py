@@ -12,7 +12,7 @@ class MessageForm(forms.ModelForm):
         fields = ("scheduled_for", "text")
         model = Message
 
-    draft = forms.BooleanField(required=False, label="Draft")
+    draft = forms.BooleanField(required=False, initial=False, label="Draft")
 
     def save(self, commit=True):
         draft = self.cleaned_data.pop("draft", False)

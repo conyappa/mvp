@@ -40,7 +40,7 @@ class Message(BaseModel):
 
     text = models.TextField(verbose_name="text")
 
-    scheduled_for = models.DateTimeField(validators=[validate_scheduled_time], verbose_name="scheduled for")
+    scheduled_for = models.DateTimeField(blank=True, null=True, validators=[validate_scheduled_time], verbose_name="scheduled for")
     job_id = models.CharField(null=True, max_length=64, default=None, verbose_name="scheduler job ID")
     status = models.PositiveSmallIntegerField(choices=Status.choices, default=Status.SCHEDULED, verbose_name="status")
 
@@ -58,8 +58,8 @@ class Message(BaseModel):
 
     @use_scheduler
     def remove_job(self, scheduler):
-        job = scheduler.remove_job(self.job_id)
-        self.job_id = job.id
+        scheduler.remove_job(self.job_id)
+        self.job_id = None
         self.save()
 
     def send(self):
