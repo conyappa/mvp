@@ -40,7 +40,9 @@ class Message(BaseModel):
 
     text = models.TextField(verbose_name="text")
 
-    scheduled_for = models.DateTimeField(blank=True, null=True, validators=[validate_scheduled_time], verbose_name="scheduled for")
+    scheduled_for = models.DateTimeField(
+        blank=True, null=True, validators=[validate_scheduled_time], verbose_name="scheduled for"
+    )
     job_id = models.CharField(null=True, max_length=64, default=None, verbose_name="scheduler job ID")
     status = models.PositiveSmallIntegerField(choices=Status.choices, default=Status.SCHEDULED, verbose_name="status")
 
@@ -50,7 +52,8 @@ class Message(BaseModel):
     def schedule_job(self, scheduler):
         job = scheduler.add_job(self.send, trigger="date", run_date=self.scheduled_for)
         self.job_id = job.id
-        self.save()
+        # Add this update_fields argument for the post_save signal.
+        self.save(update_fields={"job_id"})
 
     @use_scheduler
     def reschedule_job(self, scheduler):
@@ -60,7 +63,8 @@ class Message(BaseModel):
     def remove_job(self, scheduler):
         scheduler.remove_job(self.job_id)
         self.job_id = None
-        self.save()
+        # Add this update_fields argument for the post_save signal.
+        self.save(update_fields={"job_id"})
 
     def send(self):
         MultiSender().send_async(
