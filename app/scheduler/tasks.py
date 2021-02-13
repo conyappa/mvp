@@ -28,7 +28,7 @@ def remind_of_new_draw():
 def add_new_draw_reminder_cycle(scheduler):
     scheduler.add_job(
         remind_of_new_draw,
-        "cron",
+        trigger="cron",
         day_of_week=settings.NEW_DRAW_WEEKDAY,
         hour=settings.NEW_DRAW_REMINDER_HOUR,
         minute=settings.DRAW_RESULTS_MINUTE,
@@ -53,7 +53,7 @@ def create_new_draw():
 def add_new_draw_creation_cycle(scheduler):
     scheduler.add_job(
         create_new_draw,
-        "cron",
+        trigger="cron",
         day_of_week=settings.NEW_DRAW_WEEKDAY,
         hour=settings.NEW_DRAW_CREATION_HOUR,
         minute=settings.DRAW_RESULTS_MINUTE,
@@ -124,4 +124,6 @@ def ongoing_draw_cycle():
 
 @use_scheduler
 def add_ongoing_draw_cycle(scheduler):
-    scheduler.add_job(ongoing_draw_cycle, "cron", hour=settings.DRAW_RESULTS_HOUR, minute=settings.DRAW_RESULTS_MINUTE)
+    scheduler.add_job(
+        ongoing_draw_cycle, trigger="cron", hour=settings.DRAW_RESULTS_HOUR, minute=settings.DRAW_RESULTS_MINUTE
+    )
