@@ -11,8 +11,8 @@ class TicketInline(admin.StackedInline):
 
     def get_queryset(self, request):
         current_draw = Draw.objects.current()
-        queryset = super().get_queryset(request).filter(draw=current_draw)
-        return queryset
+        qs = super().get_queryset(request).filter(draw=current_draw)
+        return qs
 
 
 @admin.register(User)
