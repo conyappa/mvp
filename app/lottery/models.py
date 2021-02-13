@@ -21,6 +21,7 @@ def generate_result_pool():
 
 class DrawManager(models.Manager):
     def current(self):
+        # This method assumes there always is an ongoing draw.
         return self.latest("created_at")
 
     def create(self, users, **fields):
