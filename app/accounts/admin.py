@@ -4,14 +4,6 @@ from .models import User
 from lottery.models import Draw, Ticket
 
 
-class AccountsAdminMixin:
-    def has_add_permission(self, request, obj=None):
-        return settings.DEBUG
-
-    def has_delete_permission(self, request, obj=None):
-        return settings.DEBUG
-
-
 class TicketInline(admin.StackedInline):
     model = Ticket
     fields = ("draw",)
@@ -24,7 +16,7 @@ class TicketInline(admin.StackedInline):
 
 
 @admin.register(User)
-class UserAdmin(AccountsAdminMixin, admin.ModelAdmin):
+class UserAdmin(admin.ModelAdmin):
     inlines = (TicketInline,)
     exclude = ("password", "groups", "user_permissions")
     readonly_fields = (
@@ -51,3 +43,9 @@ class UserAdmin(AccountsAdminMixin, admin.ModelAdmin):
     )
     list_filter = ("is_staff", "is_superuser", "date_joined")
     search_fields = ("username", "first_name", "last_name", "alias")
+
+    def has_add_permission(self, request, obj=None):
+        return settings.DEBUG
+
+    def has_delete_permission(self, request, obj=None):
+        return settings.DEBUG

@@ -8,6 +8,7 @@ class SchedulerConfig(AppConfig):
         from .helpers import boot_scheduler
         from . import tasks
         from .models import ScheduledMessage
+        from . import signals  # noqa: F401
 
         boot_scheduler()
 
