@@ -21,7 +21,7 @@ class SchedulerConfig(AppConfig):
         tasks.add_ongoing_draw_cycle()
 
         try:
-            Message.objects.schedule()
+            Message.objects.schedule_jobs()
         except Exception as e:
             logger.warning(f"Unable to schedule messages: {e}")
         else:

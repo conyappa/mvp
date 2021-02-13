@@ -6,10 +6,10 @@ from .models import Message
 @receiver(signal=signals.post_save, sender=Message)
 def message_schedule(sender, instance, created, *args, **kwargs):
     if instance.is_ready:
-        if created:
-            instance.schedule()
-        elif instance:
-            instance.reschedule()
+        if instance.has_job:
+            instance.reschedule_job()
+        else:
+            instance.schedule_job()
 
 
 @receiver(signal=signals.pre_delete, sender=Message)
