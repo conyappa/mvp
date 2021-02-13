@@ -1,3 +1,6 @@
+import datetime as dt
+from django.core.exceptions import ValidationError
+from django.utils import timezone
 from django.db import models
 from bot.sender import MultiSender
 from accounts.models import User
@@ -5,20 +8,26 @@ from app.base import BaseModel
 from .helpers import use_scheduler
 
 
-class ScheduledMessageManager(models.Manager):
-    def anticipated(self):
-        return self.filter(is_draft=False, sent=False)
+def validate_scheduled_too_soon(value):
+    now = timezone.localtime()
+    in_one_minute = now + dt.timedelta(minutes=1)
+    if value <= in_one_minute:
+        raise ValidationError("The scheduled time is too soon.")
 
+
+class MessageManager(models.Manager):
     def schedule(self):
-        for message in self.all():
+        for message in self.filter(scheduled_for__isnull=False, is_draft=False, sent=False):
             message.schedule()
 
 
-class ScheduledMessage(BaseModel):
+class Message(BaseModel):
     class Meta:
         ordering = ("scheduled_for",)
 
-    scheduled_for = models.DateTimeField(blank=True, null=True, verbose_name="scheduled for")
+    scheduled_for = models.DateTimeField(
+        blank=True, null=True, validators=[validate_scheduled_too_soon], verbose_name="scheduled for"
+    )
     job_id = models.CharField(null=True, max_length=64, default=None, verbose_name="scheduler job ID")
 
     text = models.TextField(verbose_name="message text")
@@ -26,7 +35,7 @@ class ScheduledMessage(BaseModel):
     is_draft = models.BooleanField(default=False, verbose_name="draft status")
     sent = models.BooleanField(default=False, verbose_name="sent status")
 
-    objects = ScheduledMessageManager()
+    objects = MessageManager()
 
     @use_scheduler
     def schedule_job(self, scheduler):

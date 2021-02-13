@@ -2,12 +2,12 @@ import datetime as dt
 from django.contrib import admin
 from django.db.models import Q
 from django.utils import timezone
-from .models import ScheduledMessage
+from .models import Message
 
 
-@admin.register(ScheduledMessage)
-class ScheduledMessageAdmin(admin.ModelAdmin):
-    readonly_fields = ("sent",)
+@admin.register(Message)
+class MessageAdmin(admin.ModelAdmin):
+    readonly_fields = ("sent", "job_id")
     list_display = ("scheduled_for", "text", "is_draft", "sent")
     list_filter = ("scheduled_for", "is_draft", "sent")
     search_fields = ("text",)
