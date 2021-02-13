@@ -8,9 +8,11 @@ from app.base import BaseModel
 from .helpers import use_scheduler
 
 
-def validate_scheduled_too_soon(value):
+def validate_scheduled_time(value):
     now = timezone.localtime()
     in_one_minute = now + dt.timedelta(minutes=1)
+    if value < now:
+        raise ValidationError("The scheduled time already passed.")
     if value <= in_one_minute:
         raise ValidationError("The scheduled time is too soon.")
 
@@ -26,7 +28,7 @@ class Message(BaseModel):
         ordering = ("scheduled_for",)
 
     scheduled_for = models.DateTimeField(
-        blank=True, null=True, validators=[validate_scheduled_too_soon], verbose_name="scheduled for"
+        blank=True, null=True, validators=[validate_scheduled_time], verbose_name="scheduled for"
     )
     job_id = models.CharField(null=True, max_length=64, default=None, verbose_name="scheduler job ID")
 
