@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "conyappa-mvp"
-version = "0.8.0"
+version = "0.9.0"
 description = "The prize-linked savings account."
 authors = [
     "Alex Apt Iberkleid <aapt@uc.cl>",
