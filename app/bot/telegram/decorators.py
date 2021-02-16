@@ -33,7 +33,11 @@ def process_response(handler):
 
         if to_staff:
             text = to_user.pop("text", "")
-            Client().send(msg_formatter=lambda _user: text, chat_ids=[settings.TELEGRAM_STAFF_GROUP_ID], get_kwargs=lambda _user: to_staff)
+            Client().send(
+                msg_formatter=lambda _user: text,
+                chat_ids=[settings.TELEGRAM_STAFF_GROUP_ID],
+                get_kwargs=lambda _user: to_staff,
+            )
 
         if exception:
             msg = exception.get("msg")

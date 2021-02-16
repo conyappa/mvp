@@ -23,7 +23,7 @@ class Client(metaclass=Singleton):
 
         pseudo_users = [PseudoUser(telegram_id=chat_id) for chat_id in chat_ids]
 
-        for user in (users + pseudo_users):
+        for user in users + pseudo_users:
             try:
                 kwargs = {"parse_mode": PARSEMODE_MARKDOWN, **get_kwargs(user)}
                 msg_body = msg_formatter(user)

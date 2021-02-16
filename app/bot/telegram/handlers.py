@@ -2,12 +2,9 @@ from logging import getLogger
 import ast
 import json
 from telegram import (
-    ForceReply,
     KeyboardButton,
     ReplyKeyboardMarkup,
     ReplyKeyboardRemove,
-    # InlineKeyboardButton,
-    # InlineKeyboardMarkup,
 )
 from telegram.ext import ConversationHandler
 from .decorators import adapter, save_contact, send_contact_to_staff
@@ -65,7 +62,6 @@ def support__query(user, update, context):
     return {
         "to_user": {
             "text": "¿En qué te puedo ayudar? 🤔",
-            "reply_markup": ForceReply(),
         },
         "state": STATES["SUPPORT__QUERY"],
     }
@@ -126,7 +122,6 @@ def withdraw__amount(user, update, context):
         return {
             "to_user": {
                 "text": f"¿Cuánto deseas retirar? (Tienes ${user.balance})",
-                "reply_markup": ForceReply(),
             },
             "state": STATES["WITHDRAW__AMOUNT"],
         }
@@ -144,7 +139,6 @@ def withdraw__amount_is_nan(user, update, context):
     return {
         "to_user": {
             "text": "⚠️ Ese no es un número válido. Ingresa otro valor:",
-            "reply_markup": ForceReply(),
         },
         "state": STATES["WITHDRAW__AMOUNT"],
     }
@@ -158,7 +152,6 @@ def withdraw__contact(user, update, context):
         return {
             "to_user": {
                 "text": "⚠️ Excede máximo. Ingresa otro valor:",
-                "reply_markup": ForceReply(),
             },
             "state": STATES["WITHDRAW__AMOUNT"],
         }
