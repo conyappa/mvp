@@ -1,5 +1,7 @@
-from django.conf import settings
 from django.contrib import admin
+from django import forms
+from django.conf import settings
+from django.db import transaction
 from .models import User
 from lottery.models import Draw, Ticket
 
@@ -15,22 +17,30 @@ class TicketInline(admin.StackedInline):
         return qs
 
 
+class BalanceChangeForm(admin.helpers.ActionForm):
+    amount = forms.IntegerField(min_value=0, max_value=100000)
+
+
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    inlines = (TicketInline,)
-    exclude = ("password", "groups", "user_permissions")
-    readonly_fields = (
+    inlines = [TicketInline]
+
+    action_form = BalanceChangeForm
+    actions = ["deposit", "withdraw"]
+
+    readonly_fields = [
         "username",
         "first_name",
         "last_name",
-        "last_login",
-        "date_joined",
+        "balance",
+        "winnings",
         "telegram_id",
         "phone",
-        "winnings",
         "extra_tickets_ttl",
-    )
-    list_display = (
+    ]
+    fields = readonly_fields
+
+    list_display = [
         "username",
         "full_name",
         "telegram_id",
@@ -40,12 +50,27 @@ class UserAdmin(admin.ModelAdmin):
         "current_prize",
         "is_staff",
         "is_superuser",
-    )
-    list_filter = ("is_staff", "is_superuser", "date_joined")
-    search_fields = ("username", "first_name", "last_name", "alias")
+    ]
+
+    list_filter = ["is_staff", "is_superuser", "date_joined"]
+    search_fields = ["username", "first_name", "last_name", "alias"]
 
     def has_add_permission(self, request, obj=None):
         return settings.DEBUG
 
     def has_delete_permission(self, request, obj=None):
-        return settings.DEBUG
+        return False
+
+    @transaction.atomic
+    def deposit(self, request, queryset):
+        amount = int(request.POST["amount"])
+        for user in queryset:
+            user.balance += amount
+            user.save()
+
+    @transaction.atomic
+    def withdraw(self, request, queryset):
+        amount = int(request.POST["amount"])
+        for user in queryset:
+            user.balance -= amount
+            user.save()

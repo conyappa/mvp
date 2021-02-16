@@ -59,9 +59,11 @@ class MessageStatusFieldListFilter(admin.SimpleListFilter):
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
     form = MessageForm
-    list_display = ("scheduled_for", "preview", "status", "job_id")
-    list_filter = ("scheduled_for", MessageStatusFieldListFilter)
-    search_fields = ("text",)
+
+    list_display = ["scheduled_for", "preview", "status", "job_id"]
+
+    list_filter = ["scheduled_for", MessageStatusFieldListFilter]
+    search_fields = ["text"]
 
     def has_change_permission(self, request, obj=None):
         return obj and (obj.status != Message.Status.SENT)

@@ -1,9 +1,14 @@
-from django.conf import settings
 from django.contrib import admin
+from django.conf import settings
 from .models import Draw, Ticket
 
 
-class LotteryAdminMixin:
+@admin.register(Draw)
+class DrawAdmin(admin.ModelAdmin):
+    readonly_fields = ["start_date", "pool", "results"]
+    list_display = ["start_date", "results", "pool"]
+    list_filter = ["start_date"]
+
     def has_add_permission(self, request, obj=None):
         return settings.DEBUG
 
@@ -14,16 +19,18 @@ class LotteryAdminMixin:
         return settings.DEBUG
 
 
-@admin.register(Draw)
-class DrawAdmin(LotteryAdminMixin, admin.ModelAdmin):
-    readonly_fields = ("start_date", "pool", "results")
-    list_display = ("start_date", "results", "pool")
-    list_filter = ("start_date",)
-
-
 @admin.register(Ticket)
-class TicketAdmin(LotteryAdminMixin, admin.ModelAdmin):
-    readonly_fields = ("picks", "draw", "user")
-    list_display = ("user", "draw", "picks")
-    list_filter = ("draw", "user")
-    search_fields = ("user__username", "user__first_name", "user__last_name", "user__alias")
+class TicketAdmin(admin.ModelAdmin):
+    readonly_fields = ["picks", "draw", "user"]
+    list_display = ["user", "draw", "picks"]
+    list_filter = ["draw", "user"]
+    search_fields = ["user__username", "user__first_name", "user__last_name", "user__alias"]
+
+    def has_add_permission(self, request, obj=None):
+        return settings.DEBUG
+
+    def has_change_permission(self, request, obj=None):
+        return settings.DEBUG
+
+    def has_delete_permission(self, request, obj=None):
+        return settings.DEBUG
