@@ -82,6 +82,7 @@ INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
     "phonenumber_field",
     "django_extensions",
+    "admin_numeric_filter",
     # First party.
     "bot.apps.BotConfig",  # Load this app first!
     "lottery.apps.LotteryConfig",

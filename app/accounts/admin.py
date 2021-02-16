@@ -1,3 +1,4 @@
+from admin_numeric_filter.admin import NumericFilterModelAdmin, SliderNumericFilter
 from django.contrib import admin
 from django import forms
 from django.conf import settings
@@ -19,16 +20,20 @@ class TicketInline(admin.StackedInline):
         return qs
 
 
-class BalanceChangeForm(admin.helpers.ActionForm):
+class UserBalanceChangeForm(admin.helpers.ActionForm):
     amount = forms.IntegerField(min_value=0, max_value=100000)
 
 
 @admin.register(User)
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(NumericFilterModelAdmin):
     inlines = [TicketInline]
 
-    action_form = BalanceChangeForm
-    actions = ["deposit", "withdraw"]
+    action_form = UserBalanceChangeForm
+
+    actions = [
+        "deposit",
+        "withdraw",
+    ]
 
     readonly_fields = [
         "username",
@@ -40,7 +45,12 @@ class UserAdmin(admin.ModelAdmin):
         "phone",
         "extra_tickets_ttl",
     ]
-    fields = ["alias"] + readonly_fields
+
+    other_fields = [
+        "alias",
+    ]
+
+    fields = other_fields + readonly_fields
 
     list_display = [
         "username",
@@ -54,8 +64,20 @@ class UserAdmin(admin.ModelAdmin):
         "is_superuser",
     ]
 
-    list_filter = ["is_staff", "is_superuser", "date_joined"]
-    search_fields = ["username", "first_name", "last_name", "alias"]
+    list_filter = [
+        "is_staff",
+        "is_superuser",
+        "date_joined",
+        ("balance", SliderNumericFilter),
+        ("winnings", SliderNumericFilter),
+    ]
+
+    search_fields = [
+        "username",
+        "first_name",
+        "last_name",
+        "alias",
+    ]
 
     def has_add_permission(self, request, obj=None):
         return settings.DEBUG
