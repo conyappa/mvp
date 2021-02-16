@@ -1,10 +1,10 @@
-import logging
+from logging import getLogger
 from django.db.models import signals
 from django.dispatch import receiver
 from .models import Message
 
 
-logger = logging.getLogger(__name__)
+logger = getLogger(__name__)
 
 
 @receiver(signal=signals.post_save, sender=Message)

@@ -9,6 +9,12 @@ def q(n, word):
     return f"{n} {word}"
 
 
+class Singleton(type):
+    def __call__(cls, *args, **kwargs):
+        cls._instance = cls._instance if hasattr(cls, "_instance") else super().__call__(*args, **kwargs)
+        return cls._instance
+
+
 class Delayer:
     def __init__(self, max_bulk_size, delay_seconds):
         self.lock = th.Lock()

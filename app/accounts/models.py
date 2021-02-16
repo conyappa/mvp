@@ -1,4 +1,4 @@
-import logging
+from logging import getLogger
 from phonenumber_field.modelfields import PhoneNumberField
 from telegram import Contact
 from django.contrib.auth.base_user import BaseUserManager
@@ -8,7 +8,7 @@ from django.conf import settings
 from app.base import BaseModel
 
 
-logger = logging.getLogger(__name__)
+logger = getLogger(__name__)
 
 
 def generate_initial_extra_tickets_ttl():

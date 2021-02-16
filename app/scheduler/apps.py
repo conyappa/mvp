@@ -1,8 +1,8 @@
-import logging
+from logging import getLogger
 from django.apps import AppConfig
 
 
-logger = logging.getLogger(__name__)
+logger = getLogger(__name__)
 
 
 class SchedulerConfig(AppConfig):

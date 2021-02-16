@@ -1,4 +1,4 @@
-import logging
+from logging import getLogger
 import threading as th
 from django.conf import settings
 from telegram.ext import Updater, CommandHandler, ConversationHandler, MessageHandler, Filters
@@ -8,7 +8,7 @@ from .handlers import STATES
 from .decorators import adapter
 
 
-logger = logging.getLogger(__name__)
+logger = getLogger(__name__)
 
 
 def setup_webhook(updater):

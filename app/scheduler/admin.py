@@ -1,4 +1,4 @@
-import logging
+from logging import getLogger
 import datetime as dt
 from django import forms
 from django.contrib import admin
@@ -7,7 +7,7 @@ from django.db.models import Q
 from .models import Message
 
 
-logger = logging.getLogger(__name__)
+logger = getLogger(__name__)
 
 
 class MessageForm(forms.ModelForm):

@@ -1,15 +1,15 @@
-import logging
+from logging import getLogger
 import datetime as dt
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.db import models
-from bot.telegram.sender import send_async
+from bot.telegram.sender import Client
 from accounts.models import User
 from app.base import BaseModel
 from .helpers import use_scheduler
 
 
-logger = logging.getLogger(__name__)
+logger = getLogger(__name__)
 
 
 def validate_scheduled_time(value):
@@ -66,7 +66,7 @@ class Message(BaseModel):
         self.save(update_fields={"job_id"})
 
     def send(self):
-        send_async(msg_body_formatter=lambda _user: self.text, users=User.objects.all())
+        Client().send_async(msg_formatter=lambda _user: self.text, users=User.objects.all())
         self.status = Message.Status.SENT
         self.save()
 

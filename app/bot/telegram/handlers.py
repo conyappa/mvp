@@ -1,4 +1,4 @@
-import logging
+from logging import getLogger
 import ast
 import json
 from telegram import (
@@ -13,7 +13,7 @@ from telegram.ext import ConversationHandler
 from .decorators import adapter, save_contact, send_contact_to_staff
 
 
-logger = logging.getLogger(__name__)
+logger = getLogger(__name__)
 
 
 STATE_NAMES = (

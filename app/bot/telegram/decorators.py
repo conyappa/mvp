@@ -1,10 +1,10 @@
-import logging
+from logging import getLogger
 from django.conf import settings
 from accounts.models import User
-from .sender import send
+from .sender import Client
 
 
-logger = logging.getLogger(__name__)
+logger = getLogger(__name__)
 
 
 class HandlerError(Exception):
@@ -20,7 +20,9 @@ def process_response(handler):
         state = response.get("state")
 
         if to_user:
-            send(
+            text = to_user.pop("text", "")
+            Client().send(
+                msg_formatter=lambda _user: text,
                 chat_ids=[update.message.chat.id],
                 get_kwargs=lambda _user: {
                     "reply_to_message_id": update.message.message_id,
@@ -30,7 +32,8 @@ def process_response(handler):
             )
 
         if to_staff:
-            send(chat_ids=[settings.TELEGRAM_STAFF_GROUP_ID], get_kwargs=lambda _user: to_staff)
+            text = to_user.pop("text", "")
+            Client().send(msg_formatter=lambda _user: text, chat_ids=[settings.TELEGRAM_STAFF_GROUP_ID], get_kwargs=lambda _user: to_staff)
 
         if exception:
             msg = exception.get("msg")

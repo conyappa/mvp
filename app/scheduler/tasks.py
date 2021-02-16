@@ -1,13 +1,13 @@
-import logging
+from logging import getLogger
 from django.utils import timezone
 from django.conf import settings
 from lottery.models import Draw
 from accounts.models import User
-from bot.telegram.sender import send_async
+from bot.telegram.sender import Client
 from .helpers import use_scheduler
 
 
-logger = logging.getLogger(__name__)
+logger = getLogger(__name__)
 
 
 #####################
@@ -17,9 +17,9 @@ logger = logging.getLogger(__name__)
 
 def remind_of_new_draw():
     # Broadcast a notification.
-    send_async(
+    Client().send_async(
         users=User.objects.all(),
-        msg_body_formatter=lambda _user: (
+        msg_formatter=lambda _user: (
             f"Recordatorio: ¡Hoy a las {settings.FORMATTED_DRAW_RESULTS_TIME} comienza el sorteo! 🎉"
             f"\n\nA las {settings.FORMATTED_NEW_DRAW_CREATION_TIME} se generarán tus boletos;"
             " recuerda depositar tus ahorros antes de esa hora para aumentar tus probabilidades de ganar 🍀."
@@ -49,9 +49,9 @@ def create_new_draw():
     # Create a new draw.
     Draw.objects.create(users=User.objects.all(), start_date=timezone.localdate())
     # Broadcast a notification.
-    send_async(
+    Client().send_async(
         users=User.objects.all(),
-        msg_body_formatter=lambda _user: (
+        msg_formatter=lambda _user: (
             f"Ya se han generado tus boletos para el sorteo de las {settings.FORMATTED_DRAW_RESULTS_TIME} 😱."
             "\n\n¡Envía /boletos para revisarlos!"
         ),
@@ -81,9 +81,9 @@ def publish_new_draw():
     draw.choose_result()
 
     # Send a notification.
-    send_async(
+    Client().send_async(
         users=User.objects.all(),
-        msg_body_formatter=lambda _user: (
+        msg_formatter=lambda _user: (
             "¡Ha comenzado el sorteo! 🎉"
             f"El primer número es el *{draw.results[0]}* 🎰\n\n"
             "Envía /boletos para ver si le achuntaste."
@@ -97,9 +97,9 @@ def choose_number_from_current_draw():
     draw = Draw.objects.current()
     draw.choose_result()
     # Broadcast a notification.
-    send_async(
+    Client().send_async(
         users=User.objects.all(),
-        msg_body_formatter=lambda _user: (
+        msg_formatter=lambda _user: (
             "¡Llegó la hora de sacar un número!\n"
             f"El número de hoy es el *{draw.results[-1]}* 🎉\n\n"
             "Envía /resultados para revisar los resultados de la semana."
@@ -114,9 +114,9 @@ def end_current_draw():
     draw.choose_result()
     draw.conclude()
     # Send a notification.
-    send_async(
+    Client().send_async(
         users=User.objects.all(),
-        msg_body_formatter=lambda user: (
+        msg_formatter=lambda user: (
             "¡Finalizó el sorteo! Los resultados fueron:\n\n"
             f"{draw.formatted}\n\n"
             f"¡Ganaste *${user.current_prize}*! 🤑"
