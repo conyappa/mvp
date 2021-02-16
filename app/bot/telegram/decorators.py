@@ -32,7 +32,7 @@ def process_response(handler):
             )
 
         if to_staff:
-            text = to_user.pop("text", "")
+            text = to_staff.pop("text", "")
             Client().send(
                 msg_formatter=lambda _user: text,
                 chat_ids=[settings.TELEGRAM_STAFF_GROUP_ID],
