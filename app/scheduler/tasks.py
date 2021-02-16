@@ -3,16 +3,21 @@ from django.utils import timezone
 from django.conf import settings
 from lottery.models import Draw
 from accounts.models import User
-from bot.sender import MultiSender
+from bot.telegram.sender import send_async
 from .helpers import use_scheduler
 
 
 logger = logging.getLogger(__name__)
 
 
+#####################
+# NEW DRAW REMINDER #
+#####################
+
+
 def remind_of_new_draw():
     # Broadcast a notification.
-    MultiSender().send_async(
+    send_async(
         users=User.objects.all(),
         msg_body_formatter=lambda _user: (
             f"Recordatorio: ¡Hoy a las {settings.FORMATTED_DRAW_RESULTS_TIME} comienza el sorteo! 🎉"
@@ -35,11 +40,16 @@ def add_new_draw_reminder_cycle(scheduler):
     )
 
 
+#####################
+# NEW DRAW CREATION #
+#####################
+
+
 def create_new_draw():
     # Create a new draw.
     Draw.objects.create(users=User.objects.all(), start_date=timezone.localdate())
     # Broadcast a notification.
-    MultiSender().send_async(
+    send_async(
         users=User.objects.all(),
         msg_body_formatter=lambda _user: (
             f"Ya se han generado tus boletos para el sorteo de las {settings.FORMATTED_DRAW_RESULTS_TIME} 😱."
@@ -60,13 +70,18 @@ def add_new_draw_creation_cycle(scheduler):
     )
 
 
+######################
+# ONGOING DRAW CYCLE #
+######################
+
+
 def publish_new_draw():
     # Choose the first result.
     draw = Draw.objects.current()
     draw.choose_result()
 
     # Send a notification.
-    MultiSender().send_async(
+    send_async(
         users=User.objects.all(),
         msg_body_formatter=lambda _user: (
             "¡Ha comenzado el sorteo! 🎉"
@@ -82,7 +97,7 @@ def choose_number_from_current_draw():
     draw = Draw.objects.current()
     draw.choose_result()
     # Broadcast a notification.
-    MultiSender().send_async(
+    send_async(
         users=User.objects.all(),
         msg_body_formatter=lambda _user: (
             "¡Llegó la hora de sacar un número!\n"
@@ -99,7 +114,7 @@ def end_current_draw():
     draw.choose_result()
     draw.conclude()
     # Send a notification.
-    MultiSender().send_async(
+    send_async(
         users=User.objects.all(),
         msg_body_formatter=lambda user: (
             "¡Finalizó el sorteo! Los resultados fueron:\n\n"

@@ -3,8 +3,7 @@ import datetime as dt
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.db import models
-
-from bot.sender import MultiSender
+from bot.telegram.sender import send_async
 from accounts.models import User
 from app.base import BaseModel
 from .helpers import use_scheduler
@@ -67,9 +66,7 @@ class Message(BaseModel):
         self.save(update_fields={"job_id"})
 
     def send(self):
-        MultiSender().send_async(
-            users=User.objects.all(), msg_body_formatter=lambda _user: self.text, interfaces=("telegram",)
-        )
+        send_async(msg_body_formatter=lambda _user: self.text, users=User.objects.all())
         self.status = Message.Status.SENT
         self.save()
 
