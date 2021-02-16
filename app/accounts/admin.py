@@ -2,6 +2,8 @@ from django.contrib import admin
 from django import forms
 from django.conf import settings
 from django.db import transaction
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.admin.models import LogEntry, CHANGE
 from .models import User
 from lottery.models import Draw, Ticket
 
@@ -38,7 +40,7 @@ class UserAdmin(admin.ModelAdmin):
         "phone",
         "extra_tickets_ttl",
     ]
-    fields = readonly_fields
+    fields = ["alias"] + readonly_fields
 
     list_display = [
         "username",
@@ -62,15 +64,27 @@ class UserAdmin(admin.ModelAdmin):
         return False
 
     @transaction.atomic
-    def deposit(self, request, queryset):
-        amount = int(request.POST["amount"])
+    def change_balance(self, request, queryset, amount):
         for user in queryset:
             user.balance += amount
             user.save()
 
-    @transaction.atomic
+            content_type = ContentType.objects.get_for_model(user)
+
+            LogEntry.objects.log_action(
+                user_id=request.user.pk,
+                content_type_id=content_type.pk,
+                object_id=user.pk,
+                object_repr=repr(user),
+                action_flag=CHANGE,
+                change_message=f"Change Balance ({amount:+})",
+            )
+
+    def deposit(self, request, queryset):
+        amount = int(request.POST["amount"])
+        self.change_balance(request, queryset, amount)
+
     def withdraw(self, request, queryset):
         amount = int(request.POST["amount"])
-        for user in queryset:
-            user.balance -= amount
-            user.save()
+        amount *= -1
+        self.change_balance(request, queryset, amount)

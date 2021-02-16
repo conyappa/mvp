@@ -80,7 +80,7 @@ class Draw(BaseModel):
                 user.award_prize(value)
 
     def __str__(self):
-        return f"{', '.join(map(str, self.filled_results))} @ {self.start_date}"
+        return str(self.start_date)
 
 
 class TicketManager(models.Manager):

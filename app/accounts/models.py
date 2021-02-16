@@ -104,7 +104,7 @@ class User(BaseModel, AbstractUser):
         name_components = filter(bool, [self.first_name, self.last_name])
         name = " ".join(name_components)
         if self.alias:
-            name += f"(a.k.a. {self.alias})"
+            name += f" ({self.alias})"
         return name
 
     @property
