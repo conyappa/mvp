@@ -83,8 +83,8 @@ def publish_new_draw():
         users=User.objects.all(),
         msg_formatter=lambda _user: (
             "¡Ha comenzado el sorteo! 🎉"
-            f"El primer número es el *{draw.results[0]}* 🎰\n\n"
-            "Envía /boletos para ver si le achuntaste."
+            f"El primer número es el *{draw.results[0]}* 🎰."
+            "\n\nEnvía /boletos para ver si le achuntaste."
         ),
     )
 
@@ -97,9 +97,10 @@ def choose_number_from_current_draw():
     Client().send_async(
         users=User.objects.all(),
         msg_formatter=lambda _user: (
-            "¡Llegó la hora de sacar un número!\n"
-            f"El número de hoy es el *{draw.results[-1]}* 🎉\n\n"
-            "Envía /boletos para ver si ganaste o /resultados para revisar los números de la semana."
+            "¡Llegó la hora de sacar un número!"
+            f"\nEl número de hoy es el *{draw.results[-1]}* 🎉."
+            "\n\nEnvía /boletos para revisar cuánto has ganado."
+            "\n\nEnvía /resultados para ver los números de la semana."
         ),
     )
 
@@ -113,9 +114,9 @@ def end_current_draw():
     Client().send_async(
         users=User.objects.all(),
         msg_formatter=lambda user: (
-            "¡Finalizó el sorteo! Los resultados fueron:\n\n"
-            f"{draw.formatted}\n\n"
-            f"¡Ganaste *${user.current_prize}*! 🤑"
+            "¡Finalizó el sorteo! Los resultados fueron:"
+            f"\n\n{draw.formatted}"
+            f"\n\n¡Ganaste *${user.current_prize}*! 🤑"
         ),
     )
 

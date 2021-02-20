@@ -23,17 +23,18 @@ class Client(metaclass=Singleton):
 
         pseudo_users = [PseudoUser(telegram_id=chat_id) for chat_id in chat_ids]
 
-        for user in users + pseudo_users:
-            try:
-                kwargs = {"parse_mode": PARSEMODE_MARKDOWN, **get_kwargs(user)}
-                msg_body = msg_formatter(user)
+        for iterable in (users, pseudo_users):
+            for user in iterable:
+                try:
+                    kwargs = {"parse_mode": PARSEMODE_MARKDOWN, **get_kwargs(user)}
+                    msg_body = msg_formatter(user)
 
-                with self.delayer:
-                    self.bot.send_message(chat_id=user.telegram_id, text=msg_body, **kwargs)
+                    with self.delayer:
+                        self.bot.send_message(chat_id=user.telegram_id, text=msg_body, **kwargs)
 
-            except Exception as e:
-                logger.error(f"Unable to send a Telegram message: {e}")
-                fails.add((user, e))
+                except Exception as e:
+                    logger.error(f"Unable to send a Telegram message: {e}")
+                    fails.add((user, e))
 
         if report_errors and fails:
             self.report_fails(fails)
