@@ -99,7 +99,7 @@ def choose_number_from_current_draw():
         msg_formatter=lambda _user: (
             "¡Llegó la hora de sacar un número!\n"
             f"El número de hoy es el *{draw.results[-1]}* 🎉\n\n"
-            "Envía /resultados para revisar los resultados de la semana."
+            "Envía /boletos para ver si ganaste o /resultados para revisar los números de la semana."
         ),
     )
 
