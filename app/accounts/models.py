@@ -127,3 +127,6 @@ class EmailListEntry(BaseModel):
         verbose_name_plural = "Email list"
 
     email = models.EmailField(unique=True, max_length=254, verbose_name="email")
+
+    def __str__(self):
+        return self.email

@@ -226,6 +226,4 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
 # GraphQL (graphene-django).
-GRAPHENE = {
-    "SCHEMA": "app.schema.schema"
-}
+GRAPHENE = {"SCHEMA": "app.schema.schema"}
