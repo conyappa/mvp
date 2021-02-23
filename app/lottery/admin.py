@@ -21,14 +21,14 @@ class DrawAdmin(admin.ModelAdmin):
         "start_date",
     ]
 
-    def has_add_permission(self, request, obj=None):
-        return settings.DEBUG
+    def has_add_permission(self, request):
+        return super().has_add_permission(request) and settings.DEBUG
 
     def has_change_permission(self, request, obj=None):
-        return settings.DEBUG
+        return super().has_change_permission(request, obj) and settings.DEBUG
 
     def has_delete_permission(self, request, obj=None):
-        return settings.DEBUG
+        return super().has_delete_permission(request, obj) and settings.DEBUG
 
 
 @admin.register(Ticket)
@@ -56,11 +56,11 @@ class TicketAdmin(admin.ModelAdmin):
         "user__alias",
     ]
 
-    def has_add_permission(self, request, obj=None):
-        return settings.DEBUG
+    def has_add_permission(self, request):
+        return super().has_add_permission(request) and settings.DEBUG
 
     def has_change_permission(self, request, obj=None):
-        return settings.DEBUG
+        return super().has_change_permission(request, obj) and settings.DEBUG
 
     def has_delete_permission(self, request, obj=None):
-        return settings.DEBUG
+        return super().has_delete_permission(request, obj) and settings.DEBUG

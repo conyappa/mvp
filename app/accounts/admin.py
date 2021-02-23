@@ -5,7 +5,7 @@ from django.conf import settings
 from django.db import transaction
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.admin.models import LogEntry, CHANGE
-from .models import User
+from .models import User, EmailListEntry
 from lottery.models import Draw, Ticket
 
 
@@ -79,8 +79,8 @@ class UserAdmin(NumericFilterModelAdmin):
         "alias",
     ]
 
-    def has_add_permission(self, request, obj=None):
-        return settings.DEBUG
+    def has_add_permission(self, request):
+        return super().has_add_permission(request) and settings.DEBUG
 
     def has_delete_permission(self, request, obj=None):
         return False
@@ -110,3 +110,9 @@ class UserAdmin(NumericFilterModelAdmin):
         amount = int(request.POST["amount"])
         amount *= -1
         self.change_balance(request, queryset, amount)
+
+
+@admin.register(EmailListEntry)
+class EmailListEntryAdmin(NumericFilterModelAdmin):
+    def has_delete_permission(self, request, obj=None):
+        return super().has_delete_permission(request, obj) and settings.DEBUG
