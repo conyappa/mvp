@@ -124,7 +124,7 @@ class User(BaseModel, AbstractUser):
 
 class EmailListEntry(BaseModel):
     class Meta:
-        verbose_name_plural = "Email list"
+        verbose_name_plural = "Email list entries"
 
     email = models.EmailField(unique=True, max_length=254, verbose_name="email")
 
