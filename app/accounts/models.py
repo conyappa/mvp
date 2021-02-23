@@ -123,4 +123,4 @@ class User(BaseModel, AbstractUser):
 
 
 class EmailListEntry(BaseModel):
-    email = models.EmailField(max_length=254, verbose_name="email")
+    email = models.EmailField(unique=True, max_length=254, verbose_name="email")
