@@ -120,3 +120,7 @@ class User(BaseModel, AbstractUser):
     def __str__(self):
         fields_to_display = filter(bool, [self.full_name, self.username, self.phone])
         return " | ".join(map(str, fields_to_display))
+
+
+class EmailListEntry(BaseModel):
+    email = models.EmailField(max_length=254, verbose_name="email")
