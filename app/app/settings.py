@@ -83,6 +83,7 @@ INSTALLED_APPS = [
     "phonenumber_field",
     "django_extensions",
     "admin_numeric_filter",
+    "graphene_django",
     # First party.
     "bot.apps.BotConfig",  # Load this app first!
     "lottery.apps.LotteryConfig",
