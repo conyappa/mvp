@@ -139,6 +139,14 @@ form {
   width: 800px;
 }
 
+.email {
+    margin-top: 50px;
+}
+
+.email a {
+    color: white;
+}
+
 @media(max-width: 1300px) {
   .logo {
     height: 75px;
