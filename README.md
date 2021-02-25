@@ -1,6 +1,6 @@
 # ConYappa MVP
 
-> The backend application of YappaBot, version 0.10.0
+> The backend application of YappaBot, version 0.11.0
 
 ![ER Diagram](docs/er_diagram.png "ER Diagram")
 
