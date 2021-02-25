@@ -10,6 +10,9 @@ def trigger_exception(_request):
     raise Exception()
 
 
-def landing_page(request):
-    # return redirect("https://www.facebook.com/conyappa/")
-    return render(request, "landing_page.html")
+def landing(request):
+    return render(request, "landing.html")
+
+
+def investors(request):
+    return render(request, "investors.html")

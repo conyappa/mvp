@@ -1,0 +1,190 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="ScreenOrientation" content="autoRotate:disabled">
+  <link rel="stylesheet" href={% static 'css/investors.css' %} />
+  <link rel="icon" type="image/svg+xml" href={% static 'img/favicon.svg' %}>
+  <title>Con Yappa | Investors</title>
+</head>
+
+<body>
+  <header>
+    <div class="container top-container">
+      <img src={% static 'svg/logo.svg' %} class="logo" />
+      <nav>
+        <ul>
+          <li><a href="#problema">El problema</a></li>
+          <li><a href="#propuesta">La propuesta</a></li>
+          <li><a href="#yappabot">YappaBot</a></li>
+          <li><a href="#equipo">El equipo</a></li>
+        </ul>
+      </nav>
+      <div class="mobile-menu">
+        <img id="menu" src={% static 'svg/menu.svg' %} data-open="false" />
+      </div>
+    </div>
+    <div id="menuContent" class="mobile-menu-content">
+      <a href="#problema" onclick="hideMenuContent()">El problema</a>
+      <a href="#propuesta" onclick="hideMenuContent()">La propuesta</a>
+      <a href="#yappabot" onclick="hideMenuContent()">YappaBot</a>
+      <a href="#equipo" onclick="hideMenuContent()">El equipo</a>
+    </div>
+    <script>
+      document.getElementById("menu").addEventListener("click", function () {
+        const menuIcon = document.getElementById("menu");
+        const dataOpen = menuIcon.getAttribute("data-open");
+        const menuContent = document.getElementById("menuContent");
+        dataOpen == "false"
+          ? (menuIcon.setAttribute("data-open", "true"),
+            (menuContent.style.display = "block"),
+            (menuIcon.src = "svg/close.svg"))
+          : (menuIcon.setAttribute("data-open", "false"),
+            (menuContent.style.display = "none"),
+            (menuIcon.src = "svg/menu.svg"));
+      });
+      function hideMenuContent() {
+        document.getElementById("menu").src = "svg/menu.svg";
+        document.getElementById("menuContent").style.display = "none";
+      }
+    </script>
+  </header>
+
+  <div class="ahorra-con-yappa">
+    <h1>
+      Ahorra Con Yappa y participa por hasta
+      <strong>$100 mil cada semana</strong>.
+    </h1>
+    <a href="#yappabot">Empezar a ganar</a>
+    <a href="#problema">Cuéntame más ↓</a>
+    <div class="button-group">
+      <a href="#yappabot">Empezar a ganar</a>
+      <a href="#problema">Cuéntame más</a>
+    </div>
+  </div>
+
+  <div class="rect1">
+    <img src={% static 'svg/blue_pig.svg' %} class="rect1-pig" />
+    <div class="rect1-container">
+      <p>
+        Con Yappa incentiva el ahorro en Chile de manera entretenida.
+        Es una cuenta de ahorro que
+        ofrece la posibilidad de ganar premios sorteados al azar.
+        Mientras más ahorras, mayores son tus probabilidades de ganar.
+      </p>
+    </div>
+  </div>
+
+  <div class="steps-container">
+    <div class="wrapper">
+      <ul>
+        <li>
+          <img src={% static 'svg/transfiere.svg' %} /><strong>Transfiere</strong> tus
+          ahorros.
+        </li>
+        <li>
+          <img src={% static 'svg/participa.svg' %} /><strong>Participa</strong> en los
+          sorteos.
+        </li>
+        <li>
+          <img src={% static 'svg/gana.svg' %} /><strong>Gana</strong> hasta $100 mil cada
+          semana.*
+        </li>
+        <li>
+          <img src={% static 'svg/retira.svg' %} /><strong>Retira</strong> tus ahorros
+          cuando quieras.
+        </li>
+      </ul>
+      <p>
+        *Tus probabilidades de ganar aumentan con la cantidad de dinero que
+        tengas ahorrado.
+      </p>
+    </div>
+  </div>
+
+  <div class="rect2" id="problema">
+    <div class="cover">
+      <div class="rect2-container">
+        <h2>El problema</h2>
+        <p>
+          En Chile, la tasa de ahorro es solamente del 8,94%. De este ahorro,
+          el 94% es obligatorio (AFP).
+          <strong
+            >La mitad de los ahorrantes presenta un saldo inferior a 25 mil
+            pesos</strong
+          >
+          y solo un cuarto de ellos dispone de ahorros superiores a los 315
+          mil.<br /><br />En contraste, más de dos tercios de los chilenos han
+          comprado alguna vez un boleto de lotería y
+          <strong
+            >uno de cada tres adultos declaran ser jugadores
+            regulares.</strong
+          >
+        </p>
+      </div>
+      <img src={% static 'svg/green_pig.svg' %} class="rect2-pig" />
+    </div>
+  </div>
+
+  <div class="rect-cover-1">
+    <div class="rect3" id="propuesta">
+      <div class="rect3-container">
+        <h2>La propuesta de valor</h2>
+        <p>
+          Queremos <strong>motivar el ahorro</strong> transformándolo en un
+          juego y logrando el efecto opuesto a los instrumentos tradicionales,
+          que son extremadamente fomes.
+
+          <br /><br />El que ahorra Con Yappa tiene la posibilidad de sumar
+          premios <strong>todos los días</strong>, recibiendo así una
+          frecuente gratificación. Adicionalmente, ofrecemos tasas esperadas
+          mayores a las que nuestro público objetivo puede acceder.
+        </p>
+      </div>
+      <img src={% static 'svg/pig.svg' %} class="rect3-pig" />
+    </div>
+  </div>
+
+  <div class="rect4" id="yappabot">
+    <div class="rect4-container">
+      <h2>YappaBot</h2>
+      <p>
+        Prueba nuestro YappaBot de Telegram y comienza a ahorrar Con Yappa.
+        Inscríbete ahora y te regalaremos un boleto equivalente a $5.000
+        ahorrados para tu primer sorteo.
+      </p>
+
+      <form action="https://t.me/ConYappaBot">
+        <button type="submit">Únete Aquí</button>
+      </form>
+    </div>
+
+    <img src={% static 'svg/pig.svg' %} class="rect4-pig" />
+  </div>
+
+  <div class="cover-ex-t">
+    <div class="rect5">
+      <img src={% static 'svg/blue_pig.svg' %} class="rect5-pig" />
+    </div>
+  </div>
+
+  <div class="equipo-container" id="equipo">
+    <h2>El equipo</h2>
+
+    <div class="perfiles-container">
+      <div class="aapt">
+        <img src={% static 'img/aapt.png' %} />
+        <p><strong>Alex Apt</strong><br />CEO<br />alex@conyappa.cl</p>
+      </div>
+
+      <div class="amartinez">
+        <img src={% static 'img/amartinez.png' %} />
+        <p><strong>Ariel Martínez</strong><br />CTO<br />ariel@conyappa.cl</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

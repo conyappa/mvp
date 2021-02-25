@@ -1,0 +1,67 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="ScreenOrientation" content="autoRotate:disabled">
+  <link rel="stylesheet" href={% static 'css/landing.css' %}>
+  <link rel="icon" type="image/svg+xml" href={% static 'img/favicon.svg' %}>
+  <title>Con Yappa</title>
+</head>
+<body>
+  <div class="header">
+    <div class="header-container">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <img src={% static 'svg/logo.svg' %} class="logo">
+    </div>
+  </div>
+
+  <div class="text1-container">
+    <p class="ahorra-con-yappa">Ahorra Con Yappa y participa por <strong>hasta $100 mil cada semana</strong>.</p>
+  </div>
+
+  <div class="rect1">
+    <img src={% static 'svg/blue_pig.svg' %}>
+    <p>
+      Con Yappa incentiva el ahorro en Chile de manera entretenida.
+      Es una cuenta de ahorro que
+      ofrece la posibilidad de ganar premios sorteados al azar.
+      Mientras más ahorras, mayores son tus probabilidades de ganar.
+    </p>
+  </div>
+
+  <div class="container">
+    <div class="form">
+      <div class="form-container">
+          <!-- <p>Avísame cuando este lista la app!</p>
+          <form>
+              <input type="email" class="text" placeholder="juan.perez@email.com">
+              <input type="submit" value="Submit" class="submit">
+          </form> -->
+          <p>Ya queda poco para que puedas empezar a ahorrar Con Yappa. ¡Síguenos para ser el primero en enterarte!</p>
+          <div class="social-media">
+            <a href="https://www.instagram.com/conyappa" class="fa fa-instagram fa-2x" target="_blank" rel="noopener noreferrer"></a>
+            <a href="https://www.facebook.com/conyappa" class="fa fa-facebook fa-2x" target="_blank" rel="noopener noreferrer"></a>
+            <a href="https://www.twitter.com/conyappa" class="fa fa-twitter fa-2x" target="_blank" rel="noopener noreferrer"></a>
+            <a href="https://www.linkedin.com/company/conyappa" class="fa fa-linkedin fa-2x" target="_blank" rel="noopener noreferrer"></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="info">
+          <ul>
+              <li><img src={% static 'svg/transfiere.svg' %}><strong>Transfiere</strong> tus ahorros.</li>
+              <li><img src={% static 'svg/participa.svg' %}><strong>Participa</strong> en los sorteos.</li>
+              <li><img src={% static 'svg/gana.svg' %}><strong>Gana</strong> hasta $100 mil cada semana.*</li>
+              <li><img src={% static 'svg/retira.svg' %}><strong>Retira</strong> tus ahorros cuando quieras.</li>
+          </ul>
+
+          <p>*Tus probabilidades de ganar aumentan
+              con la cantidad de dinero que tengas ahorrado.</p>
+      </div>
+
+  </div>
+</body>
+</html>
