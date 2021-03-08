@@ -127,11 +127,11 @@ def tickets(user, *args, **kwargs):
         formatted_tickets = "\n\n".join(
             map(
                 lambda index, ticket: f"{numbers[index]}{' ' * 3}...{' ' * 3}{ticket.formatted}",
-                *zip(*enumerate(tickets, 1)),
+                *zip(*enumerate(sorted_tickets, 1)),
             )
         )
         msg = (
-            f"Tus boletos de esta semana son:\n\n{formatted_tickets}"
+            f"Tus boletos de esta semana son ({len(sorted_tickets)}/{tickets.count()}):\n\n{formatted_tickets}"
             f"\n\n¡Esta semana llevas *${user.current_prize}* ganados! 💰"
         )
     else:
