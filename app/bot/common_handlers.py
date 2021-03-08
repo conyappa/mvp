@@ -122,6 +122,7 @@ def results(user, *args, **kwargs):
 @simple_response
 def tickets(user, *args, **kwargs):
     tickets = user.current_tickets
+    sorted_tickets = sorted(tickets, key=lambda ticket: ticket.prize, reverse=True)[:10]
     if tickets.exists():
         formatted_tickets = "\n\n".join(
             map(
