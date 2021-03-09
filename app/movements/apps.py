@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class DepositsConfig(AppConfig):
-    name = "deposits"
+class MovementsConfig(AppConfig):
+    name = "movements"
