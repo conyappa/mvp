@@ -43,6 +43,10 @@ class User(BaseModel, AbstractUser):
         error_messages={"unique": "A user with that phone number already exists."},
         verbose_name="phone number",
     )
+
+    rut = models.PositiveIntegerField(null=True, default=None, verbose_name="RUT")
+    check_digit = models.PositiveSmallIntegerField(null=True, default=None, verbose_name="RUT check digit")
+
     alias = models.CharField(blank=True, null=True, max_length=50, verbose_name="alias/pseudonym")
 
     balance = models.PositiveIntegerField(default=0, verbose_name="balance")
@@ -106,6 +110,12 @@ class User(BaseModel, AbstractUser):
         if self.alias:
             name += f" ({self.alias})"
         return name
+
+    @property
+    def formatted_rut(self):
+        rut_w_thousands_sep = "{:,}".format(self.rut).replace(",", ".")
+        formatted_check_digit = "K" if (self.check_digit == 10) else self.check_digit
+        return f"{rut_w_thousands_sep}-{formatted_check_digit}"
 
     @property
     def telegram_contact(self):
