@@ -25,4 +25,5 @@ class Movement(BaseModel):
 
     @property
     def rut(self):
-        return int(self.rut[:-1])
+        raw_rut = self.raw_rut
+        return int(raw_rut[:-1]) if isinstance(raw_rut, str) else None
