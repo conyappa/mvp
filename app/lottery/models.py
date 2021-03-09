@@ -118,7 +118,9 @@ class Ticket(BaseModel):
     def formatted(self):
         draw_results = self.draw.results
         sorted_picks = sorted(self.picks)
-        formatted_picks = ", ".join(map(lambda pick: f"*{pick}*" if (pick in draw_results) else str(pick), sorted_picks))
+        formatted_picks = ", ".join(
+            map(lambda pick: f"*{pick}*" if (pick in draw_results) else str(pick), sorted_picks)
+        )
         formatted_prize = f"_({q(self.number_of_matches, 'acierto')}: ${self.prize})_"
         return f"{formatted_picks}\n{' ' * 15}{formatted_prize}"
 
