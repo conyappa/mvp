@@ -29,6 +29,12 @@ class UserManager(BaseUserManager):
 
 
 class User(BaseModel, AbstractUser):
+    class Meta:
+        indexes = [
+            models.Index(fields=["telegram_id"]),
+            models.Index(fields=["rut"]),
+        ]
+
     telegram_id = models.PositiveBigIntegerField(
         unique=True,
         blank=True,
@@ -44,7 +50,7 @@ class User(BaseModel, AbstractUser):
         verbose_name="phone number",
     )
 
-    rut = models.PositiveIntegerField(null=True, default=None, verbose_name="RUT")
+    rut = models.PositiveIntegerField(unique=True, null=True, default=None, verbose_name="RUT")
     check_digit = models.PositiveSmallIntegerField(null=True, default=None, verbose_name="RUT check digit")
 
     alias = models.CharField(blank=True, null=True, max_length=50, verbose_name="alias/pseudonym")
