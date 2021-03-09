@@ -23,7 +23,9 @@ def tickets(user, update, context, page_num=1):
 
     if not tickets.exists():
         return {
-            "to_user": {"text": "No tienes boletos esta semana 😢.\nSi quieres obtener boletos puedes /depositar."},
+            "to_user": {
+                "text": ("No tienes boletos esta semana 😢." "\n\nSi quieres obtener boletos puedes /depositar.")
+            },
             "state": ConversationHandler.END,
         }
 
