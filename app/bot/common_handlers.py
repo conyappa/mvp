@@ -119,28 +119,8 @@ def results(user, *args, **kwargs):
     return msg
 
 
-@simple_response
-def tickets(user, *args, **kwargs):
-    tickets = user.current_tickets
-    if tickets.exists():
-        formatted_tickets = "\n\n".join(
-            map(
-                lambda index, ticket: f"{numbers[index]}{' ' * 3}...{' ' * 3}{ticket.formatted}",
-                *zip(*enumerate(tickets, 1)),
-            )
-        )
-        msg = (
-            f"Tus boletos de esta semana son:\n\n{formatted_tickets}"
-            f"\n\n¡Esta semana llevas *${user.current_prize}* ganados! 💰"
-        )
-    else:
-        msg = "No tienes boletos esta semana 😢."
-    return msg
-
-
 commands = {
     "ayuda": help_,
-    "boletos": tickets,
     "depositar": deposit,
     "premios": prizes,
     "reglas": rules,
