@@ -17,6 +17,12 @@ TWILIO_AUTH_TOKEN = "iLskXIhauahGmtTHzze5iDH6vIZdDXhF"
 TWILIO_PHONE_NUMBER = "+0123456789"
 
 
+# Fintoc.
+FINTOC_SECRET_KEY = "sk_example_WXUFqk8hMPQ4UA7HafJtZDsPZvabS5af"
+FINTOC_LINK_TOKEN = "bsdnsLxwLg4hvIiu_token_MqtIXPNibVqK3XtPBOvmUI1m"
+FINTOC_ACCOUNT_ID = "AzrEVH1tFG4z4kTT"
+
+
 # Email.
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"

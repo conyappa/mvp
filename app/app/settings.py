@@ -44,6 +44,11 @@ TWILIO_MAX_BULK_SIZE = int(os.environ.get("TWILIO_MAX_BULK_SIZE", 30))
 TWILIO_DELAY_SECONDS = int(os.environ.get("TWILIO_DELAY_SECONDS", 1))
 
 
+# Fintoc.
+FINTOC_SECRET_KEY = os.environ.get("FINTOC_SECRET_KEY")
+FINTOC_LINK_TOKEN = os.environ.get("FINTOC_LINK_TOKEN")
+
+
 # Other environmental variables.
 TEST = "test" in sys.argv
 DEBUG = os.environ.get("DJANGO_ENV") == "development"
