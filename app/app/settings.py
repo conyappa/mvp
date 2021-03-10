@@ -47,6 +47,7 @@ TWILIO_DELAY_SECONDS = int(os.environ.get("TWILIO_DELAY_SECONDS", 1))
 # Fintoc.
 FINTOC_SECRET_KEY = os.environ.get("FINTOC_SECRET_KEY")
 FINTOC_LINK_TOKEN = os.environ.get("FINTOC_LINK_TOKEN")
+FINTOC_ACCOUNT_ID = os.environ.get("FINTOC_ACCOUNT_ID")
 
 
 # Other environmental variables.
