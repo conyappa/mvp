@@ -1,5 +1,6 @@
 from logging import getLogger
 from django.apps import AppConfig
+from django.conf import settings
 
 
 logger = getLogger(__name__)
@@ -19,7 +20,9 @@ class SchedulerConfig(AppConfig):
         tasks.add_new_draw_reminder_cycle()
         tasks.add_new_draw_creation_cycle()
         tasks.add_ongoing_draw_cycle()
-        tasks.add_fintoc_movements_fetcher()
+
+        if settings.FINTOC_IS_ENABLED:
+            tasks.add_fintoc_movements_fetcher()
 
         try:
             Message.objects.schedule_jobs()
