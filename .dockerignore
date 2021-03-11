@@ -6,7 +6,7 @@
 !app/app
 !app/bot
 !app/lottery
-!app/movements
+!app/banking
 !app/scheduler
 !app/static
 !app/staticfiles
