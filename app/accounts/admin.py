@@ -47,6 +47,8 @@ class UserAdmin(NumericFilterModelAdmin):
     ]
 
     other_fields = [
+        "rut",
+        "check_digit",
         "alias",
     ]
 
