@@ -12,12 +12,12 @@ class Fintoc(metaclass=Singleton):
         self.account = self.link.find(id_=settings.FINTOC_ACCOUNT_ID)
 
     def sync(self):
-        # Movements are ordered by Fintoc’s post_date.
-        latest = Movement.objects.first()
-        since = latest and latest.fintoc_post_date
-
         movements = []
         page = 1
+
+        # Movements are ordered by Fintoc’s post_date.
+        latest_movement = Movement.objects.first()
+        since = latest_movement and latest_movement.fintoc_post_date
 
         while True:
             fintoc_movements = self.account.get_transactions(since=since, page=page)

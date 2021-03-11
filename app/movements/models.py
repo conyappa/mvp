@@ -11,6 +11,8 @@ class Movement(BaseModel):
     fintoc_id = models.CharField(unique=True, verbose_name="Fintoc movement 'id'", max_length=32)
     fintoc_post_date = models.DateField(verbose_name="Fintoc movement 'post_date'")
 
+    number = models.PositiveIntegerField(null=True, default=None, verbose_name="movement number")
+
     user = models.ForeignKey(
         to="accounts.User",
         null=True,
@@ -27,6 +29,10 @@ class Movement(BaseModel):
 
         super().__init__(fintoc_data=fintoc_data, fintoc_id=fintoc_id, fintoc_post_date=fintoc_post_date, **kwargs)
 
+    def set_user(self, user):
+        self.number = user.movements.count() + 1
+        self.user = user
+
     @property
     def amount(self):
         return self.fintoc_data.get("amount")
@@ -40,3 +46,10 @@ class Movement(BaseModel):
     def rut(self):
         raw_rut = self.raw_rut
         return int(raw_rut[:-1]) if isinstance(raw_rut, str) else None
+
+    @property
+    def __str__(self):
+        sender_account = self.fintoc_data.get("sender_account", {})
+        holder_name = sender_account.get("holder_name")
+        number = f"#{self.number}" or ""
+        return f"{holder_name} {number}"
