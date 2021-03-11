@@ -37,6 +37,7 @@ class MovementAdmin(admin.ModelAdmin):
         "user__first_name",
         "user__last_name",
         "user__alias",
+        "user__rut",
     ]
 
     def has_delete_permission(self, request, obj=None):
