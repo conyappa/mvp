@@ -30,7 +30,7 @@ class MessageManager(models.Manager):
 
 class Message(BaseModel):
     class Meta:
-        ordering = ("scheduled_for",)
+        ordering = ["scheduled_for"]
 
     class Status(models.IntegerChoices):
         DRAFT = 1
