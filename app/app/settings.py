@@ -94,7 +94,7 @@ INSTALLED_APPS = [
     "bot.apps.BotConfig",  # Load this app first!
     "lottery.apps.LotteryConfig",
     "accounts.apps.AccountsConfig",
-    "movements.apps.MovementsConfig",
+    "banking.apps.BankingConfig",
     "scheduler.apps.SchedulerConfig",  # Load this app last!
     # Built-in.
     "django.contrib.admin",

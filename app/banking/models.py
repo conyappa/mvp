@@ -1,5 +1,9 @@
+from logging import getLogger
 from django.db import models
 from app.base import BaseModel
+
+
+logger = getLogger(__name__)
 
 
 class Movement(BaseModel):
@@ -22,13 +26,6 @@ class Movement(BaseModel):
         on_delete=models.PROTECT,
     )
 
-    def __init__(self, **kwargs):
-        fintoc_data = kwargs.pop("fintoc_data", {})
-        fintoc_id = fintoc_data.get("id")
-        fintoc_post_date = fintoc_data.get("post_date")
-
-        super().__init__(fintoc_data=fintoc_data, fintoc_id=fintoc_id, fintoc_post_date=fintoc_post_date, **kwargs)
-
     def set_user(self, user):
         self.number = user.movements.count() + 1
         self.user = user
@@ -47,9 +44,9 @@ class Movement(BaseModel):
         raw_rut = self.raw_rut
         return int(raw_rut[:-1]) if isinstance(raw_rut, str) else None
 
-    @property
     def __str__(self):
         sender_account = self.fintoc_data.get("sender_account", {})
         holder_name = sender_account.get("holder_name")
         number = f"#{self.number}" or ""
         return f"{holder_name} {number}"
+
