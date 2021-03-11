@@ -9,17 +9,17 @@ from .models import Movement
 logger = getLogger(__name__)
 
 
-class Fintoc(metaclass=Singleton):
+class Interface(metaclass=Singleton):
     def __init__(self):
         self.client = Client(api_key=settings.FINTOC_SECRET_KEY)
         self.link = self.client.get_link(link_token=settings.FINTOC_LINK_TOKEN)
         self.account = self.link.find(id_=settings.FINTOC_ACCOUNT_ID)
 
     @transaction.atomic
-    def fetch(self):
+    def fetch_movements(self):
         query_params = {"page": 1}
 
-        # Movements are ordered by Fintoc’s post_date.
+        # Movements are ordered by Fintoc’s post_date. More recent goes first.
         latest_movement = Movement.objects.first()
 
         if latest_movement is not None:
@@ -40,6 +40,7 @@ class Fintoc(metaclass=Singleton):
                     fintoc_post_date = fintoc_post_datetime.split("T")[0]
 
                     # Use regular create instead of bulk_create so the post_save signal is sent.
+                    # Nontheless, these creations ocurr atomically.
                     Movement.objects.create(fintoc_data=data, fintoc_id=fintoc_id, fintoc_post_date=fintoc_post_date)
 
                 except IntegrityError:
