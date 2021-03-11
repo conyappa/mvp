@@ -79,6 +79,7 @@ class UserAdmin(NumericFilterModelAdmin):
         "first_name",
         "last_name",
         "alias",
+        "rut",
     ]
 
     def has_add_permission(self, request):
