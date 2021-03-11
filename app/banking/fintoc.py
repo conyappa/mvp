@@ -1,7 +1,7 @@
 from logging import getLogger
 from fintoc import Client
 from django.conf import settings
-from django.db import transaction, IntegrityError
+from django.db import transaction
 from app.utils import Singleton
 from .models import Movement
 
