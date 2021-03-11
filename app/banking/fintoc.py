@@ -33,7 +33,6 @@ class Interface(metaclass=Singleton):
 
             for obj in fintoc_movements:
                 data = obj.serialize()
-
                 fintoc_id = data.get("id")
 
                 # Ignore duplicated movements (i.e., with the same fintoc_id).
@@ -45,7 +44,7 @@ class Interface(metaclass=Singleton):
                 fintoc_post_date = fintoc_post_datetime.split("T")[0]
 
                 # Use regular create instead of bulk_create so the post_save signal is sent.
-                # Nontheless, these creations ocurr atomically.
+                # Nonetheless, these creations ocurr atomically.
                 Movement.objects.create(fintoc_data=data, fintoc_id=fintoc_id, fintoc_post_date=fintoc_post_date)
 
             query_params["page"] += 1
