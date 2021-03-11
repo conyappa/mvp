@@ -45,7 +45,7 @@ TWILIO_DELAY_SECONDS = int(os.environ.get("TWILIO_DELAY_SECONDS", "1"))
 
 
 # Fintoc.
-FINTOC_IS_ENABLED = bool(os.environ.get("FINTOC_IS_ENABLED", 0))
+FINTOC_IS_ENABLED = bool(int(os.environ.get("FINTOC_IS_ENABLED", "0")))
 FINTOC_SECRET_KEY = os.environ.get("FINTOC_SECRET_KEY")
 FINTOC_LINK_TOKEN = os.environ.get("FINTOC_LINK_TOKEN")
 FINTOC_ACCOUNT_ID = os.environ.get("FINTOC_ACCOUNT_ID")
@@ -180,8 +180,8 @@ EMAIL_HOST = os.environ.get("EMAIL_HOST")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_PORT = int(os.environ.get("EMAIL_HOST_PORT", "25"))
-EMAIL_USE_TLS = bool(int(os.environ.get("EMAIL_USE_TLS", 0)))
-EMAIL_USE_SSL = bool(int(os.environ.get("EMAIL_USE_SSL", 0)))
+EMAIL_USE_TLS = bool(int(os.environ.get("EMAIL_USE_TLS", "0")))
+EMAIL_USE_SSL = bool(int(os.environ.get("EMAIL_USE_SSL", "0")))
 EMAIL_USE_LOCALTIME = True
 
 
