@@ -17,8 +17,6 @@ class Interface(metaclass=Singleton):
 
     @transaction.atomic
     def fetch_movements(self):
-        logger.info("BEGIN FETCH")
-
         query_params = {"page": 1}
 
         # Movements are ordered by Fintoc’s post_date. More recent goes first.
@@ -51,5 +49,3 @@ class Interface(metaclass=Singleton):
                 Movement.objects.create(fintoc_data=data, fintoc_id=fintoc_id, fintoc_post_date=fintoc_post_date)
 
             query_params["page"] += 1
-
-        logger.info("END FETCH")
