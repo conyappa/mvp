@@ -1,7 +1,7 @@
 from logging import getLogger
 from fintoc import Client
 from django.conf import settings
-from django.db import transaction
+from django.db import transaction, IntegrityError
 from app.utils import Singleton
 from .models import Movement
 
@@ -15,8 +15,8 @@ class Fintoc(metaclass=Singleton):
         self.link = self.client.get_link(link_token=settings.FINTOC_LINK_TOKEN)
         self.account = self.link.find(id_=settings.FINTOC_ACCOUNT_ID)
 
+    @transaction.atomic
     def fetch(self):
-        movements = []
         query_params = {"page": 1}
 
         # Movements are ordered by Fintoc’s post_date.
@@ -26,20 +26,24 @@ class Fintoc(metaclass=Singleton):
             query_params["since"] = latest_movement.fintoc_post_date
 
         while True:
-            fintoc_movements = self.account.get_movements(**query_params)
-            movements_data = [movement.serialize() for movement in fintoc_movements]
+            fintoc_movements = list(self.account.get_movements(**query_params))
 
-            if not movements_data:
+            if not fintoc_movements:
                 break
 
-            movements += [
-                Movement(
-                    fintoc_data=data, fintoc_id=data.get("id"), fintoc_post_date=data.get("post_date").split("T")[0]
-                )
-                for data in movements_data
-            ]
-            query_params["page"] += 1
+            for obj in fintoc_movements:
+                data = obj.serialize()
 
-        with transaction.atomic():
-            # Ignore duplicated movements (i.e., with the same fintoc_id).
-            Movement.objects.bulk_create(movements, ignore_conflicts=True)
+                try:
+                    fintoc_id = data.get("id")
+                    fintoc_post_datetime = data.get("post_date")
+                    fintoc_post_date = fintoc_post_datetime.split("T")[0]
+
+                    # Use regular create instead of bulk_create so the post_save signal is sent.
+                    Movement.objects.create(fintoc_data=data, fintoc_id=fintoc_id, fintoc_post_date=fintoc_post_date)
+
+                except IntegrityError:
+                    # Ignore duplicated movements (i.e., with the same fintoc_id).
+                    pass
+
+            query_params["page"] += 1

@@ -20,7 +20,7 @@ def associate_movement_w_user(sender, instance, created, *args, **kwargs):
             logger.warning(f"Couldn’t associate movement to user: {e}")
         else:
             with transaction.atomic():
-                instance.set_user(user=user)
+                instance.user = user
                 instance.save()
 
                 user.balance += instance.amount

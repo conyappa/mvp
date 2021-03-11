@@ -6,9 +6,10 @@ from .models import Movement
 @admin.register(Movement)
 class MovementAdmin(admin.ModelAdmin):
     readonly_fields = [
+        "name",
+        "raw_rut",
         "fintoc_data",
         "fintoc_post_date",
-        "number",
         "amount",
     ]
 
@@ -19,12 +20,17 @@ class MovementAdmin(admin.ModelAdmin):
     fields = other_fields + readonly_fields
 
     list_display = [
+        "name",
+        "raw_rut",
         "user",
         "amount",
         "fintoc_post_date",
     ]
 
-    list_filter = ["user", "fintoc_post_date"]
+    list_filter = [
+        "user",
+        "fintoc_post_date",
+    ]
 
     search_fields = [
         "user__username",
