@@ -19,6 +19,7 @@ class SchedulerConfig(AppConfig):
         tasks.add_new_draw_reminder_cycle()
         tasks.add_new_draw_creation_cycle()
         tasks.add_ongoing_draw_cycle()
+        tasks.add_fintoc_movements_fetcher()
 
         try:
             Message.objects.schedule_jobs()

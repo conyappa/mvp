@@ -149,4 +149,6 @@ def add_ongoing_draw_cycle(scheduler):
 @use_scheduler
 def add_fintoc_movements_fetcher(scheduler):
     fintoc_interface = FintocInterface()
-    scheduler.add_job(fintoc_interface.fetch_movements, trigger="cron", minutes=settings.FINTOC_MOVEMENTS_FETCH_MINUTES_INTERVAL)
+    scheduler.add_job(
+        fintoc_interface.fetch_movements, trigger="cron", minutes=settings.FINTOC_MOVEMENTS_FETCH_MINUTES_INTERVAL
+    )
