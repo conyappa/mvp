@@ -47,6 +47,8 @@ class UserAdmin(NumericFilterModelAdmin):
     ]
 
     other_fields = [
+        "rut",
+        "check_digit",
         "alias",
     ]
 
@@ -55,6 +57,7 @@ class UserAdmin(NumericFilterModelAdmin):
     list_display = [
         "username",
         "full_name",
+        "formatted_rut",
         "telegram_id",
         "balance",
         "winnings",
@@ -77,6 +80,7 @@ class UserAdmin(NumericFilterModelAdmin):
         "first_name",
         "last_name",
         "alias",
+        "rut",
     ]
 
     def has_add_permission(self, request):
