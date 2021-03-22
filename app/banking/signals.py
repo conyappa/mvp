@@ -23,5 +23,7 @@ def associate_movement_w_user(sender, instance, created, *args, **kwargs):
                 instance.user = user
                 instance.save()
 
-                user.balance += instance.amount
+                amount = instance.amount
+                if amount > 0:
+                    user.balance += amount
                 user.save()

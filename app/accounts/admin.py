@@ -57,6 +57,7 @@ class UserAdmin(NumericFilterModelAdmin):
     list_display = [
         "username",
         "full_name",
+        "formatted_rut",
         "telegram_id",
         "balance",
         "winnings",
